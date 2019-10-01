@@ -1,17 +1,17 @@
 # Summer work
 
-* PROJECT NAME
-* YOUR NAME
-* STUDENT_ID
-* SUPERVISOR NAME
-
-Use this file to keep a report stating what you completed over the summer. The following is an *template* that you can use as a basis. 
+* Monitoring Emotional State via Phone-Based Sensor Data
+* Anguel Hristozov
+* 2255541h
+* Professor Matthew Chalmers
 
 ## Research completed
+I read two past disserations at the start of the summer that were from students that were previously supervised by Professor Matthew Chalmers and were related to the topic. Aside from that, I did not have time to do any other research.
 
 ## Ideas developed
+None yet.
 
 ## Concerns or risks identified
-
+None yet.
 
 
