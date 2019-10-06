@@ -1,10 +1,14 @@
 % REMEMBER: You must not plagiarise anything in your report. Be extremely careful.
-
 \documentclass{l4proj}
 
     
+%==============================================================================
+% Put any additional packages here
+% You can add any packages you want, as long as it does not alter
+% the overall format (e.g. don't change the margins or the reference style).
 %
-% put any additional packages here
+\usepackage{pdfpages} % if you want to include a PDF for an ethics checklist, for example
+%
 %
 
 \begin{document}
@@ -27,6 +31,16 @@
     never been used together. It was found that  
     ABC was 20\% better than XYZ, though it caused rabies in half of subjects.''
 \end{abstract}
+
+%==============================================================================
+%% ACKNOWLEDGEMENTS
+\chapter*{Acknowledgements}
+% Enter any acknowledgements here. This is optional; you may leave this blank if you wish,
+% or remove the entire chapter
+%
+% We give thanks to the Gods of LaTeX, who in their eternal graciousness, 
+% have granted that this document may compile without errors or overfull hboxes.
+%
 
 %==============================================================================
 
@@ -58,21 +72,21 @@
 % using Arabic numerals. Therefore, immediately after the first call to \chapter we need the call
 % \pagenumbering{arabic} and this should be called once only in the document. 
 %
-% Do not alter the bibliography style.
 %
 % The first Chapter should then be on page 1. You are allowed 40 pages for a 40 credit project and 30 pages for a 
 % 20 credit report. This includes everything numbered in Arabic numerals (excluding front matter) up
 % to but excluding the appendices and bibliography.
 %
 % You must not alter text size (it is currently 10pt) or alter margins or spacing.
-%
+% Do not alter the bibliography style.
 %
 %==================================================================================================================================
 %
 % IMPORTANT
-% The chapter headings here are **suggestions**. You don't have to follow this model if
+% The chapter headings and structure here are **suggestions**. You don't have to follow this model if
 % it doesn't fit your project. Every project should have an introduction and conclusion,
-% however. 
+% however.  If in doubt, your supervisor can give you specific guidance; their view takes precedence over
+% the structure suggested here.
 %
 %==================================================================================================================================
 \chapter{Introduction}
@@ -80,6 +94,11 @@
 % reset page numbering. Don't remove this!
 \pagenumbering{arabic} 
 
+% You can use \todo{} to mark text that needs to be fixed. Anything inside will appear as highlighted 
+% text in the final copy, and you will also get warnings when you compile (so you don't
+% forget to take them out!)
+
+\todo{Remove the guidance notes from your dissertation before submitting!}
 
 Why should the reader care about what are you doing and what are you actually doing?
 \section{Guidance}
@@ -140,7 +159,9 @@ read these, but they will improve how you write.
 \end{itemize}
 
 There is a complete guide on good citation practice by Peter Coxhead available here: \url{http://www.cs.bham.ac.uk/~pxc/refs/index.html}. 
-If you are unsure about how to cite online sources, please see this guide: \url{https://student.unsw.edu.au/how-do-i-cite-electronic-sources}.
+If you are unsure about how to cite online sources, please see \citet{UNSWWebsite}. 
+\footnote{Specifying an online resource like \url{https://developer.android.com/studio}
+in a footnote sometimes makes more sense than including it as a formal reference.}
 
 \subsection{Plagiarism warning}
 
@@ -149,6 +170,17 @@ If you are unsure about how to cite online sources, please see this guide: \url{
     If you include material from other sources without full and correct attribution, you are commiting plagiarism. The penalties for plagiarism are severe.
     Quote any included text and cite it correctly. Cite all images, figures, etc. clearly in the caption of the figure.
 \end{highlight_title}
+
+\subsection{Quoting text}
+
+If you are quoting a long passage, use a \texttt{quote} environment:
+
+\begin{quote}
+     If you scribble your thoughts any which way, your readers will surely feel that you care nothing about them. They will mark you down as an egomaniac or a chowderhead -or, worse, they will stop reading you. The most damning revelation you can make about yourself is that you do not know what is interesting and what is not.
+\end{quote} \citep{Von80}
+
+If you are quoting inline, like Simon Peyton-Jones' following remark, use quotation marks ``Conveying the intuition is primary, not
+secondary'' \citep{Pey17}.
 
 
 %==================================================================================================================================
@@ -174,11 +206,23 @@ What is the problem that you want to solve, and how did you arrive at it?
 \section{Guidance}
 Make it clear how you derived the constrained form of your problem via a clear and logical process. 
 
+The analysis chapter explains the process by which you arrive at a concrete design. In software 
+engineering projects, this will include a statement of the requirement capture process and the
+derived requirements.
+
+In research projects, it will involve developing a design drawing on
+the work established in the background, and stating how the space of possible projects was
+sensibly narrowed down to what you have done.
+
 %==================================================================================================================================
 \chapter{Design}
 How is this problem to be approached, without reference to specific implementation details? 
 \section{Guidance}
-Design should cover the abstract design in such a way that someone else might be able to do what you did, but with a different language or library or tool.
+Design should cover the abstract design in such a way that someone else might be able to do what you did, 
+but with a different language or library or tool. This might include overall system architecture diagrams,
+user interface designs (wireframes/personas/etc.), protocol specifications, algorithms, data set design choices,
+among others. Specific languages, technical choices, libraries and such like should not usually appear in the design. These are implementation details.
+
 
 %==================================================================================================================================
 \chapter{Implementation}
@@ -186,18 +230,13 @@ What did you do to implement this idea, and what technical achievements did you 
 \section{Guidance}
 You can't talk about everything. Cover the high level first, then cover important, relevant or impressive details.
 
-
-
-\section{General points}
+\section{General guidance for technical writing}
 
 These points apply to the whole dissertation, not just this chapter.
-
-
 
 \subsection{Figures}
 \emph{Always} refer to figures included, like Figure \ref{fig:relu}, in the body of the text. Include full, explanatory captions and make sure the figures look good on the page.
 You may include multiple figures in one float, as in Figure \ref{fig:synthetic}, using \texttt{subcaption}, which is enabled in the template.
-
 
 
 % Figures are important. Use them well.
@@ -389,7 +428,26 @@ How good is your solution? How well did you solve the general problem, and what 
 \end{itemize}
 
 \section{Evidence}
-Make sure you present your evidence well. Use appropriate visualisations, reporting techniques and statistical analysis, as appropriate.
+Make sure you present your evidence well. Use appropriate visualisations, 
+reporting techniques and statistical analysis, as appropriate. The point is not
+to dump all the data you have but to present an argument well supported by evidence gathered.
+
+If you use numerical evidence, specify reasonable numbers of significant digits; don't state ``18.41141\% of users were successful'' if you only had 20 users. If you average \textit{anything}, present both a measure of central tendency (e.g. mean, median) \textit{and} a measure of spread (e.g. standard deviation, min/max, interquartile range).
+
+You can use \texttt{siunitx} to define units, space numbers neatly, and set the precision for the whole LaTeX document. 
+
+% setup siunitx to have two decimal places
+\sisetup{
+	round-mode = places,
+	round-precision = 2
+}
+
+For example, these numbers will appear with two decimal places: \num{3.141592}, \num{2.71828}, and this one will appear with reasonable spacing \num{1000000}.
+
+
+
+If you use statistical procedures, make sure you understand the process you are using,
+and that you check the required assumptions hold in your case. 
 
 If you visualise, follow the basic rules, as illustrated in Figure \ref{fig:boxplot}:
 \begin{itemize}
@@ -418,7 +476,7 @@ See the file \texttt{guide\_to\_visualising.pdf} for further information and gui
 
 %==================================================================================================================================
 \chapter{Conclusion}    
-Summarise the whole project for a lazy reader who didn't read the rest (e.g. a prize-awarding committee).
+Summarise the whole project for a lazy reader who didn't read the rest (e.g. a prize-awarding committee). This chapter should be short in most dissertations; maybe one to three pages.
 \section{Guidance}
 \begin{itemize}
     \item
@@ -434,6 +492,15 @@ Summarise the whole project for a lazy reader who didn't read the rest (e.g. a p
         won't get credit for things you haven't done}.
 \end{itemize}
 
+\section{Summary}
+Summarise what you did; answer the general questions you asked in the introduction. What did you achieve? Briefly describe what was built and summarise the evaluation results.
+
+\section{Reflection}
+Discuss what went well and what didn't and how you would do things differently if you did this project again.
+
+\section{Future work}
+Discuss what you would do if you could take this further -- where would the interesting directions to go next be? (e.g. you got another year to work on it, or you started a company to work on this, or you pursued a PhD on this topic)
+
 %==================================================================================================================================
 %
 % 
@@ -444,36 +511,42 @@ Summarise the whole project for a lazy reader who didn't read the rest (e.g. a p
 
 \chapter{Appendices}
 
+Use separate appendix chapters for groups of ancillary material that support your dissertation. 
 Typical inclusions in the appendices are:
 
 \begin{itemize}
 \item
-  Copies of ethics approvals (required if obtained)
+  Copies of ethics approvals (you must include these if you needed to get them)
 \item
-  Copies of questionnaires etc. used to gather data from subjects.
+  Copies of questionnaires etc. used to gather data from subjects. Don't include
+  voluminous data logs; instead submit these electronically alongside your source code.
 \item
   Extensive tables or figures that are too bulky to fit in the main body of
   the report, particularly ones that are repetitive and summarised in the body.
-
-\item Outline of the source code (e.g. directory structure), or other architecture documentation like class diagrams.
-
-\item User manuals, and any guides to starting/running the software.
+\item Outline of the source code (e.g. directory structure), 
+    or other architecture documentation like class diagrams.
+\item User manuals, and any guides to starting/running the software. 
+Your equivalent of \texttt{readme.md} should be included.
 
 \end{itemize}
 
 \textbf{Don't include your source code in the appendices}. It will be
 submitted separately.
 
+
+
 \end{appendices}
 
 %==================================================================================================================================
 %   BIBLIOGRAPHY   
 
-% The bibliography style is abbrvnat
+% The bibliography style is agsm (Harvard)
 % The bibliography always appears last, after the appendices.
 
-\bibliographystyle{abbrvnat}
+\bibliographystyle{agsm}
 
+% Force the bibliography not to be numbered
+\renewcommand{\thechapter}{0} 
 \bibliography{l4proj}
 
 \end{document}
