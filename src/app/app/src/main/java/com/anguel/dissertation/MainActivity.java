@@ -7,6 +7,7 @@ import android.app.usage.UsageStats;
 import android.app.usage.UsageStatsManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -26,6 +27,7 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.SortedMap;
@@ -43,9 +45,9 @@ public class MainActivity extends AppCompatActivity {
 
         requestUsageStatsPermission();
 
-        final Object k = this.getPackageManager();
-        final Object c = this.getSystemService(ACTIVITY_SERVICE);
-        final Handler handler = new Handler(Looper.getMainLooper());
+//        final Object k = this.getPackageManager();
+//        final Object c = this.getSystemService(ACTIVITY_SERVICE);
+//        final Handler handler = new Handler(Looper.getMainLooper());
 
         TextView t = (TextView) findViewById(R.id.text);
 
@@ -60,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
             for (UsageStats usageStats : appList) {
                 mySortedMap.put(usageStats.getTotalTimeInForeground(), usageStats);
             }
-            if (mySortedMap != null && !mySortedMap.isEmpty()) {
+            if (!mySortedMap.isEmpty()) {
                 int max = 10;
                 int current = 0;
                 for (Map.Entry<Long, UsageStats> x : mySortedMap.entrySet()) {
@@ -68,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
                         continue;
                     } else {
                         current++;
-                        t.append(x.getValue().getPackageName() + "\t " + x.getValue().getTotalTimeInForeground() + "\t " + x.getValue().getLastTimeUsed());
+                        t.append("app name: " + appName(x.getValue().getPackageName()) + System.lineSeparator() + "minutes: " + TimeUnit.MILLISECONDS.toMinutes(x.getValue().getTotalTimeInForeground()) + System.lineSeparator() + "last used: " + new Date(x.getValue().getLastTimeUsed()).toString());
                         t.append(System.lineSeparator());
                         t.append(System.lineSeparator());
                         Log.d("Executed", "usage stats executed : " + x.getValue().getPackageName() + "\t\t totalTimeForeground: " + x.getValue().getTotalTimeInForeground());
@@ -77,6 +79,20 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
+    }
+
+    public String appName(String pack) {
+        String Name = null;
+
+        try {
+            PackageManager packManager = getBaseContext().getPackageManager();
+            ApplicationInfo app = getBaseContext().getPackageManager().getApplicationInfo(pack, 0);
+            Name = packManager.getApplicationLabel(app).toString();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return Name;
     }
 
 
