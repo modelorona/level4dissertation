@@ -4,16 +4,22 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
-class AsyncLogSave extends AsyncTask<Object, Void, Void> {
+import com.anguel.dissertation.persistence.LogEvent;
+import com.anguel.dissertation.persistence.LogEventDatabase;
+
+import java.util.List;
+
+class AsyncLogSave extends AsyncTask<Object, Void, Boolean> {
 
     @Override
-    protected Void doInBackground(Object... params) {
+    protected Boolean doInBackground(Object... params) {
 //        params[0] will be the context, params[1] will be the data to save
 //        where the data is saved, received as a parameter
         Context c = (Context) params[0];
+        List data = (List) params[1];
+        LogEventDatabase.getInstance(c).logEventDao().insertLogEvent(new LogEvent(System.currentTimeMillis(), data));
 
-
-        return null;
+        return true;
     }
 
     @Override

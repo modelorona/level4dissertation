@@ -4,14 +4,16 @@ import android.content.Context;
 
 import com.anguel.dissertation.persistence.LogEvent;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 public class Logger {
 
-    public void saveData(Context context) {
+    public Boolean saveData(Context context, ArrayList<HashMap<String, String>> data) throws ExecutionException, InterruptedException {
         AsyncLogSave runner = new AsyncLogSave();
-        runner.execute(context);
+        return runner.execute(context, data).get();
     }
 
     public List<LogEvent> getData(Context context) throws ExecutionException, InterruptedException {

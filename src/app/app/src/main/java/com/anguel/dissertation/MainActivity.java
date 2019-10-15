@@ -6,11 +6,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.work.WorkManager;
 
 import android.provider.Settings;
 import android.view.Menu;
@@ -18,6 +20,13 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.anguel.dissertation.logger.Logger;
+import com.anguel.dissertation.persistence.LogEvent;
+import com.anguel.dissertation.persistence.LogEventDatabase;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 public class MainActivity extends AppCompatActivity {
@@ -33,11 +42,16 @@ public class MainActivity extends AppCompatActivity {
 
         Logger logger = new Logger();
 
+        ArrayList<HashMap<String, String>> data = new ArrayList<>();
+
         try {
-            Toast.makeText(this, logger.getData(this).toString(), Toast.LENGTH_LONG).show();
+            Toast.makeText(this, logger.saveData(getApplicationContext(), data).toString(), Toast.LENGTH_LONG).show();
         } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();
         }
+        //        AsyncTask.execute(() -> LogEventDatabase.getInstance(getApplicationContext()).logEventDao().insertLogEvent(LogEvent.builder().timestamp(System.currentTimeMillis()).data(
+//                new ArrayList<>()
+//        ).build()));
 
 
 //        TextView t = (TextView) findViewById(R.id.text);
