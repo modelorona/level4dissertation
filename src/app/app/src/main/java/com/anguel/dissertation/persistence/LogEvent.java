@@ -13,12 +13,14 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 @Builder
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 @Entity(tableName = "LogEvents")
 public class LogEvent {
     @PrimaryKey // timestamp is the date in epoch time of the timestamp
