@@ -9,6 +9,7 @@ import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.work.OneTimeWorkRequest;
@@ -27,12 +28,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 
-
 public class MainActivity extends AppCompatActivity {
-
-    private RecyclerView recyclerView;
-    private RecyclerView.Adapter mAdapter;
-    private RecyclerView.LayoutManager layoutManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,16 +42,16 @@ public class MainActivity extends AppCompatActivity {
         OneTimeWorkRequest request = new OneTimeWorkRequest.Builder(IntervalGatheringWorker.class).build();
         WorkManager.getInstance(this.getApplicationContext()).enqueue(request);
 
-        recyclerView = (RecyclerView) findViewById(R.id.data_view);
+        RecyclerView recyclerView = findViewById(R.id.data_view);
 
-        layoutManager = new LinearLayoutManager(this);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
 
         Logger logger = new Logger();
 
         try {
             List<LogEvent> events = logger.getData(this.getApplicationContext());
-            mAdapter = new LogEventAdapter(events);
+            RecyclerView.Adapter mAdapter = new LogEventAdapter(events);
             recyclerView.setAdapter(mAdapter);
 
         } catch (ExecutionException | InterruptedException e) {
