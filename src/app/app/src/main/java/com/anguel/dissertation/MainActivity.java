@@ -9,22 +9,30 @@ import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkManager;
 
 import android.provider.Settings;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
+import com.anguel.dissertation.adapters.LogEventAdapter;
 import com.anguel.dissertation.logger.Logger;
+import com.anguel.dissertation.persistence.LogEvent;
 import com.anguel.dissertation.workerservice.IntervalGatheringWorker;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 
 
 public class MainActivity extends AppCompatActivity {
+
+    private RecyclerView recyclerView;
+    private RecyclerView.Adapter mAdapter;
+    private RecyclerView.LayoutManager layoutManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,16 +43,32 @@ public class MainActivity extends AppCompatActivity {
 
         requestUsageStatsPermission();
 
+        OneTimeWorkRequest request = new OneTimeWorkRequest.Builder(IntervalGatheringWorker.class).build();
+        WorkManager.getInstance(this.getApplicationContext()).enqueue(request);
+
+        recyclerView = (RecyclerView) findViewById(R.id.data_view);
+
+        layoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
+
         Logger logger = new Logger();
 
         try {
-            OneTimeWorkRequest request = new OneTimeWorkRequest.Builder(IntervalGatheringWorker.class).build();
-            WorkManager.getInstance(this.getApplicationContext()).enqueue(request);
-            Toast.makeText(this, logger.getData(this.getApplicationContext()).toString(), Toast.LENGTH_LONG).show();
+            List<LogEvent> events = logger.getData(this.getApplicationContext());
+            mAdapter = new LogEventAdapter(events);
+            recyclerView.setAdapter(mAdapter);
+
         } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();
         }
 
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        OneTimeWorkRequest request = new OneTimeWorkRequest.Builder(IntervalGatheringWorker.class).build();
+        WorkManager.getInstance(this.getApplicationContext()).enqueue(request);
     }
 
 
