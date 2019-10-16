@@ -17,6 +17,9 @@ public interface LogEventDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertLogEvent(LogEvent logEvent);
 
+//    @Insert(onConflict = OnConflictStrategy.REPLACE)
+//    void insertLogEvents(List<LogEvent> logEvents);
+
     @Delete
     void delete(LogEvent logEvent);
 }

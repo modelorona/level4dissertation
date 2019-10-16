@@ -16,8 +16,9 @@ class AsyncLogSave extends AsyncTask<Object, Void, Boolean> {
 //        params[0] will be the context, params[1] will be the data to save
 //        where the data is saved, received as a parameter
         Context c = (Context) params[0];
-        List data = (List) params[1];
-        LogEventDatabase.getInstance(c).logEventDao().insertLogEvent(new LogEvent(System.currentTimeMillis(), data));
+        LogEvent data = (LogEvent) params[1];
+
+        LogEventDatabase.getInstance(c).logEventDao().insertLogEvent(data);
 
         return true;
     }
