@@ -1,5 +1,6 @@
 package com.anguel.dissertation.workerservice;
 
+import android.app.Application;
 import android.app.usage.UsageStats;
 import android.app.usage.UsageStatsManager;
 import android.content.Context;
@@ -17,10 +18,12 @@ import com.anguel.dissertation.persistence.LogEvent;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
 import java.util.concurrent.ExecutionException;
@@ -53,9 +56,14 @@ public class IntervalGatheringWorker extends Worker {
             List<Map<String, String>> logEventData = new ArrayList<>();
 
             SortedMap<Long, UsageStats> sortedAppsWithStats = new TreeMap<>();
+            Set<String> systemApps = getSystemApps();
 
             for (UsageStats usageStats : appList) {
-                sortedAppsWithStats.put(usageStats.getTotalTimeInForeground(), usageStats);
+                // try to filter out the system apps, although this can be bad depending on which apps are considered "system".
+//                todo: look into a much more complex way to filter out applications that may be considered "useless"
+                if (!systemApps.contains(usageStats.getPackageName())) {
+                    sortedAppsWithStats.put(usageStats.getTotalTimeInForeground(), usageStats);
+                }
             }
 
             Iterator<Map.Entry<Long, UsageStats>> appIterator = sortedAppsWithStats.entrySet().iterator();
@@ -106,5 +114,17 @@ public class IntervalGatheringWorker extends Worker {
         }
 
         return name;
+    }
+
+    private Set<String> getSystemApps() {
+        List<ApplicationInfo> applicationInfo = getApplicationContext().getPackageManager().getInstalledApplications(0);
+        Set<String> systemApps = new HashSet<>();
+        for (ApplicationInfo x: applicationInfo) {
+            if ((x.flags & ApplicationInfo.FLAG_SYSTEM) != 0) {
+                systemApps.add(x.packageName);
+            }
+        }
+
+        return systemApps;
     }
 }
