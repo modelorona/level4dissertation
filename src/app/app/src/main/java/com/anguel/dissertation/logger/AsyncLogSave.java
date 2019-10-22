@@ -7,8 +7,6 @@ import android.util.Log;
 import com.anguel.dissertation.persistence.LogEvent;
 import com.anguel.dissertation.persistence.LogEventDatabase;
 
-import java.util.List;
-
 class AsyncLogSave extends AsyncTask<Object, Void, Boolean> {
 
     @Override

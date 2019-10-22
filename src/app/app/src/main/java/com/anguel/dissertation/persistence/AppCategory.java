@@ -1,5 +1,6 @@
 package com.anguel.dissertation.persistence;
 
+import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
@@ -17,9 +18,10 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-@Entity(tableName = "AppCategories")
-public class AppCategories {
-    @PrimaryKey
+@Entity(tableName = "AppCategory")
+public class AppCategory {
+
+    @PrimaryKey @NonNull
     String appName;
 
     @ColumnInfo

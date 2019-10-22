@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.anguel.dissertation.R;
 import com.anguel.dissertation.persistence.LogEvent;
 
+import java.util.Date;
 import java.util.List;
 
 public class LogEventAdapter extends RecyclerView.Adapter<LogEventAdapter.ViewHolder> {
@@ -26,7 +27,7 @@ public class LogEventAdapter extends RecyclerView.Adapter<LogEventAdapter.ViewHo
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         StringBuilder s = new StringBuilder();
-        s.append(dataSet.get(position).getTimestamp());
+        s.append(new Date(dataSet.get(position).getTimestamp()).toString());
         s.append(System.lineSeparator());
         s.append(dataSet.get(position).getData().toString());
         s.append(System.lineSeparator());
@@ -43,7 +44,7 @@ public class LogEventAdapter extends RecyclerView.Adapter<LogEventAdapter.ViewHo
         return dataSet.size();
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    static class ViewHolder extends RecyclerView.ViewHolder {
         TextView textView;
 
         ViewHolder(View v) {

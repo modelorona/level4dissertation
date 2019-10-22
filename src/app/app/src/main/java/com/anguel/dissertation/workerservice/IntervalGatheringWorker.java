@@ -13,6 +13,7 @@ import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 
 import com.anguel.dissertation.logger.Logger;
+import com.anguel.dissertation.persistence.AppCategory;
 import com.anguel.dissertation.persistence.LogEvent;
 
 import java.util.ArrayList;
@@ -70,8 +71,15 @@ public class IntervalGatheringWorker extends Worker {
                 appData.put("lastTimeUsed", String.valueOf(usageStats.getLastTimeUsed()));
                 appData.put("totalTimeInForeground", String.valueOf(usageStats.getTotalTimeInForeground()));
 
+//                todo: make this better. it's currently a quick fix, due to the fact that there's too much happening in my life, no time for a break even
                 if (additionalDetails.containsKey("category")) {
                     appData.put("category", additionalDetails.get("category"));
+//                    if we have a category, then we save it to the database. otherwise, for now, do nothing
+                    try {
+                        boolean res = logger.saveAppCategory(getApplicationContext(), AppCategory.builder().category(appData.get("category")).appName(appData.get("name")).build());
+                    } catch (ExecutionException | InterruptedException e) {
+                        e.printStackTrace();
+                    }
                 }
 
 //                now this will be the interesting part. with android Q, more usage data is available, but we need to check to make sure the device actually supports it as the current min
@@ -90,7 +98,7 @@ public class IntervalGatheringWorker extends Worker {
         }
 
         try {
-            boolean res = logger.saveData(getApplicationContext(), logEvent);
+            boolean res = logger.saveAppStatistics(getApplicationContext(), logEvent);
             if (res) {
                 return Result.success();
             } return Result.failure();
@@ -108,7 +116,12 @@ public class IntervalGatheringWorker extends Worker {
             ApplicationInfo app = packManager.getApplicationInfo(packageName, 0);
             details.put("name", packManager.getApplicationLabel(app).toString());
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                details.put("category", ApplicationInfo.getCategoryTitle(getApplicationContext(), app.category).toString());
+//                damn getCategoryTitle throws a null, got to check that if it's null, the category is UNDEFINED. todo: should probably implement a way to figure out unknown by scraping google play site
+                String category = "UNDEFINED";
+                if (ApplicationInfo.getCategoryTitle(getApplicationContext(), app.category) != null) {
+                    category = ApplicationInfo.getCategoryTitle(getApplicationContext(), app.category).toString();
+                }
+                details.put("category", category);
             }
         } catch (Exception e) {
             Log.e("worker_appDetailsFail", Objects.requireNonNull(e.getLocalizedMessage()));

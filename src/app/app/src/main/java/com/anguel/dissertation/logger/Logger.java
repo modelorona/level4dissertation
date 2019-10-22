@@ -2,6 +2,7 @@ package com.anguel.dissertation.logger;
 
 import android.content.Context;
 
+import com.anguel.dissertation.persistence.AppCategory;
 import com.anguel.dissertation.persistence.LogEvent;
 
 import java.util.List;
@@ -9,7 +10,7 @@ import java.util.concurrent.ExecutionException;
 
 public class Logger {
 
-    public Boolean saveData(Context context, LogEvent data) throws ExecutionException, InterruptedException {
+    public Boolean saveAppStatistics(Context context, LogEvent data) throws ExecutionException, InterruptedException {
         AsyncLogSave runner = new AsyncLogSave();
         return runner.execute(context, data).get();
     }
@@ -17,5 +18,10 @@ public class Logger {
     public List<LogEvent> getData(Context context) throws ExecutionException, InterruptedException {
         AsyncLogGet runner = new AsyncLogGet();
         return runner.execute(context).get();
+    }
+
+    public Boolean saveAppCategory(Context context, AppCategory data) throws ExecutionException, InterruptedException {
+        AsyncCategorySave runner = new AsyncCategorySave();
+        return runner.execute(context, data).get();
     }
 }
