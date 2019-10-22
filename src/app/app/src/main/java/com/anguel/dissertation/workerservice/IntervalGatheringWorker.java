@@ -1,6 +1,5 @@
 package com.anguel.dissertation.workerservice;
 
-import android.app.Application;
 import android.app.usage.UsageStats;
 import android.app.usage.UsageStatsManager;
 import android.content.Context;
@@ -56,20 +55,22 @@ public class IntervalGatheringWorker extends Worker {
             List<Map<String, String>> logEventData = new ArrayList<>();
 
             SortedMap<Long, UsageStats> sortedAppsWithStats = new TreeMap<>();
-            Set<String> systemApps = getSystemApps();
+//            Set<String> systemApps = getSystemApps();
 
             for (UsageStats usageStats : appList) {
                 // try to filter out the system apps, although this can be bad depending on which apps are considered "system".
-//                todo: look into a much more complex way to filter out applications that may be considered "useless"
-                if (!systemApps.contains(usageStats.getPackageName())) {
+//                if (!systemApps.contains(usageStats.getPackageName())) {
                     sortedAppsWithStats.put(usageStats.getTotalTimeInForeground(), usageStats);
-                }
+//                }
             }
 
-            Iterator<Map.Entry<Long, UsageStats>> appIterator = sortedAppsWithStats.entrySet().iterator();
-            int current = sortedAppsWithStats.size()>10?10:sortedAppsWithStats.size();  // see if it will get the top 10 or less
-            while (current-- != 0 && appIterator.hasNext()){
-                UsageStats usageStats = appIterator.next().getValue();
+            //            int current = sortedAppsWithStats.size()>10?10:sortedAppsWithStats.size();  // see if it will get the top 10 or less
+            for (Map.Entry<Long, UsageStats> longUsageStatsEntry : sortedAppsWithStats.entrySet()) {
+                UsageStats usageStats = longUsageStatsEntry.getValue();
+//                skip if the total time used is 0
+                if (usageStats.getTotalTimeInForeground() == 0) {
+                    continue;
+                }
                 Map<String, String> appData = new HashMap<>();
                 appData.put("name", appName(usageStats.getPackageName()));
                 appData.put("lastTimeUsed", String.valueOf(usageStats.getLastTimeUsed()));
@@ -116,15 +117,32 @@ public class IntervalGatheringWorker extends Worker {
         return name;
     }
 
-    private Set<String> getSystemApps() {
-        List<ApplicationInfo> applicationInfo = getApplicationContext().getPackageManager().getInstalledApplications(0);
-        Set<String> systemApps = new HashSet<>();
-        for (ApplicationInfo x: applicationInfo) {
-            if ((x.flags & ApplicationInfo.FLAG_SYSTEM) != 0) {
-                systemApps.add(x.packageName);
+    private Map<String, String> getAdditionalAppDetails(String packageName) {
+        Map<String, String> details = new HashMap<>();
+        try {
+            PackageManager packManager = getApplicationContext().getPackageManager();
+            ApplicationInfo app = packManager.getApplicationInfo(packageName, 0);
+            details.put("name", packManager.getApplicationLabel(app).toString());
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                details.put("category", ApplicationInfo.getCategoryTitle(getApplicationContext(), app.category).toString());
             }
+        } catch (Exception e) {
+            Log.e("worker_appDetailsFail", Objects.requireNonNull(e.getLocalizedMessage()));
+            e.printStackTrace();
         }
 
-        return systemApps;
+        return details;
     }
+
+//    private Set<String> getSystemApps() {
+//        List<ApplicationInfo> applicationInfo = getApplicationContext().getPackageManager().getInstalledApplications(0);
+//        Set<String> systemApps = new HashSet<>();
+//        for (ApplicationInfo x: applicationInfo) {
+//            if ((x.flags & ApplicationInfo.FLAG_SYSTEM) != 0) {
+//                systemApps.add(x.packageName);
+//            }
+//        }
+//
+//        return systemApps;
+//    }
 }
