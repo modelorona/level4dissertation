@@ -17,12 +17,9 @@ import com.anguel.dissertation.persistence.LogEvent;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
 import java.util.concurrent.ExecutionException;
@@ -55,26 +52,27 @@ public class IntervalGatheringWorker extends Worker {
             List<Map<String, String>> logEventData = new ArrayList<>();
 
             SortedMap<Long, UsageStats> sortedAppsWithStats = new TreeMap<>();
-//            Set<String> systemApps = getSystemApps();
 
             for (UsageStats usageStats : appList) {
-                // try to filter out the system apps, although this can be bad depending on which apps are considered "system".
-//                if (!systemApps.contains(usageStats.getPackageName())) {
                     sortedAppsWithStats.put(usageStats.getTotalTimeInForeground(), usageStats);
-//                }
             }
 
-            //            int current = sortedAppsWithStats.size()>10?10:sortedAppsWithStats.size();  // see if it will get the top 10 or less
             for (Map.Entry<Long, UsageStats> longUsageStatsEntry : sortedAppsWithStats.entrySet()) {
                 UsageStats usageStats = longUsageStatsEntry.getValue();
 //                skip if the total time used is 0
                 if (usageStats.getTotalTimeInForeground() == 0) {
                     continue;
                 }
+                Map<String, String> additionalDetails = getAdditionalAppDetails(usageStats.getPackageName());
                 Map<String, String> appData = new HashMap<>();
-                appData.put("name", appName(usageStats.getPackageName()));
+
+                appData.put("name", additionalDetails.get("name"));
                 appData.put("lastTimeUsed", String.valueOf(usageStats.getLastTimeUsed()));
                 appData.put("totalTimeInForeground", String.valueOf(usageStats.getTotalTimeInForeground()));
+
+                if (additionalDetails.containsKey("category")) {
+                    appData.put("category", additionalDetails.get("category"));
+                }
 
 //                now this will be the interesting part. with android Q, more usage data is available, but we need to check to make sure the device actually supports it as the current min
 //                target version is 24
@@ -103,20 +101,6 @@ public class IntervalGatheringWorker extends Worker {
 
     }
 
-    private String appName(String pack) {
-        String name = null;
-
-        try {
-            PackageManager packManager = getApplicationContext().getPackageManager();
-            ApplicationInfo app = getApplicationContext().getPackageManager().getApplicationInfo(pack, 0);
-            name = packManager.getApplicationLabel(app).toString();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return name;
-    }
-
     private Map<String, String> getAdditionalAppDetails(String packageName) {
         Map<String, String> details = new HashMap<>();
         try {
@@ -134,15 +118,4 @@ public class IntervalGatheringWorker extends Worker {
         return details;
     }
 
-//    private Set<String> getSystemApps() {
-//        List<ApplicationInfo> applicationInfo = getApplicationContext().getPackageManager().getInstalledApplications(0);
-//        Set<String> systemApps = new HashSet<>();
-//        for (ApplicationInfo x: applicationInfo) {
-//            if ((x.flags & ApplicationInfo.FLAG_SYSTEM) != 0) {
-//                systemApps.add(x.packageName);
-//            }
-//        }
-//
-//        return systemApps;
-//    }
 }
