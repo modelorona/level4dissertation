@@ -9,9 +9,12 @@ import android.os.Build;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 
+import com.anguel.dissertation.R;
 import com.anguel.dissertation.logger.Logger;
 import com.anguel.dissertation.persistence.AppCategory;
 import com.anguel.dissertation.persistence.LogEvent;
@@ -25,8 +28,11 @@ import java.util.SortedMap;
 import java.util.TreeMap;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class IntervalGatheringWorker extends Worker {
+
+    private AtomicInteger nId = new AtomicInteger();
 
     public IntervalGatheringWorker(@NonNull Context context, @NonNull WorkerParameters workerParams) {
         super(context, workerParams);
@@ -97,13 +103,43 @@ public class IntervalGatheringWorker extends Worker {
             logEvent.setData(logEventData);
         }
 
+        // todo: fix the way notifications are shown, this is ugly and a quick hack
         try {
             boolean res = logger.saveAppStatistics(getApplicationContext(), logEvent);
             if (res) {
+//                NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), getApplicationContext().getString(R.string.channel_id))
+//                        .setSmallIcon(R.drawable.ic_done_black_24dp)
+//                        .setContentTitle("Dissertation App Data Collection")
+//                        .setContentText("ISSA SUCCESS")
+//                        .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+//
+//                NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(getApplicationContext());
+//                notificationManagerCompat.notify(nId.getAndIncrement(), builder.build());
+
                 return Result.success();
-            } return Result.failure();
+            }
+
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), getApplicationContext().getString(R.string.channel_id))
+                    .setSmallIcon(R.drawable.ic_done_black_24dp)
+                    .setContentTitle("Dissertation App Data Collection")
+                    .setContentText("ISSA FAILURE")
+                    .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+
+            NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(getApplicationContext());
+            notificationManagerCompat.notify(nId.getAndIncrement(), builder.build());
+
+            return Result.failure();
         } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), getApplicationContext().getString(R.string.channel_id))
+                    .setSmallIcon(R.drawable.ic_done_black_24dp)
+                    .setContentTitle("Dissertation App Data Collection")
+                    .setContentText("ISSA FAILURE")
+                    .setStyle(new NotificationCompat.BigTextStyle().bigText(e.getLocalizedMessage()))
+                    .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+
+            NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(getApplicationContext());
+            notificationManagerCompat.notify(nId.getAndIncrement(), builder.build());
             return Result.failure();
         }
 

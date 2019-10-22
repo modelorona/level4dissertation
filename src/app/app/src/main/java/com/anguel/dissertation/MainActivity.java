@@ -2,6 +2,8 @@ package com.anguel.dissertation;
 
 import android.annotation.TargetApi;
 import android.app.AppOpsManager;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
@@ -9,8 +11,6 @@ import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkManager;
 
@@ -18,14 +18,9 @@ import android.provider.Settings;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.anguel.dissertation.adapters.LogEventAdapter;
-import com.anguel.dissertation.logger.Logger;
-import com.anguel.dissertation.persistence.LogEvent;
 import com.anguel.dissertation.workerservice.IntervalGatheringWorker;
 
-import java.util.List;
 import java.util.Objects;
-import java.util.concurrent.ExecutionException;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -38,24 +33,26 @@ public class MainActivity extends AppCompatActivity {
 
         requestUsageStatsPermission();
 
+        createNotificationChannel();
+
         OneTimeWorkRequest request = new OneTimeWorkRequest.Builder(IntervalGatheringWorker.class).build();
         WorkManager.getInstance(this.getApplicationContext()).enqueue(request);
 
-        RecyclerView recyclerView = findViewById(R.id.data_view);
-
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(layoutManager);
-
-        Logger logger = new Logger();
-
-        try {
-            List<LogEvent> events = logger.getData(this.getApplicationContext());
-            RecyclerView.Adapter mAdapter = new LogEventAdapter(events);
-            recyclerView.setAdapter(mAdapter);
-
-        } catch (ExecutionException | InterruptedException e) {
-            e.printStackTrace();
-        }
+//        RecyclerView recyclerView = findViewById(R.id.data_view);
+//
+//        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
+//        recyclerView.setLayoutManager(layoutManager);
+//
+//        Logger logger = new Logger();
+//
+//        try {
+//            List<LogEvent> events = logger.getData(this.getApplicationContext());
+//            RecyclerView.Adapter mAdapter = new LogEventAdapter(events);
+//            recyclerView.setAdapter(mAdapter);
+//
+//        } catch (ExecutionException | InterruptedException e) {
+//            e.printStackTrace();
+//        }
 
     }
 
@@ -101,5 +98,19 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = "Collection Update";
+            String description = "Shows a notification is data is collected or not";
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel(getApplicationContext().getString(R.string.channel_id), name, importance);
+            channel.setDescription(description);
+            // Register the channel with the system; you can't change the importance
+            // or other notification behaviors after this
+            NotificationManager notificationManager = getApplicationContext().getSystemService(NotificationManager.class);
+            Objects.requireNonNull(notificationManager).createNotificationChannel(channel);
+        }
     }
 }
