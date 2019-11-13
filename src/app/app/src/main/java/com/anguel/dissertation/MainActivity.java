@@ -21,13 +21,18 @@ import androidx.work.WorkManager;
 
 import android.os.SystemClock;
 import android.provider.Settings;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.anguel.dissertation.services.AlarmReceiver;
 import com.anguel.dissertation.services.SaveLogService;
 import com.anguel.dissertation.workerservice.IntervalGatheringWorker;
+import com.jakewharton.threetenabp.AndroidThreeTen;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.Calendar;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
@@ -39,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        AndroidThreeTen.init(this);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -53,40 +59,22 @@ public class MainActivity extends AppCompatActivity {
         AlarmManager alarmManager = (AlarmManager)getApplicationContext().getSystemService(Context.ALARM_SERVICE);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this, REQUEST_CODE, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        Objects.requireNonNull(alarmManager).setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 1000*60, AlarmManager.INTERVAL_HOUR, pendingIntent);
+//        https://stackoverflow.com/a/25120314/4004697
 
-//        SaveLogService.enqueueWork(this, new Intent(this, SaveLogService.class));
-//
-//        Objects.requireNonNull(alarmManager).set(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + 60 * 1000, saveLogIntent);
+        long midnight;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            midnight = LocalDateTime.now().until(LocalDate.now().plusDays(1).atStartOfDay(), ChronoUnit.MILLIS);
+        } else { // use backported version only when necessary
+            Log.d("BP", "using backported version");
+            midnight = org.threeten.bp.LocalDateTime.now().until(org.threeten.bp.LocalDate.now().plusDays(1).atStartOfDay(), org.threeten.bp.temporal.ChronoUnit.MILLIS);
+        }
+        Log.d("midnightTime", String.valueOf(System.currentTimeMillis() + midnight));
 
-//        set the alarm to start at midnight, and run every 6 hours after that. this is to ensure data is gathered in the same time frame across devices
-//        Calendar calendar = Calendar.getInstance();
-//        calendar.setTimeInMillis(System.currentTimeMillis());
-//        calendar.set(Calendar.HOUR_OF_DAY, 0);
-//        calendar.set(Calendar.MINUTE, 0);
-//
-//        Objects.requireNonNull(alarmManager).setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), 21600000, saveLogIntent);
+//        create the background task to start at midnight and then run every 4 hours.
+        Objects.requireNonNull(alarmManager).setRepeating(AlarmManager.RTC_WAKEUP, midnight, AlarmManager.INTERVAL_HOUR * 4, pendingIntent);
 
-//        alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP)
 
-//        OneTimeWorkRequest request = new OneTimeWorkRequest.Builder(IntervalGatheringWorker.class).build();
-//        WorkManager.getInstance(this.getApplicationContext()).enqueue(request);
 
-//        RecyclerView recyclerView = findViewById(R.id.data_view);
-//
-//        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
-//        recyclerView.setLayoutManager(layoutManager);
-//
-//        Logger logger = new Logger();
-//
-//        try {
-//            List<LogEvent> events = logger.getData(this.getApplicationContext());
-//            RecyclerView.Adapter mAdapter = new LogEventAdapter(events);
-//            recyclerView.setAdapter(mAdapter);
-//
-//        } catch (ExecutionException | InterruptedException e) {
-//            e.printStackTrace();
-//        }
 
     }
 
