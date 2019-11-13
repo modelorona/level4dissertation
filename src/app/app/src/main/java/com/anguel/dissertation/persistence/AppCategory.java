@@ -26,4 +26,7 @@ public class AppCategory {
 
     @ColumnInfo
     String category;
+
+    @ColumnInfo
+    String packageName;
 }
