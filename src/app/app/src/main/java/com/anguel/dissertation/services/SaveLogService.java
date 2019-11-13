@@ -42,6 +42,7 @@ public class SaveLogService extends JobIntentService {
 
     private Map<String, String> getAdditionalAppDetails(String packageName) {
         Map<String, String> details = new HashMap<>();
+        details.put("packageName", packageName);
         try {
             PackageManager packManager = getApplicationContext().getPackageManager();
             ApplicationInfo app = packManager.getApplicationInfo(packageName, 0);
@@ -57,7 +58,8 @@ public class SaveLogService extends JobIntentService {
         } catch (Exception e) {
             Log.e("worker_appDetailsFail", Objects.requireNonNull(e.getLocalizedMessage()));
             e.printStackTrace();
-            details.put("name_package", packageName); // in this case we have only the package name. the app may have been recently uninstalled
+            details.put("name", String.format("UNDEFINED_%s", packageName)); // in this case we have only the package name. the app may have been recently uninstalled. add undefined in front as to differentiate it
+            details.put("category", "UNDEFINED");
         }
 
         return details;
@@ -106,15 +108,14 @@ public class SaveLogService extends JobIntentService {
                 appData.put("totalTimeInForeground", String.valueOf(usageStats.getTotalTimeInForeground()));
 
 //                todo: make this better. it's currently a quick fix, due to the fact that there's too much happening in my life, no time for a break even
-                if (additionalDetails.containsKey("category")) {
-                    appData.put("category", additionalDetails.get("category"));
+//                if (additionalDetails.containsKey("category")) {
 //                    if we have a category, then we save it to the database. otherwise, for now, do nothing
-                    try {
-                        boolean res = logger.saveAppCategory(getApplicationContext(), AppCategory.builder().category(appData.get("category")).appName(appData.get("name")).build());
-                    } catch (ExecutionException | InterruptedException e) {
-                        e.printStackTrace();
-                    }
+                try {
+                    boolean res = logger.saveAppCategory(getApplicationContext(), AppCategory.builder().category(additionalDetails.get("category")).appName(additionalDetails.get("name")).packageName(additionalDetails.get("packageName")).build());
+                } catch (ExecutionException | InterruptedException e) {
+                    e.printStackTrace();
                 }
+//                }
 
 //                now this will be the interesting part. with android Q, more usage data is available, but we need to check to make sure the device actually supports it as the current min
 //                target version is 24
