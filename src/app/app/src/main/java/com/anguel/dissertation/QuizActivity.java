@@ -7,6 +7,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -20,19 +21,28 @@ import com.anguel.dissertation.persistence.userdata.UserData;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 
-public class QuizActivity extends AppCompatActivity implements View.OnClickListener{
+public class QuizActivity extends AppCompatActivity implements View.OnClickListener {
 
 
     private int total = 0;
     private final int AMOUNT_OF_QUESTIONS = 20;
     private int totalQuestionsSoFar = 0;
     private TextView question;
+    private String id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quiz);
         setTitle(R.string.title);
+
+        SharedPreferences sharedPref = this.getSharedPreferences(
+                getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+        id = sharedPref.getString(getString(R.string.shprefprefix) + "_ID", "");
+        if (id.equalsIgnoreCase("")) {
+            Log.d("YEET", "YEET");
+//            ID has not been generated properly, todo: figure out how to overcome this
+        }
 
 //        get all buttons
         Button ans1 = (Button) findViewById(R.id.ans1);
@@ -57,7 +67,7 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View v) {
         int value;
-        switch(v.getId()) {
+        switch (v.getId()) {
             case R.id.ans2:
                 value = 1;
                 break;
@@ -76,7 +86,7 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
                 break;
         }
         total += value;
-        if (totalQuestionsSoFar++ < AMOUNT_OF_QUESTIONS-1) {
+        if (totalQuestionsSoFar++ < AMOUNT_OF_QUESTIONS - 1) {
             updateQuestion(getBaseContext(), totalQuestionsSoFar);
         } else {
             finishQuiz();
@@ -84,18 +94,17 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void updateQuestion(Context context, int index) {
-        String resource = String.format("q%s", String.valueOf(index+1));
+        String resource = String.format("q%s", String.valueOf(index + 1));
         int requestedId = context.getResources().getIdentifier(resource, "string", context.getPackageName());
         question.setText(getString(requestedId));
     }
 
     public void finishQuiz() {
 //        save score before doing anything else
-//        important: this is also where the user's unique ID gets generated
         Logger logger = new Logger();
         try {
 //            throw new InterruptedException("");
-            logger.saveSiasScore(getApplicationContext(), UserData.builder().userId(UUID.randomUUID().toString()).sias(total).build());
+            logger.saveSiasScore(getApplicationContext(), UserData.builder().userId(id).sias(total).build());
 //        tell the user what has happened. give them chance to read more about the score
             AlertDialog.Builder builder = new AlertDialog.Builder(QuizActivity.this);
             builder.setMessage("Thank you for taking the test. Your SIAS score is " + total + ". If you would like to know more about this test, please click the left button below to learn more.")

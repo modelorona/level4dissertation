@@ -8,16 +8,19 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import com.anguel.dissertation.services.AlarmReceiver;
 import com.jakewharton.threetenabp.AndroidThreeTen;
@@ -26,6 +29,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Objects;
+import java.util.UUID;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -42,6 +46,11 @@ public class MainActivity extends AppCompatActivity {
         requestUsageStatsPermission();
 
         createNotificationChannel();
+
+//        create user unique ID
+        String id = getUserID();
+        TextView personalId = (TextView) findViewById(R.id.personalId);
+        personalId.append(id);
 
         Intent intent = new Intent(this, AlarmReceiver.class);
 
@@ -67,9 +76,25 @@ public class MainActivity extends AppCompatActivity {
 //      start the quiz
         findViewById(R.id.start_test).setOnClickListener(v -> {
             Intent startTestIntent = new Intent(this, QuizActivity.class);
+//            startTestIntent.putExtra("userID", id);
             startActivity(startTestIntent);
         });
 
+    }
+
+    public String getUserID() {
+//        preferencemanager was deprecated
+        SharedPreferences sharedPref = this.getSharedPreferences(
+                getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+        String id = sharedPref.getString(getString(R.string.shprefprefix)+"_ID", "");
+        if (id.equalsIgnoreCase("")) {
+            UUID g = UUID.randomUUID();
+            id = g.toString();
+            SharedPreferences.Editor editor = sharedPref.edit();
+            editor.putString(getString(R.string.shprefprefix)+"_ID", id);
+            editor.apply();
+        }
+        return id;
     }
 
     @Override
