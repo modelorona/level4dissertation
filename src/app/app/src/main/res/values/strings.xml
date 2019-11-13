@@ -8,7 +8,7 @@
     <string name="moderately">moderately</string>
     <string name="very">very</string>
     <string name="extremely">extremely</string>
-    <string name="main_act_string">Thank you for agreeing to participate in this study. Please click the button below to take the SIAS evaluation. Once taken, the score will be displayed and then saved to your device\'s memory. Please, do not clear any application space for the duration of the study. If you have any questions, please contact me at 2255541h@student.gla.ac.uk.</string>
+    <string name="main_act_string">Thank you for agreeing to participate in this study. Please click the button below to take the SIAS evaluation. Once taken, the score will be displayed and then saved to your device\'s memory. If you retake the test, the new score will not be saved. Please, do not clear any application space for the duration of the study. If you have any questions, please contact me at 2255541h@student.gla.ac.uk.</string>
     <string name="yourid">Your personal unique ID is: </string>
     <string name="start_sias_test">Start SIAS Test</string>
     <string name="sias_url">https://en.wikipedia.org/wiki/Social_Interaction_Anxiety_Scale</string>
