@@ -9,7 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.anguel.dissertation.R;
-import com.anguel.dissertation.persistence.LogEvent;
+import com.anguel.dissertation.persistence.logevent.LogEvent;
 
 import java.util.Date;
 import java.util.List;

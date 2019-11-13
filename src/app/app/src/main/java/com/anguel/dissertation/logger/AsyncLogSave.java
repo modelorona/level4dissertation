@@ -4,8 +4,8 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.anguel.dissertation.persistence.LogEvent;
-import com.anguel.dissertation.persistence.LogEventDatabase;
+import com.anguel.dissertation.persistence.logevent.LogEvent;
+import com.anguel.dissertation.persistence.logevent.LogEventDatabase;
 
 class AsyncLogSave extends AsyncTask<Object, Void, Boolean> {
 

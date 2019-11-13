@@ -1,4 +1,4 @@
-package com.anguel.dissertation.persistence;
+package com.anguel.dissertation.persistence.appcategory;
 
 import androidx.room.Dao;
 import androidx.room.Delete;

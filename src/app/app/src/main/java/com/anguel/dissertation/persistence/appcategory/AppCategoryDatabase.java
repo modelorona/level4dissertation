@@ -1,10 +1,12 @@
-package com.anguel.dissertation.persistence;
+package com.anguel.dissertation.persistence.appcategory;
 
 import android.content.Context;
 
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
+
+import com.anguel.dissertation.persistence.logevent.LogEventDatabase;
 
 @Database(entities = {AppCategory.class}, version = 1)
 public abstract class AppCategoryDatabase extends RoomDatabase {

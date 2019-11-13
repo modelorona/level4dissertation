@@ -1,4 +1,4 @@
-package com.anguel.dissertation.persistence;
+package com.anguel.dissertation.persistence.appcategory;
 
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;

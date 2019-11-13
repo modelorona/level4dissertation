@@ -13,12 +13,11 @@ import androidx.annotation.NonNull;
 import androidx.core.app.JobIntentService;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
-import androidx.work.ListenableWorker;
 
 import com.anguel.dissertation.R;
 import com.anguel.dissertation.logger.Logger;
-import com.anguel.dissertation.persistence.AppCategory;
-import com.anguel.dissertation.persistence.LogEvent;
+import com.anguel.dissertation.persistence.appcategory.AppCategory;
+import com.anguel.dissertation.persistence.logevent.LogEvent;
 
 import java.util.ArrayList;
 import java.util.HashMap;

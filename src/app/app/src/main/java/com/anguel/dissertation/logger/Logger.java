@@ -2,8 +2,8 @@ package com.anguel.dissertation.logger;
 
 import android.content.Context;
 
-import com.anguel.dissertation.persistence.AppCategory;
-import com.anguel.dissertation.persistence.LogEvent;
+import com.anguel.dissertation.persistence.appcategory.AppCategory;
+import com.anguel.dissertation.persistence.logevent.LogEvent;
 
 import java.util.List;
 import java.util.concurrent.ExecutionException;

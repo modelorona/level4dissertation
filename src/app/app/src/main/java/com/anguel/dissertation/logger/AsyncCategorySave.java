@@ -4,8 +4,8 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.anguel.dissertation.persistence.AppCategory;
-import com.anguel.dissertation.persistence.AppCategoryDatabase;
+import com.anguel.dissertation.persistence.appcategory.AppCategory;
+import com.anguel.dissertation.persistence.appcategory.AppCategoryDatabase;
 
 public class AsyncCategorySave extends AsyncTask<Object, Void, Boolean> {
     @Override

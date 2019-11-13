@@ -1,4 +1,4 @@
-package com.anguel.dissertation.persistence;
+package com.anguel.dissertation.persistence.logevent;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;

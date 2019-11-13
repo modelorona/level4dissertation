@@ -16,8 +16,8 @@ import androidx.work.WorkerParameters;
 
 import com.anguel.dissertation.R;
 import com.anguel.dissertation.logger.Logger;
-import com.anguel.dissertation.persistence.AppCategory;
-import com.anguel.dissertation.persistence.LogEvent;
+import com.anguel.dissertation.persistence.appcategory.AppCategory;
+import com.anguel.dissertation.persistence.logevent.LogEvent;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -30,6 +30,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
+@Deprecated
 public class IntervalGatheringWorker extends Worker {
 
     private AtomicInteger nId = new AtomicInteger();
