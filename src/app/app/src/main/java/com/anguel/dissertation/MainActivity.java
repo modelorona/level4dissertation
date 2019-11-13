@@ -24,6 +24,7 @@ import android.provider.Settings;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
 
 import com.anguel.dissertation.services.AlarmReceiver;
 import com.anguel.dissertation.services.SaveLogService;
@@ -68,6 +69,7 @@ public class MainActivity extends AppCompatActivity {
             Log.d("BP", "using backported version");
             midnight = org.threeten.bp.LocalDateTime.now().until(org.threeten.bp.LocalDate.now().plusDays(1).atStartOfDay(), org.threeten.bp.temporal.ChronoUnit.MILLIS);
         }
+        midnight += System.currentTimeMillis();
         Log.d("midnightTime", String.valueOf(System.currentTimeMillis() + midnight));
 
 //        create the background task to start at midnight and then run every 4 hours.
