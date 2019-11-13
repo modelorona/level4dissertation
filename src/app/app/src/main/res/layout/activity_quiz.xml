@@ -10,8 +10,8 @@
         android:id="@+id/quizLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginStart="1dp"
-        android:layout_marginEnd="1dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
         android:layout_marginBottom="2dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -20,25 +20,14 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:id="@+id/title"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:clickable="false"
-            android:lineSpacingExtra="8sp"
-            android:text="@string/title"
-            android:textAlignment="center"
-            android:textSize="24sp"
-            android:textStyle="bold" />
-
-        <TextView
             android:id="@+id/question"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:text="Sample Question"
             android:textAlignment="center"
-            android:textSize="24sp" />
+            android:textSize="24sp"
+            android:textStyle="bold" />
 
         <Button
             android:id="@+id/ans1"
@@ -51,24 +40,28 @@
             android:id="@+id/ans2"
             android:layout_width="match_parent"
             android:layout_height="60dp"
+            android:layout_marginTop="5dp"
             android:text="@string/slightly" />
 
         <Button
             android:id="@+id/ans3"
             android:layout_width="match_parent"
             android:layout_height="60dp"
+            android:layout_marginTop="5dp"
             android:text="@string/moderately" />
 
         <Button
             android:id="@+id/ans4"
             android:layout_width="match_parent"
             android:layout_height="60dp"
+            android:layout_marginTop="5dp"
             android:text="@string/very" />
 
         <Button
             android:id="@+id/ans5"
             android:layout_width="match_parent"
             android:layout_height="60dp"
+            android:layout_marginTop="5dp"
             android:text="@string/extremely" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

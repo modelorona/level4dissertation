@@ -76,7 +76,10 @@ public class MainActivity extends AppCompatActivity {
         Objects.requireNonNull(alarmManager).setRepeating(AlarmManager.RTC_WAKEUP, midnight, AlarmManager.INTERVAL_HOUR * 4, pendingIntent);
 
 
-
+        findViewById(R.id.start_test).setOnClickListener(v -> {
+            Intent startTestIntent = new Intent(this, QuizActivity.class);
+            startActivity(startTestIntent);
+        });
 
     }
 
