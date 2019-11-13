@@ -57,6 +57,7 @@ public class SaveLogService extends JobIntentService {
         } catch (Exception e) {
             Log.e("worker_appDetailsFail", Objects.requireNonNull(e.getLocalizedMessage()));
             e.printStackTrace();
+            details.put("name_package", packageName); // in this case we have only the package name. the app may have been recently uninstalled
         }
 
         return details;
