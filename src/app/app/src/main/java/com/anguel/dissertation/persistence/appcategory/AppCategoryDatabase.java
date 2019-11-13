@@ -6,8 +6,6 @@ import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
-import com.anguel.dissertation.persistence.logevent.LogEventDatabase;
-
 @Database(entities = {AppCategory.class}, version = 1)
 public abstract class AppCategoryDatabase extends RoomDatabase {
     public abstract AppCategoryDao appCategoryDao();
@@ -16,7 +14,7 @@ public abstract class AppCategoryDatabase extends RoomDatabase {
 
     public static AppCategoryDatabase getInstance(Context context) {
         if (INSTANCE == null) {
-            synchronized (LogEventDatabase.class) {
+            synchronized (AppCategoryDatabase.class) {
                 if (INSTANCE == null) {
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(), AppCategoryDatabase.class, "AppCategory.db").build();
                 }

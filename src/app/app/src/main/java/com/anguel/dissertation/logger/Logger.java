@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.anguel.dissertation.persistence.appcategory.AppCategory;
 import com.anguel.dissertation.persistence.logevent.LogEvent;
+import com.anguel.dissertation.persistence.userdata.UserData;
 
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -22,6 +23,11 @@ public class Logger {
 
     public Boolean saveAppCategory(Context context, AppCategory data) throws ExecutionException, InterruptedException {
         AsyncCategorySave runner = new AsyncCategorySave();
+        return runner.execute(context, data).get();
+    }
+
+    public Boolean saveSiasScore(Context context, UserData data) throws ExecutionException, InterruptedException {
+        AsyncSiasSave runner = new AsyncSiasSave();
         return runner.execute(context, data).get();
     }
 }

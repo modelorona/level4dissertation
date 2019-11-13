@@ -7,8 +7,6 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.room.TypeConverters;
 
-import com.anguel.dissertation.persistence.logevent.Converters;
-
 @Database(entities = {LogEvent.class}, version = 1)
 @TypeConverters(Converters.class)
 public abstract class LogEventDatabase extends RoomDatabase {

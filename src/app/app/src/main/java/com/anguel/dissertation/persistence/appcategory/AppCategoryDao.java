@@ -1,7 +1,6 @@
 package com.anguel.dissertation.persistence.appcategory;
 
 import androidx.room.Dao;
-import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
@@ -17,6 +16,4 @@ public interface AppCategoryDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertAppCategory(AppCategory appCategory);
 
-    @Delete
-    void delete(AppCategory appCategory);
 }

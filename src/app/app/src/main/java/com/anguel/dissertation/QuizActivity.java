@@ -3,6 +3,7 @@ package com.anguel.dissertation;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -12,6 +13,12 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+
+import com.anguel.dissertation.logger.Logger;
+import com.anguel.dissertation.persistence.userdata.UserData;
+
+import java.util.UUID;
+import java.util.concurrent.ExecutionException;
 
 public class QuizActivity extends AppCompatActivity implements View.OnClickListener{
 
@@ -84,22 +91,47 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
 
     public void finishQuiz() {
 //        save score before doing anything else
-
+//        important: this is also where the user's unique ID gets generated
+        Logger logger = new Logger();
+        try {
+//            throw new InterruptedException("");
+            logger.saveSiasScore(getApplicationContext(), UserData.builder().userId(UUID.randomUUID().toString()).sias(total).build());
 //        tell the user what has happened. give them chance to read more about the score
-        AlertDialog.Builder builder = new AlertDialog.Builder(QuizActivity.this);
-        builder.setMessage("Thank you for taking the test. Your SIAS score is " + total + ". If you would like to know more about this test, please click the left button below to learn more.")
-                .setTitle("Thank you");
+            AlertDialog.Builder builder = new AlertDialog.Builder(QuizActivity.this);
+            builder.setMessage("Thank you for taking the test. Your SIAS score is " + total + ". If you would like to know more about this test, please click the left button below to learn more.")
+                    .setTitle("Thank you")
+                    .setCancelable(false);
 
-        builder.setPositiveButton("Finish", (dialog, which) -> finish());
+            builder.setPositiveButton("Finish", (dialog, which) -> finish());
 
-        builder.setNeutralButton("Learn more", (dialog, which) -> {
-            Intent learnMoreIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.sias_url)));
-            startActivity(learnMoreIntent);
-            finish();
-        });
+            builder.setNeutralButton("Learn more", (dialog, which) -> {
+                Intent learnMoreIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.sias_url)));
+                startActivity(learnMoreIntent);
+                finish();
+            });
 
-        builder.create().show();
+            Dialog d = builder.create();
+            d.setCanceledOnTouchOutside(false);
+            d.show();
 
+        } catch (InterruptedException | ExecutionException e) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(QuizActivity.this);
+            builder.setTitle("Test could not save")
+                    .setMessage("A system error occured and the test score could not be saved. Please try again by clicking the button button, or if the error persists, quit and immediately email me at 2255541h@student.gla.ac.uk.")
+                    .setCancelable(false);
+
+            builder.setPositiveButton("Try again", (dialog, which) -> {
+                finishQuiz(); // cheeky
+            });
+
+            builder.setNeutralButton("Cancel", (dialog, which) -> {
+                finish();
+            });
+
+            Dialog d = builder.create();
+            d.setCanceledOnTouchOutside(false);
+            d.show();
+        }
     }
 
     @Override
