@@ -11,36 +11,25 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.app.JobIntentService;
-import androidx.work.OneTimeWorkRequest;
-import androidx.work.PeriodicWorkRequest;
-import androidx.work.WorkManager;
 
-import android.os.SystemClock;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Button;
 
 import com.anguel.dissertation.services.AlarmReceiver;
-import com.anguel.dissertation.services.SaveLogService;
-import com.anguel.dissertation.workerservice.IntervalGatheringWorker;
 import com.jakewharton.threetenabp.AndroidThreeTen;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-import java.util.Calendar;
 import java.util.Objects;
-import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity {
 
-    public static final int REQUEST_CODE=101;
+    public static final int REQUEST_CODE = 101;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, AlarmReceiver.class);
 
 
-        AlarmManager alarmManager = (AlarmManager)getApplicationContext().getSystemService(Context.ALARM_SERVICE);
+        AlarmManager alarmManager = (AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this, REQUEST_CODE, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
 //        https://stackoverflow.com/a/25120314/4004697
@@ -75,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
 //        create the background task to start at midnight and then run every 4 hours.
         Objects.requireNonNull(alarmManager).setRepeating(AlarmManager.RTC_WAKEUP, midnight, AlarmManager.INTERVAL_HOUR * 4, pendingIntent);
 
-
+//      start the quiz
         findViewById(R.id.start_test).setOnClickListener(v -> {
             Intent startTestIntent = new Intent(this, QuizActivity.class);
             startActivity(startTestIntent);
