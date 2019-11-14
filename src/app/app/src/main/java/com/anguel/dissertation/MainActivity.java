@@ -1,5 +1,6 @@
 package com.anguel.dissertation;
 
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.AlarmManager;
 import android.app.AppOpsManager;
@@ -9,12 +10,14 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.os.PowerManager;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.util.Log;
@@ -30,6 +33,7 @@ import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Objects;
 import java.util.UUID;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -47,11 +51,21 @@ public class MainActivity extends AppCompatActivity {
 
         createNotificationChannel();
 
-//        create user unique ID
+        //        create user unique ID
         String id = getUserID();
         TextView personalId = (TextView) findViewById(R.id.personalId);
         personalId.append(id);
 
+        //      start the quiz
+        findViewById(R.id.start_test).setOnClickListener(v -> {
+            Intent startTestIntent = new Intent(this, QuizActivity.class);
+//            startTestIntent.putExtra("userID", id);
+            startActivity(startTestIntent);
+        });
+
+    }
+
+    public void setUpBackgroundService() {
         Intent intent = new Intent(this, AlarmReceiver.class);
 
 
@@ -72,14 +86,6 @@ public class MainActivity extends AppCompatActivity {
 
 //        create the background task to start at midnight and then run every 4 hours.
         Objects.requireNonNull(alarmManager).setRepeating(AlarmManager.RTC_WAKEUP, midnight, AlarmManager.INTERVAL_HOUR * 4, pendingIntent);
-
-//      start the quiz
-        findViewById(R.id.start_test).setOnClickListener(v -> {
-            Intent startTestIntent = new Intent(this, QuizActivity.class);
-//            startTestIntent.putExtra("userID", id);
-            startActivity(startTestIntent);
-        });
-
     }
 
     public String getUserID() {
@@ -97,6 +103,11 @@ public class MainActivity extends AppCompatActivity {
         return id;
     }
 
+//    @SuppressLint("BatteryLife")
+    public void disableBatteryOptimisation() {
+        startActivityForResult(new Intent(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS), REQUEST_CODE+1);
+    }
+
     @Override
     public void onResume() {
         super.onResume();
@@ -107,7 +118,7 @@ public class MainActivity extends AppCompatActivity {
 
     void requestUsageStatsPermission() {
         if (!hasUsageStatsPermission(this)) {
-            startActivity(new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS));
+            startActivityForResult(new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS), REQUEST_CODE);
         }
     }
 
@@ -117,6 +128,17 @@ public class MainActivity extends AppCompatActivity {
         int mode = Objects.requireNonNull(appOps).checkOpNoThrow("android:get_usage_stats",
                 android.os.Process.myUid(), context.getPackageName());
         return mode == AppOpsManager.MODE_ALLOWED;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CODE) {
+            disableBatteryOptimisation();
+        } else if (requestCode == REQUEST_CODE+1) {
+            setUpBackgroundService();
+        }
+
     }
 
     @Override
