@@ -46,5 +46,7 @@
 <!--    preference strings -->
     <string name="usage_stats_pref">usage_stats_pref</string>
     <string name="battery_opt_pref">battery_opt_pref</string>
+    <string name="no_change">Setting not changed</string>
+    <string name="manual_change">The option to disable this is turned on for the purpose of the study. Please do not manually go into the system settings and change it from there.</string>
 
 </resources>

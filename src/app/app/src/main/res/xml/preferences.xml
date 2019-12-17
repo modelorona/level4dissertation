@@ -7,11 +7,11 @@
         app:title="Permissions">
 
         <SwitchPreferenceCompat
-            app:key="@string/usage_stats_pref"
+            app:key="usage_stats_pref"
             app:title="Enable usage stats"/>
 
         <SwitchPreferenceCompat
-            app:key="@string/battery_opt_pref"
+            app:key="battery_opt_pref"
             app:title="Disable battery optimization"/>
 
     </PreferenceCategory>
