@@ -7,18 +7,18 @@
         app:title="Permissions">
 
         <SwitchPreferenceCompat
-            app:key="usage_stats"
+            app:key="@string/usage_stats_pref"
             app:title="Enable usage stats"/>
 
         <SwitchPreferenceCompat
-            app:key="battery_opt"
+            app:key="@string/battery_opt_pref"
             app:title="Disable battery optimization"/>
 
     </PreferenceCategory>
 
     <PreferenceCategory
-        app:key="help_category"
-        app:title="Help">
+        app:key="info_category"
+        app:title="Information">
 
         <Preference
             app:key="learn_more_pref"
@@ -39,6 +39,14 @@
                 android:data="@string/sias_url">
             </intent>
         </Preference>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        app:key="help_category"
+        app:title="Help">
+
+<!--        maybe an action to opt out or contact me -->
 
     </PreferenceCategory>
 
