@@ -1,24 +1,23 @@
 package com.anguel.dissertation;
 
-import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.AlarmManager;
 import android.app.AppOpsManager;
+import android.app.Dialog;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.os.PowerManager;
-import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.Menu;
@@ -26,6 +25,7 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.anguel.dissertation.services.AlarmReceiver;
+import com.anguel.dissertation.settings.SettingsActivity;
 import com.jakewharton.threetenabp.AndroidThreeTen;
 
 import java.time.LocalDate;
@@ -47,27 +47,41 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        requestUsageStatsPermission();
-
         createNotificationChannel();
 
-        //        create user unique ID
-        String id = getUserID();
-        TextView personalId = (TextView) findViewById(R.id.personalId);
-        personalId.append(id);
+        PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
 
         //      start the quiz
         findViewById(R.id.start_test).setOnClickListener(v -> {
-            Intent startTestIntent = new Intent(this, QuizActivity.class);
-//            startTestIntent.putExtra("userID", id);
-            startActivity(startTestIntent);
+//            see if permissions are enabled or not. prevent taking the test unless they are fin
+            if (!hasUsageStatsPermission(this) || !Objects.requireNonNull(pm).isIgnoringBatteryOptimizations(getPackageName())) {
+                AlertDialog.Builder alert = new AlertDialog.Builder(MainActivity.this);
+                alert.setTitle("Please enable permissions")
+                        .setMessage("Please make sure to enable the Usage Statistics permisssion and then disable battery optimisations for the app to work as intended. You can find this " +
+                                "in the settings.")
+                        .setCancelable(false);
+
+                alert.setPositiveButton("Go to Settings", ((dialog, which) -> {
+                    Intent settingsIntent = new Intent(this, SettingsActivity.class);
+                    startActivity(settingsIntent);
+                }));
+
+                Dialog d = alert.create();
+                d.setCanceledOnTouchOutside(false);
+                d.show();
+
+            } else {
+                Intent startTestIntent = new Intent(this, QuizActivity.class);
+                startActivity(startTestIntent);
+            }
         });
 
     }
 
     public void setUpBackgroundService() {
         Intent intent = new Intent(this, AlarmReceiver.class);
-
+        intent.putExtra("startTime", -1L);
+        intent.putExtra("endTime", -1L);
 
         AlarmManager alarmManager = (AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this, REQUEST_CODE, intent, PendingIntent.FLAG_UPDATE_CURRENT);
@@ -85,7 +99,7 @@ public class MainActivity extends AppCompatActivity {
         Log.d("midnightTime", String.valueOf(System.currentTimeMillis() + midnight));
 
 //        create the background task to start at midnight and then run every 4 hours.
-        Objects.requireNonNull(alarmManager).setRepeating(AlarmManager.RTC_WAKEUP, midnight, AlarmManager.INTERVAL_HOUR * 4, pendingIntent);
+        Objects.requireNonNull(alarmManager).setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 2000, AlarmManager.INTERVAL_HOUR * 4, pendingIntent);
     }
 
     public String getUserID() {
@@ -157,6 +171,8 @@ public class MainActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            Intent settingsIntent = new Intent(this, SettingsActivity.class);
+            startActivity(settingsIntent);
             return true;
         }
 
@@ -166,7 +182,7 @@ public class MainActivity extends AppCompatActivity {
     private void createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             CharSequence name = "Collection Update";
-            String description = "Shows a notification is data is collected or not";
+            String description = "Shows a notification if data is collected or not";
             int importance = NotificationManager.IMPORTANCE_DEFAULT;
             NotificationChannel channel = new NotificationChannel(getApplicationContext().getString(R.string.channel_id), name, importance);
             channel.setDescription(description);
