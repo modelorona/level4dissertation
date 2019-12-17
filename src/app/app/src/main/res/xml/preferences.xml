@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory
+        app:key="permission_category"
+        app:title="Permissions">
+
+        <SwitchPreferenceCompat
+            app:key="usage_stats"
+            app:title="Enable usage stats"/>
+
+        <SwitchPreferenceCompat
+            app:key="battery_opt"
+            app:title="Disable battery optimization"/>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        app:key="help_category"
+        app:title="Help">
+
+        <Preference
+            app:key="learn_more_pref"
+            app:title="Learn more"
+            app:summary="Learn more about the study you are participating in">
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:data="@string/learn_more_url">
+            </intent>
+        </Preference>
+
+        <Preference
+            app:key="sias_pref"
+            app:title="What is SIAS"
+            app:summary="Learn more about what the SIAS is">
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:data="@string/sias_url">
+            </intent>
+        </Preference>
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

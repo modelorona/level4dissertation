@@ -8,10 +8,11 @@
     <string name="moderately">moderately</string>
     <string name="very">very</string>
     <string name="extremely">extremely</string>
-    <string name="main_act_string">Thank you for agreeing to participate in this study. Please click the button below to take the SIAS evaluation. Once taken, the score will be displayed and then saved to your device\'s memory. If you retake the test, the new score will not be saved. Please, do not clear any application space for the duration of the study. If you have any questions, please contact me at 2255541h@student.gla.ac.uk.</string>
+    <string name="main_act_string">Thank you for agreeing to participate in this study. Please first allow permissions by clicking the buttons below, and then click the last one to start the SIAS evaluation. Once taken, the score will be displayed and then saved to your device\'s memory. If you retake the test, the new score will not be saved. Please, do not clear any application space for the duration of the study. If you have any questions, please contact me at 2255541h@student.gla.ac.uk.</string>
     <string name="yourid">Your personal unique ID is: </string>
     <string name="start_sias_test">Start SIAS Test</string>
     <string name="sias_url">https://en.wikipedia.org/wiki/Social_Interaction_Anxiety_Scale</string>
+    <string name="learn_more_url">TODO: add link to this resource</string>
     <string name="shprefprefix">level4dissertation2255541h</string>
     <string name="preference_file_key">level4dissertationprefs</string>
 
@@ -35,4 +36,7 @@
     <string name="q18">When mixing in a group, I find myself worrying I will be ignored.</string>
     <string name="q19">I am tense mixing in a group.</string>
     <string name="q20">I am unsure whether to greet someone I know only slightly.</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

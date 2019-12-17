@@ -32,6 +32,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".settings.SettingsActivity" />
 
         <receiver
             android:name=".services.AlarmReceiver"
