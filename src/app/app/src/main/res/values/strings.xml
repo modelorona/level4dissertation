@@ -49,5 +49,9 @@
     <string name="no_change">Setting not changed</string>
     <string name="manual_change">The option to disable this is turned on for the purpose of the study. Please do not manually go into the system settings and change it from there.</string>
     <string name="see_data_collection">See data collection</string>
+    <string name="toggle_data_collection">Toggle data collection</string>
+    <string name="data_collection_is_off">Data Collection is Off</string>
+    <string name="data_collection_is_on">Data Collection is On</string>
+    <string name="use_the_button_below_to_turn_on_and_off_the_data_collection">Use the button below to turn on and off the data collection.</string>
 
 </resources>
