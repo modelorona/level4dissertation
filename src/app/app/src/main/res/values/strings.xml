@@ -21,7 +21,7 @@
     <string name="shprefprefix">level4dissertation2255541h</string>
     <string name="preference_file_key">level4dissertationprefs</string>
 
-<!--    question strings-->
+    <!--    question strings-->
     <string name="q1">I get nervous if I have to speak with someone in authority (teacher, boss, etc.).</string>
     <string name="q2">I have difficulty making eye contact with others.</string>
     <string name="q3">I become tense if I have to talk about myself or my feelings.</string>
@@ -43,10 +43,11 @@
     <string name="q19">I am tense mixing in a group.</string>
     <string name="q20">I am unsure whether to greet someone I know only slightly.</string>
 
-<!--    preference strings -->
+    <!--    preference strings -->
     <string name="usage_stats_pref">usage_stats_pref</string>
     <string name="battery_opt_pref">battery_opt_pref</string>
     <string name="no_change">Setting not changed</string>
     <string name="manual_change">The option to disable this is turned on for the purpose of the study. Please do not manually go into the system settings and change it from there.</string>
+    <string name="see_data_collection">See data collection</string>
 
 </resources>

@@ -11,13 +11,17 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toolbar;
 
 import com.anguel.dissertation.logger.Logger;
 import com.anguel.dissertation.persistence.userdata.UserData;
 
+import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 
@@ -34,6 +38,8 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quiz);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         setTitle(R.string.title);
 
         id = getUserID();
@@ -115,17 +121,17 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
             logger.saveSiasScore(getApplicationContext(), UserData.builder().userId(id).sias(total).build());
 //        tell the user what has happened. give them chance to read more about the score
             AlertDialog.Builder builder = new AlertDialog.Builder(QuizActivity.this);
-            builder.setMessage("Thank you for taking the test. Your SIAS score is " + total + ". If you would like to know more about this test, please click the left button below to learn more.")
+            builder.setMessage("Thank you for taking the test. Your SIAS score is " + total + ". If you would like to know more about this test, you can find more information in the application settings.")
                     .setTitle("Thank you")
                     .setCancelable(false);
 
             builder.setPositiveButton("Finish", (dialog, which) -> finish());
 
-            builder.setNeutralButton("Learn more", (dialog, which) -> {
-                Intent learnMoreIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.sias_url)));
-                startActivity(learnMoreIntent);
-                finish();
-            });
+//            builder.setNeutralButton("Learn more", (dialog, which) -> {
+//                Intent learnMoreIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.sias_url)));
+//                startActivity(learnMoreIntent);
+//                finish();
+//            });
 
             Dialog d = builder.create();
             d.setCanceledOnTouchOutside(false);
@@ -141,14 +147,25 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
                 finishQuiz(); // cheeky
             });
 
-            builder.setNeutralButton("Cancel", (dialog, which) -> {
-                finish();
-            });
+            builder.setNeutralButton("Cancel", (dialog, which) -> finish());
 
             Dialog d = builder.create();
             d.setCanceledOnTouchOutside(false);
             d.show();
         }
+    }
+
+    public boolean onOptionsItemSelected(MenuItem item){
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    public boolean onCreateOptionsMenu(Menu menu) {
+        return true;
     }
 
     @Override

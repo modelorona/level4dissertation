@@ -24,6 +24,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import com.anguel.dissertation.datacollection.DataCollectionActivity;
 import com.anguel.dissertation.services.AlarmReceiver;
 import com.anguel.dissertation.settings.SettingsActivity;
 import com.jakewharton.threetenabp.AndroidThreeTen;
@@ -50,6 +51,11 @@ public class MainActivity extends AppCompatActivity {
         createNotificationChannel();
 
         PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+
+        findViewById(R.id.startDataCollectionButton).setOnClickListener(v -> {
+            Intent dataColIntent = new Intent(getBaseContext(), DataCollectionActivity.class);
+            startActivity(dataColIntent);
+        });
 
         //      start the quiz
         findViewById(R.id.start_test).setOnClickListener(v -> {

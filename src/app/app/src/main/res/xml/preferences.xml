@@ -21,6 +21,16 @@
         app:title="Information">
 
         <Preference
+            app:key="see_personal_sias_pref"
+            app:title="See your SIAS score">
+<!--            app:summary="See your SIAS score">-->
+<!--            <intent-->
+<!--                android:action="android.intent.action.VIEW"-->
+<!--                android:data="@string/learn_more_url">-->
+<!--            </intent>-->
+        </Preference>
+
+        <Preference
             app:key="learn_more_pref"
             app:title="Learn more"
             app:summary="Learn more about the study you are participating in">
