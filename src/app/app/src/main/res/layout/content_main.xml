@@ -38,4 +38,15 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/welcomeText" />
 
+    <Button
+        android:id="@+id/startDataCollectionButton"
+        android:layout_width="0dp"
+        android:layout_height="60dp"
+        android:text="@string/see_data_collection"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/start_test"
+        app:layout_constraintVertical_bias="0.07999998" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
