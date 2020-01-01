@@ -38,7 +38,6 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quiz);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         setTitle(R.string.title);
 
@@ -127,12 +126,6 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
 
             builder.setPositiveButton("Finish", (dialog, which) -> finish());
 
-//            builder.setNeutralButton("Learn more", (dialog, which) -> {
-//                Intent learnMoreIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.sias_url)));
-//                startActivity(learnMoreIntent);
-//                finish();
-//            });
-
             Dialog d = builder.create();
             d.setCanceledOnTouchOutside(false);
             d.show();
@@ -155,15 +148,16 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    @Override
     public boolean onOptionsItemSelected(MenuItem item){
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                finish();
-                return true;
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         return true;
     }
