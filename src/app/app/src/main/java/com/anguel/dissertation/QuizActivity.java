@@ -36,13 +36,7 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_quiz);
         setTitle(R.string.title);
 
-        SharedPreferences sharedPref = this.getSharedPreferences(
-                getString(R.string.preference_file_key), Context.MODE_PRIVATE);
-        id = sharedPref.getString(getString(R.string.shprefprefix) + "_ID", "");
-        if (id.equalsIgnoreCase("")) {
-            Log.d("YEET", "YEET");
-//            ID has not been generated properly, todo: figure out how to overcome this
-        }
+        id = getUserID();
 
 //        get all buttons
         Button ans1 = (Button) findViewById(R.id.ans1);
@@ -62,6 +56,21 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
         question = (TextView) findViewById(R.id.question);
         question.setText(R.string.q1);
 
+    }
+
+        public String getUserID() {
+//        preferencemanager was deprecated
+        SharedPreferences sharedPref = this.getSharedPreferences(
+                getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+        String id = sharedPref.getString(getString(R.string.shprefprefix)+"_ID", "");
+        if (id.equalsIgnoreCase("")) {
+            UUID g = UUID.randomUUID();
+            id = g.toString();
+            SharedPreferences.Editor editor = sharedPref.edit();
+            editor.putString(getString(R.string.shprefprefix)+"_ID", id);
+            editor.apply();
+        }
+        return id;
     }
 
     @Override
@@ -103,7 +112,6 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
 //        save score before doing anything else
         Logger logger = new Logger();
         try {
-//            throw new InterruptedException("");
             logger.saveSiasScore(getApplicationContext(), UserData.builder().userId(id).sias(total).build());
 //        tell the user what has happened. give them chance to read more about the score
             AlertDialog.Builder builder = new AlertDialog.Builder(QuizActivity.this);
