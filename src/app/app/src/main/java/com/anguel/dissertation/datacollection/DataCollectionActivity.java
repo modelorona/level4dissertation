@@ -32,6 +32,8 @@ public class DataCollectionActivity extends AppCompatActivity {
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         setTitle("Data Collection");
 
+        createSessionNotificationChannel();
+
         sharedPref = this.getSharedPreferences(
                 getString(R.string.preference_file_key), Context.MODE_PRIVATE);
         toggleDataCollectionDisplay();
@@ -54,6 +56,10 @@ public class DataCollectionActivity extends AppCompatActivity {
             }
             editor.apply();
         });
+
+    }
+
+    public void createSessionNotificationChannel() {
 
     }
 
