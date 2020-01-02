@@ -36,18 +36,19 @@ public class DataCollectionActivity extends AppCompatActivity {
                 getString(R.string.preference_file_key), Context.MODE_PRIVATE);
         toggleDataCollectionDisplay();
 
+        Intent keepAliveIntent = new Intent(getApplicationContext(), KeepAliveService.class);
+        keepAliveIntent.setAction(getString(R.string.ACTION_KEEP_ALIVE));
+
         ToggleButton button = (ToggleButton) findViewById(R.id.toggleButton);
         button.setOnCheckedChangeListener((buttonView, isChecked) -> {
             SharedPreferences.Editor editor = sharedPref.edit();
 //            it seems to get checked to on, and then calls this listener, which is why the isChecked is inverted :)
             if (!isChecked) {
 //                stop the data collection
-//                todo: is this important to add?
+                stopService(keepAliveIntent); // this seems to do the trick?
                 editor.putBoolean(getString(R.string.shprefprefix) + "_RECORDING_DATA", false);
             } else {
 //                start the data collection
-                Intent keepAliveIntent = new Intent(getApplicationContext(), KeepAliveService.class);
-                keepAliveIntent.setAction(getString(R.string.ACTION_KEEP_ALIVE));
                 startService(keepAliveIntent);
                 editor.putBoolean(getString(R.string.shprefprefix) + "_RECORDING_DATA", true);
             }

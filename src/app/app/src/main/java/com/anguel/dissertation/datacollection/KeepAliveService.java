@@ -17,6 +17,7 @@ import androidx.core.app.NotificationCompat;
 public class KeepAliveService extends Service {
 
     public static boolean isServiceRunning = false;
+    private static PhoneUnlockedReceiver receiver;
 
     @Override
     public void onCreate() {
@@ -58,7 +59,7 @@ public class KeepAliveService extends Service {
         startForeground(Integer.parseInt(getString(R.string.keep_alive_notif_channel)), notification);
 
 //        set up the receiver to receive all the required broadcasts
-        PhoneUnlockedReceiver receiver = new PhoneUnlockedReceiver();
+        receiver = new PhoneUnlockedReceiver();
         IntentFilter filter = new IntentFilter();
         filter.addAction(Intent.ACTION_USER_PRESENT);
         filter.addAction(Intent.ACTION_SCREEN_OFF);
@@ -70,11 +71,12 @@ public class KeepAliveService extends Service {
     // In case the service is deleted or crashes some how
     @Override
     public void onDestroy() {
-        isServiceRunning = false;
+        stopMyService();
         super.onDestroy();
     }
 
     void stopMyService() {
+        unregisterReceiver(receiver);
         stopForeground(true);
         stopSelf();
         isServiceRunning = false;
