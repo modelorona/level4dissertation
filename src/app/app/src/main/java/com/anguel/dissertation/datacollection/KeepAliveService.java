@@ -1,19 +1,20 @@
 package com.anguel.dissertation.datacollection;
 
 import android.app.Notification;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.IBinder;
-import android.util.Log;
 
 import com.anguel.dissertation.R;
+
+import java.util.Objects;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 
 public class KeepAliveService extends Service {
-    static final int NOTIFICATION_ID = 543;
 
     public static boolean isServiceRunning = false;
 
@@ -25,8 +26,7 @@ public class KeepAliveService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.d("here", "here");
-        if (intent != null && intent.getAction().equals(getString(R.string.ACTION_KEEP_ALIVE))) {
+        if (intent != null && Objects.requireNonNull(intent.getAction()).equals(getString(R.string.ACTION_KEEP_ALIVE))) {
             startServiceWithNotification();
         }
         else stopMyService();
@@ -37,25 +37,26 @@ public class KeepAliveService extends Service {
         if (isServiceRunning) return;
         isServiceRunning = true;
 
-//        Intent notificationIntent = new Intent(getApplicationContext(), MyActivity.class);
-//        notificationIntent.setAction(C.ACTION_MAIN);  // A string containing the action name
-//        notificationIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-//        PendingIntent contentPendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
+        Intent notificationIntent = new Intent(getApplicationContext(), DataCollectionActivity.class);
+        notificationIntent.setAction(getString(R.string.ACTION_KEEP_ALIVE));  // A string containing the action name
+        notificationIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        PendingIntent contentPendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
 
         Notification notification = new NotificationCompat.Builder(this, getString(R.string.channel_id))
                 .setContentTitle(getResources().getString(R.string.app_name))
                 .setTicker(getResources().getString(R.string.app_name))
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
-//                .setContentText(getResources().getString(R.string.app_name))
+                .setContentText(getResources().getString(R.string.alive_notif_text))
                 .setSmallIcon(R.drawable.ic_assignment_turned_in_black_24dp)
-//                .setContentIntent(contentPendingIntent)
+                .setContentIntent(contentPendingIntent)
                 .setOngoing(true)
-//                .setDeleteIntent(contentPendingIntent)  // if needed
+                .setAutoCancel(false)
                 .build();
 
         notification.flags = notification.flags | Notification.FLAG_NO_CLEAR;     // NO_CLEAR makes the notification stay when the user performs a "delete all" command
-        startForeground(NOTIFICATION_ID, notification);
+        startForeground(Integer.parseInt(getString(R.string.keep_alive_notif_channel)), notification);
 
+//        set up the receiver to receive all the required broadcasts
         PhoneUnlockedReceiver receiver = new PhoneUnlockedReceiver();
         IntentFilter filter = new IntentFilter();
         filter.addAction(Intent.ACTION_USER_PRESENT);

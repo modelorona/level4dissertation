@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.anguel.dissertation.MainActivity;
 import com.anguel.dissertation.R;
 
 import java.util.Objects;
@@ -35,7 +36,8 @@ public class DataCollectionActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
         if (item.getItemId() == android.R.id.home) {
-            finish();
+            Intent goBackIntent = new Intent(getApplicationContext(), MainActivity.class);
+            startActivity(goBackIntent);
             return true;
         }
         return super.onOptionsItemSelected(item);
