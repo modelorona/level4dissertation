@@ -30,6 +30,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
+@Deprecated
 public class SaveLogService extends JobIntentService {
 
     static final int JOB_ID = 300;

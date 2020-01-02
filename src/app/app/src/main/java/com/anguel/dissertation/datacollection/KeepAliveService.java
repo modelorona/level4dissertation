@@ -50,6 +50,7 @@ public class KeepAliveService extends Service {
                 .setSmallIcon(R.drawable.ic_assignment_turned_in_black_24dp)
                 .setContentIntent(contentPendingIntent)
                 .setOngoing(true)
+                .setOnlyAlertOnce(true)
                 .setAutoCancel(false)
                 .build();
 
