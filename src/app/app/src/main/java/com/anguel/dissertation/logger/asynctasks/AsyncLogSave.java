@@ -1,4 +1,4 @@
-package com.anguel.dissertation.logger;
+package com.anguel.dissertation.logger.asynctasks;
 
 import android.content.Context;
 import android.os.AsyncTask;
@@ -7,7 +7,7 @@ import android.util.Log;
 import com.anguel.dissertation.persistence.logevent.LogEvent;
 import com.anguel.dissertation.persistence.logevent.LogEventDatabase;
 
-class AsyncLogSave extends AsyncTask<Object, Void, Boolean> {
+public class AsyncLogSave extends AsyncTask<Object, Void, Boolean> {
 
     @Override
     protected Boolean doInBackground(Object... params) {

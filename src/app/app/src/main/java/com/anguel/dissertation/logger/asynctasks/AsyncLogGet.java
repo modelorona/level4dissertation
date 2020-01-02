@@ -1,4 +1,4 @@
-package com.anguel.dissertation.logger;
+package com.anguel.dissertation.logger.asynctasks;
 
 import android.content.Context;
 import android.os.AsyncTask;

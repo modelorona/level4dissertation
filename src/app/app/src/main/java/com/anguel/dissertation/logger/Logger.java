@@ -2,6 +2,10 @@ package com.anguel.dissertation.logger;
 
 import android.content.Context;
 
+import com.anguel.dissertation.logger.asynctasks.AsyncCategorySave;
+import com.anguel.dissertation.logger.asynctasks.AsyncLogGet;
+import com.anguel.dissertation.logger.asynctasks.AsyncLogSave;
+import com.anguel.dissertation.logger.asynctasks.AsyncSiasSave;
 import com.anguel.dissertation.persistence.appcategory.AppCategory;
 import com.anguel.dissertation.persistence.logevent.LogEvent;
 import com.anguel.dissertation.persistence.userdata.UserData;
