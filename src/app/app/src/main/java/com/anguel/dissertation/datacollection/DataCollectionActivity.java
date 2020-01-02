@@ -2,6 +2,7 @@ package com.anguel.dissertation.datacollection;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -18,6 +19,17 @@ public class DataCollectionActivity extends AppCompatActivity {
         setContentView(R.layout.activity_data_collection);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         setTitle("Data Collection");
+
+        Intent keepAliveIntent = new Intent(getApplicationContext(), KeepAliveService.class);
+        keepAliveIntent.setAction(getString(R.string.ACTION_KEEP_ALIVE));
+        startService(keepAliveIntent);
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
     }
 
     @Override
