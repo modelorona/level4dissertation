@@ -59,4 +59,6 @@ dependencies {
     def preference_version = "1.1.0"
     implementation "androidx.preference:preference:$preference_version"
 
+    implementation 'com.pranavpandey.android:dynamic-engine:2.3.0'
+
 }
