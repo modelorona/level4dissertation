@@ -1,15 +1,22 @@
 package com.anguel.dissertation.datacollection;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.os.Build;
 import android.os.IBinder;
 import android.util.Log;
 
 import com.pranavpandey.android.dynamic.engine.model.DynamicAppInfo;
 import com.pranavpandey.android.dynamic.engine.service.DynamicEngine;
 
+import java.time.Instant;
+
 import androidx.annotation.Nullable;
 
 public class EventMonitoringService extends DynamicEngine {
+
+    private long startTime = getTime();
+
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
@@ -18,7 +25,7 @@ public class EventMonitoringService extends DynamicEngine {
 
     @Override
     public void onInitialize(boolean charging, boolean headset, boolean docked) {
-        Log.d("event_monitoring", "init complete");
+
     }
 
     @Override
@@ -33,7 +40,16 @@ public class EventMonitoringService extends DynamicEngine {
 
     @Override
     public void onLockStateChange(boolean locked) {
+//        if screen is unlocked, record start time
+//        else, record the end time and create a background task to record the data. then reset the variables
+        long endTime = getTime();
+        if (locked) {
+            Log.d("event_monitor", String.format("session_end: %s", endTime));
 
+        } else {
+            startTime = getTime();
+            Log.d("event_monitor", String.format("session_start: %s", startTime));
+        }
     }
 
     @Override
@@ -64,5 +80,11 @@ public class EventMonitoringService extends DynamicEngine {
     @Override
     public void onPackageRemoved(@Nullable String packageName) {
 
+    }
+
+    private long getTime() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            return Instant.now().toEpochMilli();
+        } return org.threeten.bp.Instant.now().toEpochMilli();
     }
 }
