@@ -4,7 +4,6 @@ import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.IBinder;
 
 import com.anguel.dissertation.R;
@@ -17,7 +16,6 @@ import androidx.core.app.NotificationCompat;
 public class KeepAliveService extends Service {
 
     public static boolean isServiceRunning = false;
-    private static PhoneUnlockedReceiver receiver;
 
     @Override
     public void onCreate() {
@@ -58,14 +56,12 @@ public class KeepAliveService extends Service {
         notification.flags = notification.flags | Notification.FLAG_NO_CLEAR;     // NO_CLEAR makes the notification stay when the user performs a "delete all" command
         startForeground(R.integer.keep_alive_notif_channel, notification);
 
-//        set up the receiver to receive all the required broadcasts
-//        receiver = new PhoneUnlockedReceiver();
-//        IntentFilter filter = new IntentFilter();
-//        filter.addAction(Intent.ACTION_USER_PRESENT);
-//        filter.addAction(Intent.ACTION_SCREEN_OFF);
-//        filter.addAction(Intent.ACTION_SCREEN_ON);
-//        filter.addAction(Intent.ACTION_BOOT_COMPLETED);
-//        registerReceiver(receiver, filter);
+
+//        start the event monitoring service. started here so that it does not get killed
+        Intent monitoringService = new Intent(getApplicationContext(), EventMonitoringService.class);
+        monitoringService.setAction(getString(R.string.monitoring_service));
+        startService(monitoringService);
+
     }
 
     // In case the service is deleted or crashes some how
@@ -76,7 +72,6 @@ public class KeepAliveService extends Service {
     }
 
     void stopMyService() {
-        unregisterReceiver(receiver);
         stopForeground(true);
         stopSelf();
         isServiceRunning = false;
