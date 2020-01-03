@@ -2,15 +2,21 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "7339e5bf4a6e16b13a697db10b03c90a",
+    "identityHash": "50362e8000c87c3135cfd27d6d2b40b9",
     "entities": [
       {
         "tableName": "LogEvents",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`timestamp` INTEGER NOT NULL, `data` TEXT, PRIMARY KEY(`timestamp`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`sessionStart` INTEGER NOT NULL, `sessionEnd` INTEGER NOT NULL, `data` TEXT, PRIMARY KEY(`sessionStart`, `sessionEnd`))",
         "fields": [
           {
-            "fieldPath": "timestamp",
-            "columnName": "timestamp",
+            "fieldPath": "sessionStart",
+            "columnName": "sessionStart",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "sessionEnd",
+            "columnName": "sessionEnd",
             "affinity": "INTEGER",
             "notNull": true
           },
@@ -23,7 +29,8 @@
         ],
         "primaryKey": {
           "columnNames": [
-            "timestamp"
+            "sessionStart",
+            "sessionEnd"
           ],
           "autoGenerate": false
         },
@@ -34,7 +41,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '7339e5bf4a6e16b13a697db10b03c90a')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '50362e8000c87c3135cfd27d6d2b40b9')"
     ]
   }
 }

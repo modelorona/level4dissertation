@@ -21,10 +21,11 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-@Entity(tableName = "LogEvents")
+@Entity(tableName = "LogEvents", primaryKeys = {"sessionStart", "sessionEnd"})
 public class LogEvent {
-    @PrimaryKey // timestamp is the date in epoch time of the timestamp
-    public long timestamp;
+
+    public long sessionStart;
+    public long sessionEnd;
 
 //    @ColumnInfo  // this is UUID.toString(). actually unnecessary for the device database
 //    public String userId;
