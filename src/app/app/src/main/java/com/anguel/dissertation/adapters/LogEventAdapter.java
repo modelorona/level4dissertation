@@ -27,7 +27,7 @@ public class LogEventAdapter extends RecyclerView.Adapter<LogEventAdapter.ViewHo
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         StringBuilder s = new StringBuilder();
-        s.append(new Date(dataSet.get(position).getTimestamp()).toString());
+//        s.append(new Date(dataSet.get(position).getTimestamp()).toString());
         s.append(System.lineSeparator());
         s.append(dataSet.get(position).getData().toString());
         s.append(System.lineSeparator());
