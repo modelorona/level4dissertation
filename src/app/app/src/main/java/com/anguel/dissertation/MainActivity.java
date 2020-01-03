@@ -1,15 +1,12 @@
 package com.anguel.dissertation;
 
 import android.annotation.TargetApi;
-import android.app.AlarmManager;
 import android.app.AppOpsManager;
 import android.app.Dialog;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -18,27 +15,17 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.os.PowerManager;
-import android.provider.Settings;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.TextView;
 
 import com.anguel.dissertation.datacollection.DataCollectionActivity;
-import com.anguel.dissertation.services.AlarmReceiver;
 import com.anguel.dissertation.settings.SettingsActivity;
-import com.jakewharton.threetenabp.AndroidThreeTen;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.Objects;
-import java.util.UUID;
 
 
 public class MainActivity extends AppCompatActivity {
 
-//    public static final int REQUEST_CODE = 101;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

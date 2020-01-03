@@ -1,18 +1,18 @@
-package com.anguel.dissertation.services;
+package com.anguel.dissertation.workers;
 
 import android.app.usage.UsageStats;
 import android.app.usage.UsageStatsManager;
 import android.content.Context;
-import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
-import androidx.core.app.JobIntentService;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
+import androidx.work.Worker;
+import androidx.work.WorkerParameters;
 
 import com.anguel.dissertation.R;
 import com.anguel.dissertation.logger.Logger;
@@ -30,14 +30,12 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
-@Deprecated
-public class SaveLogService extends JobIntentService {
+public class SaveLogWorker extends Worker {
 
-    static final int JOB_ID = 300;
     private AtomicInteger nId = new AtomicInteger();
 
-    public static void enqueueWork(Context context, Intent work) {
-        enqueueWork(context, SaveLogService.class, JOB_ID, work);
+    public SaveLogWorker(@NonNull Context context, @NonNull WorkerParameters workerParams) {
+        super(context, workerParams);
     }
 
     private Map<String, String> getAdditionalAppDetails(String packageName) {
@@ -66,9 +64,9 @@ public class SaveLogService extends JobIntentService {
     }
 
 
+    @NonNull
     @Override
-    protected void onHandleWork(@NonNull Intent intent) {
-//        copied from worker service
+    public Result doWork() {
         Logger logger = new Logger();
 
         UsageStatsManager usm = (UsageStatsManager) getApplicationContext().getSystemService(Context.USAGE_STATS_SERVICE);
@@ -77,13 +75,12 @@ public class SaveLogService extends JobIntentService {
 
         if (appList != null && appList.size() == 0) {
             Log.d("Executed", "######### NO APP FOUND ##########");
-//            AlarmReceiver.setAlarm(false);
-//            stopSelf();
-            return;
+            return Result.failure();
         }
 
         LogEvent logEvent = new LogEvent();
-        logEvent.setTimestamp(time);
+        logEvent.setSessionStart(getInputData().getLong("sessionStart", -1L));
+        logEvent.setSessionEnd(getInputData().getLong("sessionEnd", -1L));
 
         if (Objects.requireNonNull(appList).size() > 0) {
             List<Map<String, String>> logEventData = new ArrayList<>();
@@ -107,15 +104,11 @@ public class SaveLogService extends JobIntentService {
                 appData.put("lastTimeUsed", String.valueOf(usageStats.getLastTimeUsed()));
                 appData.put("totalTimeInForeground", String.valueOf(usageStats.getTotalTimeInForeground()));
 
-//                todo: make this better. it's currently a quick fix, due to the fact that there's too much happening in my life, no time for a break even
-//                if (additionalDetails.containsKey("category")) {
-//                    if we have a category, then we save it to the database. otherwise, for now, do nothing
                 try {
                     boolean res = logger.saveAppCategory(getApplicationContext(), AppCategory.builder().category(additionalDetails.get("category")).appName(additionalDetails.get("name")).packageName(additionalDetails.get("packageName")).build());
                 } catch (ExecutionException | InterruptedException e) {
                     e.printStackTrace();
                 }
-//                }
 
 //                now this will be the interesting part. with android Q, more usage data is available, but we need to check to make sure the device actually supports it as the current min
 //                target version is 24
@@ -132,45 +125,31 @@ public class SaveLogService extends JobIntentService {
             logEvent.setData(logEventData);
         }
 
-        // todo: fix the way notifications are shown, this is ugly and a quick hack
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), getApplicationContext().getString(R.string.channel_id))
+                .setSmallIcon(R.drawable.ic_done_black_24dp)
+                .setContentTitle("Dissertation App Data Collection")
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+
+        NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(getApplicationContext());
+
         try {
             boolean res = logger.saveAppStatistics(getApplicationContext(), logEvent);
+
             if (res) {
-                NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), getApplicationContext().getString(R.string.channel_id))
-                        .setSmallIcon(R.drawable.ic_done_black_24dp)
-                        .setContentTitle("Dissertation App Data Collection")
-                        .setContentText("ISSA SUCCESS")
-                        .setPriority(NotificationCompat.PRIORITY_DEFAULT);
-
-                NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(getApplicationContext());
+                builder.setContentText("success");
                 notificationManagerCompat.notify(nId.getAndIncrement(), builder.build());
-//                AlarmReceiver.setAlarm(false);
-//                stopSelf();
-                return;
+                return Result.success();
             }
-
-            NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), getApplicationContext().getString(R.string.channel_id))
-                    .setSmallIcon(R.drawable.ic_done_black_24dp)
-                    .setContentTitle("Dissertation App Data Collection")
-                    .setContentText("ISSA FAILURE")
-                    .setPriority(NotificationCompat.PRIORITY_DEFAULT);
-
-            NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(getApplicationContext());
+            builder.setContentText("failure");
             notificationManagerCompat.notify(nId.getAndIncrement(), builder.build());
+            return Result.failure();
 
         } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();
-            NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), getApplicationContext().getString(R.string.channel_id))
-                    .setSmallIcon(R.drawable.ic_done_black_24dp)
-                    .setContentTitle("Dissertation App Data Collection")
-                    .setContentText("ISSA FAILURE")
-                    .setStyle(new NotificationCompat.BigTextStyle().bigText(e.getLocalizedMessage()))
-                    .setPriority(NotificationCompat.PRIORITY_DEFAULT);
 
-            NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(getApplicationContext());
+            builder.setContentText("failure - crash");
             notificationManagerCompat.notify(nId.getAndIncrement(), builder.build());
-//            AlarmReceiver.setAlarm(false);
-//            stopSelf();
+            return Result.failure();
         }
     }
 }

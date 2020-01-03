@@ -36,7 +36,7 @@
         <activity android:name=".settings.SettingsActivity" />
 
         <!--        <service-->
-<!--            android:name=".services.SaveLogService"-->
+<!--            android:name=".services.SaveLogWorker"-->
 <!--            android:permission="android.permission.BIND_JOB_SERVICE" />-->
         <service android:name=".datacollection.KeepAliveService"
             android:permission="android.permission.FOREGROUND_SERVICE"
