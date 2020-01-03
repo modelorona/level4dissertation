@@ -56,16 +56,16 @@ public class KeepAliveService extends Service {
                 .build();
 
         notification.flags = notification.flags | Notification.FLAG_NO_CLEAR;     // NO_CLEAR makes the notification stay when the user performs a "delete all" command
-        startForeground(Integer.parseInt(getString(R.string.keep_alive_notif_channel)), notification);
+        startForeground(R.integer.keep_alive_notif_channel, notification);
 
 //        set up the receiver to receive all the required broadcasts
-        receiver = new PhoneUnlockedReceiver();
-        IntentFilter filter = new IntentFilter();
-        filter.addAction(Intent.ACTION_USER_PRESENT);
-        filter.addAction(Intent.ACTION_SCREEN_OFF);
-        filter.addAction(Intent.ACTION_SCREEN_ON);
-        filter.addAction(Intent.ACTION_BOOT_COMPLETED);
-        registerReceiver(receiver, filter);
+//        receiver = new PhoneUnlockedReceiver();
+//        IntentFilter filter = new IntentFilter();
+//        filter.addAction(Intent.ACTION_USER_PRESENT);
+//        filter.addAction(Intent.ACTION_SCREEN_OFF);
+//        filter.addAction(Intent.ACTION_SCREEN_ON);
+//        filter.addAction(Intent.ACTION_BOOT_COMPLETED);
+//        registerReceiver(receiver, filter);
     }
 
     // In case the service is deleted or crashes some how

@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Dissertation</string>
     <string name="action_settings">Settings</string>
-    <string name="channel_id">3hunned</string>
+    <string name="channel_id">notif_channel_id</string>
     <string name="title">SIAS Quiz</string>
     <string name="not_at_all">not at all</string>
     <string name="slightly">slightly</string>
@@ -55,6 +55,5 @@
     <string name="use_the_button_below_to_turn_on_and_off_the_data_collection">Use the button below to turn on and off the data collection.</string>
     <string name="ACTION_KEEP_ALIVE">keep_alive</string>
     <string name="alive_notif_text">Data is being collected in the background. Click to see.</string>
-    <string name="keep_alive_notif_channel">543</string>
 
 </resources>

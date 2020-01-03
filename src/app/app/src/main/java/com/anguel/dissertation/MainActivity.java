@@ -122,7 +122,7 @@ public class MainActivity extends AppCompatActivity {
             CharSequence name = "Collection Update";
             String description = "Shows a notification if data is collected or not";
             int importance = NotificationManager.IMPORTANCE_DEFAULT;
-            NotificationChannel channel = new NotificationChannel(getApplicationContext().getString(R.string.channel_id), name, importance);
+            NotificationChannel channel = new NotificationChannel(getString(R.string.channel_id), name, importance);
             channel.setDescription(description);
             // Register the channel with the system; you can't change the importance
             // or other notification behaviors after this
