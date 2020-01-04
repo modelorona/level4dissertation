@@ -56,12 +56,6 @@ public class KeepAliveService extends Service {
         notification.flags = notification.flags | Notification.FLAG_NO_CLEAR;     // NO_CLEAR makes the notification stay when the user performs a "delete all" command
         startForeground(R.integer.keep_alive_notif_channel, notification);
 
-
-//        start the event monitoring service. started here so that it does not get killed
-        Intent monitoringService = new Intent(getApplicationContext(), EventMonitoringService.class);
-        monitoringService.setAction(getString(R.string.monitoring_service));
-        startService(monitoringService);
-
     }
 
     // In case the service is deleted or crashes some how

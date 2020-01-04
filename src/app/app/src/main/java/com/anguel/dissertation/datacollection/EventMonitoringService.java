@@ -1,17 +1,21 @@
 package com.anguel.dissertation.datacollection;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Build;
 import android.os.IBinder;
 import android.util.Log;
 
+import com.anguel.dissertation.workers.SaveLogWorker;
 import com.pranavpandey.android.dynamic.engine.model.DynamicAppInfo;
 import com.pranavpandey.android.dynamic.engine.service.DynamicEngine;
 
 import java.time.Instant;
 
 import androidx.annotation.Nullable;
+import androidx.work.Configuration;
+import androidx.work.Data;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkManager;
 
 public class EventMonitoringService extends DynamicEngine {
 
@@ -45,7 +49,11 @@ public class EventMonitoringService extends DynamicEngine {
         long endTime = getTime();
         if (locked) {
             Log.d("event_monitor", String.format("session_end: %s", endTime));
-
+            Data workerData = new Data.Builder().putLong("sessionStart", startTime).putLong("sessionEnd", endTime).build();
+            OneTimeWorkRequest saveSessionData = new OneTimeWorkRequest.Builder(SaveLogWorker.class)
+                    .setInputData(workerData)
+                    .build();
+            WorkManager.getInstance(this).enqueue(saveSessionData);
         } else {
             startTime = getTime();
             Log.d("event_monitor", String.format("session_start: %s", startTime));

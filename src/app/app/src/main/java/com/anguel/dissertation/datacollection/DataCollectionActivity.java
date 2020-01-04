@@ -57,6 +57,11 @@ public class DataCollectionActivity extends AppCompatActivity {
             editor.apply();
         });
 
+        //        start the event monitoring service. started here so that it does not get killed
+        Intent monitoringService = new Intent(getApplicationContext(), EventMonitoringService.class);
+//        monitoringService.setAction(getString(R.string.monitoring_service));
+        startService(monitoringService);
+
     }
 
     public void createSessionNotificationChannel() {

@@ -39,11 +39,11 @@
 <!--            android:name=".services.SaveLogWorker"-->
 <!--            android:permission="android.permission.BIND_JOB_SERVICE" />-->
         <service android:name=".datacollection.KeepAliveService"
-            android:permission="android.permission.FOREGROUND_SERVICE"
-            android:process=":stayingAlive"/>
+            android:permission="android.permission.FOREGROUND_SERVICE" />
+<!--            android:process=":stayingAlive"/>-->
         <service android:name=".datacollection.EventMonitoringService"
-            android:permission="android.permission.FOREGROUND_SERVICE"
-            android:process=":eventMonitor"/>
+            android:permission="android.permission.FOREGROUND_SERVICE" />
+<!--            android:process=":eventMonitor"/>-->
     </application>
 
 </manifest>

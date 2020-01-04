@@ -70,10 +70,22 @@ public class SaveLogWorker extends Worker {
         Logger logger = new Logger();
 
         UsageStatsManager usm = (UsageStatsManager) getApplicationContext().getSystemService(Context.USAGE_STATS_SERVICE);
-        long time = System.currentTimeMillis();
-        List<UsageStats> appList = Objects.requireNonNull(usm).queryUsageStats(UsageStatsManager.INTERVAL_DAILY, time - TimeUnit.HOURS.toMillis(4), time);
+
+        long startTime = getInputData().getLong("sessionStart", -1L);
+        long endTime = getInputData().getLong("sessionEnd", -1L);
+
+        List<UsageStats> appList = Objects.requireNonNull(usm).queryUsageStats(UsageStatsManager.INTERVAL_BEST, startTime, endTime);
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), getApplicationContext().getString(R.string.channel_id))
+                .setSmallIcon(R.drawable.ic_done_black_24dp)
+                .setContentTitle("Dissertation App Data Collection")
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+
+        NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(getApplicationContext());
 
         if (appList != null && appList.size() == 0) {
+            builder.setContentText("failure - no size");
+            notificationManagerCompat.notify(nId.getAndIncrement(), builder.build());
             Log.d("Executed", "######### NO APP FOUND ##########");
             return Result.failure();
         }
@@ -124,13 +136,6 @@ public class SaveLogWorker extends Worker {
 
             logEvent.setData(logEventData);
         }
-
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), getApplicationContext().getString(R.string.channel_id))
-                .setSmallIcon(R.drawable.ic_done_black_24dp)
-                .setContentTitle("Dissertation App Data Collection")
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
-
-        NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(getApplicationContext());
 
         try {
             boolean res = logger.saveAppStatistics(getApplicationContext(), logEvent);
