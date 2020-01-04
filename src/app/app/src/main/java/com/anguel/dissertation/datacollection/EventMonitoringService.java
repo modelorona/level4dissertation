@@ -10,6 +10,7 @@ import com.pranavpandey.android.dynamic.engine.model.DynamicAppInfo;
 import com.pranavpandey.android.dynamic.engine.service.DynamicEngine;
 
 import java.time.Instant;
+import java.util.concurrent.TimeUnit;
 
 import androidx.annotation.Nullable;
 import androidx.work.Configuration;
@@ -52,6 +53,7 @@ public class EventMonitoringService extends DynamicEngine {
             Data workerData = new Data.Builder().putLong("sessionStart", startTime).putLong("sessionEnd", endTime).build();
             OneTimeWorkRequest saveSessionData = new OneTimeWorkRequest.Builder(SaveLogWorker.class)
                     .setInputData(workerData)
+                    .setInitialDelay(1, TimeUnit.HOURS)
                     .build();
             WorkManager.getInstance(this).enqueue(saveSessionData);
         } else {
