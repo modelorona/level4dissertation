@@ -1,1 +1,0 @@
-Dissertation report done on Overleaft using the template provided [here](https://www.overleaf.com/latex/templates/university-of-glasgow-level-4-computing-science-project-template/spqpnkvzjdbw).
