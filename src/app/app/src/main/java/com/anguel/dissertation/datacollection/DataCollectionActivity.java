@@ -41,6 +41,10 @@ public class DataCollectionActivity extends AppCompatActivity {
         Intent keepAliveIntent = new Intent(getApplicationContext(), KeepAliveService.class);
         keepAliveIntent.setAction(getString(R.string.ACTION_KEEP_ALIVE));
 
+        //        start the event monitoring service. started here so that it does not get killed
+        Intent monitoringService = new Intent(getApplicationContext(), EventMonitoringService.class);
+        monitoringService.setAction(getString(R.string.monitoring_service));
+
         ToggleButton button = (ToggleButton) findViewById(R.id.toggleButton);
         button.setOnCheckedChangeListener((buttonView, isChecked) -> {
             SharedPreferences.Editor editor = sharedPref.edit();
@@ -48,19 +52,16 @@ public class DataCollectionActivity extends AppCompatActivity {
             if (!isChecked) {
 //                stop the data collection
                 stopService(keepAliveIntent); // this seems to do the trick?
+                stopService(monitoringService);
                 editor.putBoolean(getString(R.string.shprefprefix) + "_RECORDING_DATA", false);
             } else {
 //                start the data collection
                 startService(keepAliveIntent);
+                startService(monitoringService);
                 editor.putBoolean(getString(R.string.shprefprefix) + "_RECORDING_DATA", true);
             }
             editor.apply();
         });
-
-        //        start the event monitoring service. started here so that it does not get killed
-        Intent monitoringService = new Intent(getApplicationContext(), EventMonitoringService.class);
-//        monitoringService.setAction(getString(R.string.monitoring_service));
-        startService(monitoringService);
 
     }
 

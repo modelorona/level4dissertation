@@ -5,15 +5,13 @@ import android.os.Build;
 import android.os.IBinder;
 import android.util.Log;
 
-import com.anguel.dissertation.workers.SaveLogWorker;
+import com.anguel.dissertation.workers.SaveUsageStatsWorker;
 import com.pranavpandey.android.dynamic.engine.model.DynamicAppInfo;
 import com.pranavpandey.android.dynamic.engine.service.DynamicEngine;
 
 import java.time.Instant;
-import java.util.concurrent.TimeUnit;
 
 import androidx.annotation.Nullable;
-import androidx.work.Configuration;
 import androidx.work.Data;
 import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkManager;
@@ -51,9 +49,9 @@ public class EventMonitoringService extends DynamicEngine {
         if (locked) {
             Log.d("event_monitor", String.format("session_end: %s", endTime));
             Data workerData = new Data.Builder().putLong("sessionStart", startTime).putLong("sessionEnd", endTime).build();
-            OneTimeWorkRequest saveSessionData = new OneTimeWorkRequest.Builder(SaveLogWorker.class)
+            OneTimeWorkRequest saveSessionData = new OneTimeWorkRequest.Builder(SaveUsageStatsWorker.class)
                     .setInputData(workerData)
-                    .setInitialDelay(1, TimeUnit.HOURS)
+//                    .setInitialDelay(2, TimeUnit.HOURS)
                     .build();
             WorkManager.getInstance(this).enqueue(saveSessionData);
         } else {

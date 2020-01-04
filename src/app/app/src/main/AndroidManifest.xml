@@ -21,7 +21,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning">
-        <activity android:name=".datacollection.DataCollectionActivity"></activity>
+        <activity android:name=".datacollection.DataCollectionActivity" />
         <activity android:name=".QuizActivity" />
         <activity
             android:name=".MainActivity"
@@ -36,7 +36,7 @@
         <activity android:name=".settings.SettingsActivity" />
 
         <!--        <service-->
-<!--            android:name=".services.SaveLogWorker"-->
+<!--            android:name=".workers.SaveUsageStatsWorker"-->
 <!--            android:permission="android.permission.BIND_JOB_SERVICE" />-->
         <service android:name=".datacollection.KeepAliveService"
             android:permission="android.permission.FOREGROUND_SERVICE" />

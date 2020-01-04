@@ -27,14 +27,13 @@ import java.util.Objects;
 import java.util.SortedMap;
 import java.util.TreeMap;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class SaveLogWorker extends Worker {
+public class SaveUsageStatsWorker extends Worker {
 
     private AtomicInteger nId = new AtomicInteger();
 
-    public SaveLogWorker(@NonNull Context context, @NonNull WorkerParameters workerParams) {
+    public SaveUsageStatsWorker(@NonNull Context context, @NonNull WorkerParameters workerParams) {
         super(context, workerParams);
     }
 
@@ -106,7 +105,7 @@ public class SaveLogWorker extends Worker {
             for (Map.Entry<Long, UsageStats> longUsageStatsEntry : sortedAppsWithStats.entrySet()) {
                 UsageStats usageStats = longUsageStatsEntry.getValue();
 //                skip if the total time used is 0
-                if (usageStats.getTotalTimeInForeground() == 0) {
+                if (usageStats.getTotalTimeInForeground() == 0L) {
                     continue;
                 }
                 Map<String, String> additionalDetails = getAdditionalAppDetails(usageStats.getPackageName());
