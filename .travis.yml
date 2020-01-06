@@ -19,8 +19,8 @@ android:
   components:
   - build-tools-28.0.3
   - android-29
-  - tools
-  - platform-tools
+  # - tools
+  # - platform-tools
   licenses:
   - android-sdk-license-.+
 script:
@@ -40,6 +40,5 @@ deploy:
   file: "level4dissertation/src/app/app/build/outputs/apk/release/*"
   name: "Build $(date +'%d.%m.%Y %R')"
   on:
-    tags: true
     branch: master
     repo: modelorona/level4dissertation
