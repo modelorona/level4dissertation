@@ -27,11 +27,19 @@ script:
   - "./gradlew assembleRelease"
 notifications:
   email: false
+before_deploy:
+  - git config --local user.name "modelorona"
+  - git config --local user.email "angel.hristozov@gmail.com"
+  - export TRAVIS_TAG=${TRAVIS_TAG:-$(date +'%Y%m%d%H%M%S')-$(git log --format=%h -1)}
+  - git tag $TRAVIS_TAG
 deploy:
   provider: releases
+  file_glob: true
   api_key:
     secure: ItJeVfhwrpY4ZWIhjS2Ec37wIAVNS03ucFv6NZOcddzZUUo1Z1gkdYOWLWVy4wRs8/dRMNkjLUiNh28GPyLErz9ip4z72b4D8T8EEQSkw/w6ti+ZzMgfoUlyJOXrWpGTgQ8OtSteto45Bxpcx5ukMgi44w1Ec9RGqAXAWMwgfDTrXyDDt4Lk+G89/b4lMsIcuJtZcniRZICnF1gZuyTO6sOLSVCRty6OD4FX59Mxk6AxxPNV78RH2M7qi2B2k1I7UIYbFxvKW4WXmVKDlL+sL4WYWoecSpeIqMlwpTJt6K86kFqYEvRfLFuyis9V4nIAPVHR29i3XFElUXMHaNTZNQIC1+x/LbA3RnybSqXOw6gQn57Wni0f0iz9LFdA58wrRgB2fWiPW43oiVGRrZ1ZqoR6T5TeGkHiNL4S+1mfSJgc8/EjhsvV4C+jQ4OTylJGrdqsArNa9m4xBEo8vN+qlayKafkV/MLJ8xEtTSorvLOeDIddKroHrPSF1+eS3PnHpbYvrTX7ANqsHEYEN4EP6Fd63JrIEmPX+2fLxK7usb2t1AHH3d5Tq47gvehlYiNaL6mtjF2KLM8/RGjDS2k5qvgXFgy/Fb25JjmOygT40DUnuv6oIwPJKvd+AsFo7s7zMMtPXKTKIDiLpkej93FixJwKe2loNS/eFzBOgvOtPfQ=
-  file: "/home/travis/build/modelorona/level4dissertation/src/app/app/build/outputs/apk/release/*"
+  file: "level4dissertation/src/app/app/build/outputs/apk/release/*"
   name: "Build $(date +'%d.%m.%Y %R')"
   on:
+    tags: true
+    branch: master
     repo: modelorona/level4dissertation
