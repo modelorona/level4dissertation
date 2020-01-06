@@ -24,11 +24,9 @@ import lombok.ToString;
 @Entity(tableName = "LogEvents", primaryKeys = {"sessionStart", "sessionEnd"})
 public class LogEvent {
 
-    public long sessionStart;
-    public long sessionEnd;
+    long sessionStart;
+    long sessionEnd;
 
-//    @ColumnInfo  // this is UUID.toString(). actually unnecessary for the device database
-//    public String userId;
 
     @ColumnInfo
     @TypeConverters(Converters.class)
