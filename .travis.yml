@@ -23,6 +23,10 @@ android:
   - platform-tools
   licenses:
   - android-sdk-license-.+
+script:
+  - "gradle build assembleRelease"
+notifications:
+  email: false
 deploy:
   provider: releases
   api_key:
