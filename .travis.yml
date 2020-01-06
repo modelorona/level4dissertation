@@ -24,7 +24,7 @@ android:
   licenses:
   - android-sdk-license-.+
 script:
-  - "gradle build assembleRelease"
+  - "./gradlew assembleRelease"
 notifications:
   email: false
 deploy:
