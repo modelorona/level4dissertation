@@ -1,1 +1,5 @@
 past_reports/*
+.idea/*
+src/app/.idea/*
+src/app/app/release/*
+src/app/app/src/main/gen/*
