@@ -2,6 +2,9 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 29
+    signingConfigs {
+        release
+    }
     defaultConfig {
         applicationId "com.anguel.dissertation"
         minSdkVersion 24
@@ -27,6 +30,16 @@ android {
         sourceCompatibility = 1.8
     }
     buildToolsVersion = '28.0.3'
+
+    def isRunningOnTravis = System.getenv("CI") == "true"
+
+    if (isRunningOnTravis) {
+        // configure keystore
+        signingConfigs.release.storeFile = file("../OurStore.keystore")
+        signingConfigs.release.storePassword = System.getenv("keystore_password")
+        signingConfigs.release.keyAlias = System.getenv("keystore_alias")
+        signingConfigs.release.keyPassword = System.getenv("keystore_alias_password")
+    }
 }
 
 dependencies {
