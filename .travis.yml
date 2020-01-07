@@ -30,8 +30,10 @@ notifications:
 before_deploy:
   - git config --local user.name "modelorona"
   - git config --local user.email "angel.hristozov@gmail.com"
-  - export APP_VERSION=${$(./gradlew :app:printVersionName)-$(date +'%Y%m%d%H%M%S')}
-  - git tag $APP_VERSION
+  - export APP_DATE=`date +"%Y-%m-%d"`
+  - export APP_VERSION=`./gradlew -q printVersionName`
+  - export APP_TAG=$APP_DATE-$APP_VERSION
+  - echo $APP_TAG | xargs git tag
 deploy:
   provider: releases
   file_glob: true
