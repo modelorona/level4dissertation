@@ -5,6 +5,7 @@ import android.content.Context;
 import com.anguel.dissertation.logger.asynctasks.AsyncCategorySave;
 import com.anguel.dissertation.logger.asynctasks.AsyncLogGet;
 import com.anguel.dissertation.logger.asynctasks.AsyncLogSave;
+import com.anguel.dissertation.logger.asynctasks.AsyncSiasGet;
 import com.anguel.dissertation.logger.asynctasks.AsyncSiasSave;
 import com.anguel.dissertation.persistence.appcategory.AppCategory;
 import com.anguel.dissertation.persistence.logevent.LogEvent;
@@ -20,7 +21,7 @@ public class Logger {
         return runner.execute(context, data).get();
     }
 
-    public List<LogEvent> getData(Context context) throws ExecutionException, InterruptedException {
+    public List<LogEvent> getLogData(Context context) throws ExecutionException, InterruptedException {
         AsyncLogGet runner = new AsyncLogGet();
         return runner.execute(context).get();
     }
@@ -33,5 +34,10 @@ public class Logger {
     public Boolean saveSiasScore(Context context, UserData data) throws ExecutionException, InterruptedException {
         AsyncSiasSave runner = new AsyncSiasSave();
         return runner.execute(context, data).get();
+    }
+
+    public List<UserData> getUserData(Context context) throws ExecutionException, InterruptedException {
+        AsyncSiasGet runner = new AsyncSiasGet();
+        return runner.execute(context).get();
     }
 }
