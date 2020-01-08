@@ -73,7 +73,7 @@
         </Preference>
 
         <Preference
-            app:key="license_pref"
+            app:key="@string/license_pref"
             app:title="License information"
             app:summary="See open-source project licenses">
 

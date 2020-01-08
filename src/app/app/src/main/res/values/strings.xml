@@ -61,5 +61,6 @@
     <string name="boot_data_disabled">This is due to data collection being disabled in the app. Please click here to go to enable it.</string>
     <string name="boot_notif_title">Dissertation App Data Collection</string>
     <string name="see_personal_sias_pref">see_personal_sias_pref</string>
+    <string name="license_pref">license_pref</string>
 
 </resources>
