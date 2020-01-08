@@ -18,8 +18,6 @@
         Please, do not clear any application space for the duration of the study.</string>
     <string name="yourid">Your personal unique ID is: </string>
     <string name="start_sias_test">Start SIAS Test</string>
-    <string name="sias_url">https://en.wikipedia.org/wiki/Social_Interaction_Anxiety_Scale</string>
-    <string name="learn_more_url">https://gla-my.sharepoint.com/:w:/g/personal/2255541h_student_gla_ac_uk/EQNzGTwMrwRGhejo8hiLK74BQ5rXIRRy5n1eoZjvY0SohQ?e=Z8Pea3</string>
     <string name="shpref_prefix">level4dissertation2255541h</string>
     <string name="preference_file_key">level4dissertationprefs</string>
 
@@ -45,7 +43,6 @@
     <string name="q19">I am tense mixing in a group.</string>
     <string name="q20">I am unsure whether to greet someone I know only slightly.</string>
 
-    <!--    preference strings -->
     <string name="usage_stats_pref">usage_stats_pref</string>
     <string name="battery_opt_pref">battery_opt_pref</string>
     <string name="no_change">Setting not changed</string>
@@ -62,5 +59,9 @@
     <string name="boot_notif_title">Dissertation App Data Collection</string>
     <string name="see_personal_sias_pref">see_personal_sias_pref</string>
     <string name="license_pref">license_pref</string>
+    <string name="opt_out_form">https://forms.gle/StjJQD2aHazvBnBy9</string>
+    <string name="contact_form">https://forms.gle/SgiBmEpCoPztEeCg7</string>
+    <string name="sias_url">https://en.wikipedia.org/wiki/Social_Interaction_Anxiety_Scale</string>
+    <string name="learn_more_url">https://gla-my.sharepoint.com/:w:/g/personal/2255541h_student_gla_ac_uk/EQNzGTwMrwRGhejo8hiLK74BQ5rXIRRy5n1eoZjvY0SohQ?e=Z8Pea3</string>
 
 </resources>
