@@ -1,4 +1,4 @@
-package com.anguel.dissertation.datacollection;
+package com.anguel.dissertation.serviceengine.services;
 
 import android.app.Notification;
 import android.app.PendingIntent;

@@ -1,4 +1,4 @@
-package com.anguel.dissertation.datacollection;
+package com.anguel.dissertation;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatToggleButton;
@@ -16,6 +16,9 @@ import android.widget.ToggleButton;
 
 import com.anguel.dissertation.MainActivity;
 import com.anguel.dissertation.R;
+import com.anguel.dissertation.datacollection.EventMonitoringService;
+import com.anguel.dissertation.datacollection.KeepAliveService;
+import com.anguel.dissertation.serviceengine.ServiceEngine;
 
 import java.util.Arrays;
 import java.util.Objects;
@@ -32,8 +35,6 @@ public class DataCollectionActivity extends AppCompatActivity {
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         setTitle("Data Collection");
 
-        createSessionNotificationChannel();
-
         sharedPref = this.getSharedPreferences(
                 getString(R.string.preference_file_key), Context.MODE_PRIVATE);
         toggleDataCollectionDisplay();
@@ -45,6 +46,8 @@ public class DataCollectionActivity extends AppCompatActivity {
         Intent monitoringService = new Intent(getApplicationContext(), EventMonitoringService.class);
         monitoringService.setAction(getString(R.string.monitoring_service));
 
+        ServiceEngine engine = ServiceEngine.getInstance(getApplicationContext());
+
         ToggleButton button = (ToggleButton) findViewById(R.id.toggleButton);
 //        todo: fix bug where data collection is toggled on but is not actually happening
         button.setOnCheckedChangeListener((buttonView, isChecked) -> {
@@ -52,21 +55,19 @@ public class DataCollectionActivity extends AppCompatActivity {
 //            it seems to get checked to on, and then calls this listener, which is why the isChecked is inverted :)
             if (!isChecked) {
 //                stop the data collection
-                stopService(keepAliveIntent); // this seems to do the trick?
-                stopService(monitoringService);
+//                stopService(keepAliveIntent); // this seems to do the trick?
+//                stopService(monitoringService);
+                engine.stopServices(getApplicationContext());
                 editor.putBoolean(getString(R.string.shprefprefix) + "_RECORDING_DATA", false);
             } else {
 //                start the data collection
-                startService(keepAliveIntent);
-                startService(monitoringService);
+//                startService(keepAliveIntent);
+//                startService(monitoringService);
+                engine.startServices(getApplicationContext());
                 editor.putBoolean(getString(R.string.shprefprefix) + "_RECORDING_DATA", true);
             }
             editor.apply();
         });
-
-    }
-
-    public void createSessionNotificationChannel() {
 
     }
 
