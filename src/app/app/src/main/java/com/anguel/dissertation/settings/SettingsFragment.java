@@ -9,13 +9,17 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.PowerManager;
 import android.provider.Settings;
+import com.google.android.gms.oss.licenses.OssLicensesMenuActivity;
 
+import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.SwitchPreferenceCompat;
 
 import com.anguel.dissertation.R;
+import com.anguel.dissertation.logger.Logger;
 
 import java.util.Objects;
+import java.util.concurrent.ExecutionException;
 
 public class SettingsFragment extends PreferenceFragmentCompat {
     private SwitchPreferenceCompat batteryOpt;
@@ -27,6 +31,8 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
         batteryOpt = findPreference(getString(R.string.battery_opt_pref));
         usageStatsPms = findPreference(getString(R.string.usage_stats_pref));
+        Preference personSias = findPreference(getString(R.string.see_personal_sias_pref));
+        Preference licenseInfo = findPreference(getString(R.string.license_pref));
 
 //        toggle their values based on the current setting
         togglePreferenceValues();
@@ -39,6 +45,18 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
         usageStatsPms.setOnPreferenceClickListener(preference -> {
             requestUsageStatsPermission();
+            return true;
+        });
+
+        try {
+            Objects.requireNonNull(personSias).setSummary(String.valueOf(new Logger().getUserData(Objects.requireNonNull(getActivity()).getApplicationContext()).get(0).getSias()));
+        } catch (ExecutionException | InterruptedException | IndexOutOfBoundsException e) {
+            Objects.requireNonNull(personSias).setSummary("You have not yet taken the test.");
+            e.printStackTrace();
+        }
+
+        Objects.requireNonNull(licenseInfo).setOnPreferenceClickListener(preference -> {
+            startActivity(new Intent(Objects.requireNonNull(getActivity()).getApplicationContext(), OssLicensesMenuActivity.class));
             return true;
         });
 

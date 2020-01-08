@@ -39,36 +39,42 @@ public class MainActivity extends AppCompatActivity {
         PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
 
         findViewById(R.id.startDataCollectionButton).setOnClickListener(v -> {
-            Intent dataColIntent = new Intent(getBaseContext(), DataCollectionActivity.class);
-            startActivity(dataColIntent);
+            if (!hasUsageStatsPermission(this) || !Objects.requireNonNull(pm).isIgnoringBatteryOptimizations(getPackageName())) {
+                showPermissionsMissingDialog();
+            } else {
+                Intent dataColIntent = new Intent(getApplicationContext(), DataCollectionActivity.class);
+                startActivity(dataColIntent);
+            }
         });
 
         //      start the quiz
         findViewById(R.id.start_test).setOnClickListener(v -> {
 //            see if permissions are enabled or not. prevent taking the test unless they are fin
             if (!hasUsageStatsPermission(this) || !Objects.requireNonNull(pm).isIgnoringBatteryOptimizations(getPackageName())) {
-                AlertDialog.Builder alert = new AlertDialog.Builder(MainActivity.this);
-                alert.setTitle("Please enable permissions")
-                        .setMessage("Please make sure to enable the Usage Statistics permisssion and then disable battery optimisations for the app to work as intended. You can find this " +
-                                "in the settings.");
-//                        .setCancelable(false);
-
-                alert.setPositiveButton("Go to Settings", ((dialog, which) -> {
-                    Intent settingsIntent = new Intent(getBaseContext(), SettingsActivity.class);
-                    startActivity(settingsIntent);
-                }));
-
-
-                Dialog d = alert.create();
-//                d.setCanceledOnTouchOutside(false);
-                d.show();
-
+                showPermissionsMissingDialog();
             } else {
                 Intent startTestIntent = new Intent(this, QuizActivity.class);
                 startActivity(startTestIntent);
             }
         });
+    }
 
+    private void showPermissionsMissingDialog() {
+        AlertDialog.Builder alert = new AlertDialog.Builder(MainActivity.this);
+        alert.setTitle("Please enable permissions")
+                .setMessage("Please make sure to enable the Usage Statistics permisssion and then disable battery optimisations for the app to work as intended. You can find this " +
+                        "in the settings.");
+//                        .setCancelable(false);
+
+        alert.setPositiveButton("Go to Settings", ((dialog, which) -> {
+            Intent settingsIntent = new Intent(getApplicationContext(), SettingsActivity.class);
+            startActivity(settingsIntent);
+        }));
+
+
+        Dialog d = alert.create();
+//                d.setCanceledOnTouchOutside(false);
+        d.show();
     }
 
     @TargetApi(Build.VERSION_CODES.KITKAT)
