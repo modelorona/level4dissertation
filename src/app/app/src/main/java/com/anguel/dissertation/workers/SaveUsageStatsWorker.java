@@ -121,7 +121,7 @@ public class SaveUsageStatsWorker extends Worker {
                     e.printStackTrace();
                 }
 
-//                now this will be the interesting part. with android Q, more usage data is available, but we need to check to make sure the device actually supports it as the current min
+//                with android Q, more usage data is available, but we need to check to make sure the device actually supports it as the current min
 //                target version is 24
                 if (Build.VERSION.SDK_INT == Build.VERSION_CODES.Q) {
                     appData.put("lastTimeVisible", String.valueOf(usageStats.getLastTimeVisible()));

@@ -46,6 +46,7 @@ public class DataCollectionActivity extends AppCompatActivity {
         monitoringService.setAction(getString(R.string.monitoring_service));
 
         ToggleButton button = (ToggleButton) findViewById(R.id.toggleButton);
+//        todo: fix bug where data collection is toggled on but is not actually happening
         button.setOnCheckedChangeListener((buttonView, isChecked) -> {
             SharedPreferences.Editor editor = sharedPref.edit();
 //            it seems to get checked to on, and then calls this listener, which is why the isChecked is inverted :)
