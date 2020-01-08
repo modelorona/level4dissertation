@@ -67,12 +67,12 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
 //        preferencemanager was deprecated
         SharedPreferences sharedPref = this.getSharedPreferences(
                 getString(R.string.preference_file_key), Context.MODE_PRIVATE);
-        String id = sharedPref.getString(getString(R.string.shprefprefix)+"_ID", "");
+        String id = sharedPref.getString(getString(R.string.shpref_prefix)+"_ID", "");
         if (id.equalsIgnoreCase("")) {
             UUID g = UUID.randomUUID();
             id = g.toString();
             SharedPreferences.Editor editor = sharedPref.edit();
-            editor.putString(getString(R.string.shprefprefix)+"_ID", id);
+            editor.putString(getString(R.string.shpref_prefix)+"_ID", id);
             editor.apply();
         }
         return id;

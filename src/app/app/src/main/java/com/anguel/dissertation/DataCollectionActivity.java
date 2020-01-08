@@ -33,11 +33,12 @@ public class DataCollectionActivity extends AppCompatActivity {
             SharedPreferences.Editor editor = this.getSharedPreferences(
                     getString(R.string.preference_file_key), Context.MODE_PRIVATE).edit();
 //            it seems to get checked on, and then calls this listener, which is why the isChecked is inverted :)
-            if (!isChecked) {
-                editor.putBoolean(getString(R.string.shprefprefix) + "_RECORDING_DATA", false);
-            } else {
-                editor.putBoolean(getString(R.string.shprefprefix) + "_RECORDING_DATA", true);
-            }
+            editor.putBoolean(getString(R.string.shpref_prefix) + "_RECORDING_DATA", isChecked);
+//            if (!isChecked) {
+//                editor.putBoolean(getString(R.string.shpref_prefix) + "_RECORDING_DATA", false);
+//            } else {
+//                editor.putBoolean(getString(R.string.shpref_prefix) + "_RECORDING_DATA", true);
+//            }
             editor.apply();
             toggleDataCollection(isRecordingData());
         });
@@ -58,7 +59,7 @@ public class DataCollectionActivity extends AppCompatActivity {
 
     private boolean isRecordingData() {
         return getApplicationContext().getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE)
-                .getBoolean(getString(R.string.shprefprefix) + "_RECORDING_DATA", false);
+                .getBoolean(getString(R.string.shpref_prefix) + "_RECORDING_DATA", false);
     }
 
     @Override
