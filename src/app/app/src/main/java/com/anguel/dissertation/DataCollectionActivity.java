@@ -16,8 +16,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class DataCollectionActivity extends AppCompatActivity {
 
-//    private SharedPreferences sharedPref;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,13 +30,7 @@ public class DataCollectionActivity extends AppCompatActivity {
         button.setOnCheckedChangeListener((buttonView, isChecked) -> {
             SharedPreferences.Editor editor = this.getSharedPreferences(
                     getString(R.string.preference_file_key), Context.MODE_PRIVATE).edit();
-//            it seems to get checked on, and then calls this listener, which is why the isChecked is inverted :)
             editor.putBoolean(getString(R.string.shpref_prefix) + "_RECORDING_DATA", isChecked);
-//            if (!isChecked) {
-//                editor.putBoolean(getString(R.string.shpref_prefix) + "_RECORDING_DATA", false);
-//            } else {
-//                editor.putBoolean(getString(R.string.shpref_prefix) + "_RECORDING_DATA", true);
-//            }
             editor.apply();
             toggleDataCollection(isRecordingData());
         });
@@ -46,7 +38,6 @@ public class DataCollectionActivity extends AppCompatActivity {
     }
 
     private void toggleDataCollection(boolean recordingData) {
-//        boolean recordingData = sharedPref.getBoolean(getString(R.string.shprefprefix) + "_RECORDING_DATA", false);
         ToggleButton button = (ToggleButton) findViewById(R.id.toggleButton);
         button.setChecked(recordingData);
         ServiceEngine engine = ServiceEngine.getInstance(getApplicationContext());
