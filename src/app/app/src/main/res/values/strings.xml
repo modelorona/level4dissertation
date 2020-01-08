@@ -20,7 +20,7 @@
     <string name="start_sias_test">Start SIAS Test</string>
     <string name="sias_url">https://en.wikipedia.org/wiki/Social_Interaction_Anxiety_Scale</string>
     <string name="learn_more_url">https://gla-my.sharepoint.com/:w:/g/personal/2255541h_student_gla_ac_uk/EQNzGTwMrwRGhejo8hiLK74BQ5rXIRRy5n1eoZjvY0SohQ?e=Z8Pea3</string>
-    <string name="shprefprefix">level4dissertation2255541h</string>
+    <string name="shpref_prefix">level4dissertation2255541h</string>
     <string name="preference_file_key">level4dissertationprefs</string>
 
     <!--    question strings-->
@@ -55,8 +55,10 @@
     <string name="data_collection_is_off">Data Collection is Off</string>
     <string name="data_collection_is_on">Data Collection is On</string>
     <string name="use_the_button_below_to_turn_on_and_off_the_data_collection">Use the button below to turn on and off the data collection.</string>
-    <string name="ACTION_KEEP_ALIVE">keep_alive</string>
+    <string name="keep_alive_service">keep_alive</string>
     <string name="alive_notif_text">Data is being collected in the background.</string>
-    <string name="monitoring_service">monitoring_service</string>
+    <string name="monitor_service">monitoring_service</string>
+    <string name="boot_data_disabled">This is due to data collection being disabled in the app. Please click here to go to enable it.</string>
+    <string name="boot_notif_title">Dissertation App Data Collection</string>
 
 </resources>
