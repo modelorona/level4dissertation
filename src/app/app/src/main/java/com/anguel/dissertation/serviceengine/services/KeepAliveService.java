@@ -26,7 +26,7 @@ public class KeepAliveService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        if (intent != null && Objects.requireNonNull(intent.getAction()).equals(getString(R.string.ACTION_KEEP_ALIVE))) {
+        if (intent != null && Objects.requireNonNull(intent.getAction()).equals(getString(R.string.keep_alive_service))) {
             startServiceWithNotification();
         }
         else stopMyService();
@@ -38,7 +38,7 @@ public class KeepAliveService extends Service {
         isServiceRunning = true;
 
         Intent notificationIntent = new Intent(getApplicationContext(), DataCollectionActivity.class);
-        notificationIntent.setAction(getString(R.string.ACTION_KEEP_ALIVE));  // A string containing the action name
+        notificationIntent.setAction(getString(R.string.keep_alive_service));  // A string containing the action name
         notificationIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         PendingIntent contentPendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
 

@@ -40,11 +40,11 @@ public class BootService extends JobIntentService {
 
         if (recordingData) {
             Intent keepAliveIntent = new Intent(getApplicationContext(), KeepAliveService.class);
-            keepAliveIntent.setAction(getString(R.string.ACTION_KEEP_ALIVE));
+            keepAliveIntent.setAction(getString(R.string.keep_alive_service));
 
             //        start the event monitoring service. started here so that it does not get killed
             Intent monitoringService = new Intent(getApplicationContext(), EventMonitoringService.class);
-            monitoringService.setAction(getString(R.string.monitoring_service));
+            monitoringService.setAction(getString(R.string.monitor_service));
 
             startService(keepAliveIntent);
             startService(monitoringService);

@@ -55,8 +55,8 @@
     <string name="data_collection_is_off">Data Collection is Off</string>
     <string name="data_collection_is_on">Data Collection is On</string>
     <string name="use_the_button_below_to_turn_on_and_off_the_data_collection">Use the button below to turn on and off the data collection.</string>
-    <string name="ACTION_KEEP_ALIVE">keep_alive</string>
+    <string name="keep_alive_service">keep_alive</string>
     <string name="alive_notif_text">Data is being collected in the background.</string>
-    <string name="monitoring_service">monitoring_service</string>
+    <string name="monitor_service">monitoring_service</string>
 
 </resources>

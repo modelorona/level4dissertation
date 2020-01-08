@@ -24,8 +24,8 @@ public class ServiceEngine {
     private ServiceEngine(Context context) {
 //        add the different kinds of services available
         services = new LinkedList<>(Arrays.asList(
-//                new Intent(context.getApplicationContext(), EventMonitoringService.class).putExtra("name", "EventMonitoring"),
-                new Intent(context.getApplicationContext(), KeepAliveService.class).setAction(context.getString(R.string.ACTION_KEEP_ALIVE))
+                new Intent(context.getApplicationContext(), EventMonitoringService.class).setAction(context.getString(R.string.monitor_service)),
+                new Intent(context.getApplicationContext(), KeepAliveService.class).setAction(context.getString(R.string.keep_alive_service))
         ));
     }
 
