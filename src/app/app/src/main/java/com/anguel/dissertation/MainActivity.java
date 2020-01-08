@@ -18,7 +18,6 @@ import android.os.PowerManager;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.anguel.dissertation.datacollection.DataCollectionActivity;
 import com.anguel.dissertation.settings.SettingsActivity;
 
 import java.util.Objects;

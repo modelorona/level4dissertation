@@ -12,6 +12,7 @@
         tools:ignore="ProtectedPermissions" />
     <uses-permission android:name="Manifest.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
         android:allowBackup="true"
@@ -21,7 +22,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning">
-        <activity android:name=".datacollection.DataCollectionActivity" />
+        <activity android:name=".DataCollectionActivity" />
         <activity android:name=".QuizActivity" />
         <activity
             android:name=".MainActivity"
@@ -35,15 +36,27 @@
         </activity>
         <activity android:name=".settings.SettingsActivity" />
 
+        <receiver android:name=".reboot.BootReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+            </intent-filter>
+        </receiver>
+
         <!--        <service-->
 <!--            android:name=".workers.SaveUsageStatsWorker"-->
 <!--            android:permission="android.permission.BIND_JOB_SERVICE" />-->
-        <service android:name=".datacollection.KeepAliveService"
+        <service android:name=".serviceengine.services.KeepAliveService"
             android:permission="android.permission.FOREGROUND_SERVICE" />
 <!--            android:process=":stayingAlive"/>-->
-        <service android:name=".datacollection.EventMonitoringService"
+
+        <service android:name=".serviceengine.services.EventMonitoringService"
             android:permission="android.permission.FOREGROUND_SERVICE" />
-<!--            android:process=":eventMonitor"/>-->
+        <!--            android:process=":eventMonitor"/>-->
+
+        <service android:name=".reboot.BootService"
+            android:permission="android.permission.BIND_JOB_SERVICE"
+            android:exported="true"/>
+
     </application>
 
 </manifest>

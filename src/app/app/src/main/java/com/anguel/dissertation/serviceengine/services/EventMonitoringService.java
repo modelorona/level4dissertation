@@ -1,4 +1,4 @@
-package com.anguel.dissertation.datacollection;
+package com.anguel.dissertation.serviceengine.services;
 
 import android.content.Intent;
 import android.os.Build;
