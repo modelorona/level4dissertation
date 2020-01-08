@@ -48,7 +48,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
         try {
             Objects.requireNonNull(personSias).setSummary(String.valueOf(new Logger().getUserData(Objects.requireNonNull(getActivity()).getApplicationContext()).get(0).getSias()));
-        } catch (ExecutionException | InterruptedException e) {
+        } catch (ExecutionException | InterruptedException | IndexOutOfBoundsException e) {
             Objects.requireNonNull(personSias).setSummary("You have not yet taken the test.");
             e.printStackTrace();
         }
