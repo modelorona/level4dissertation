@@ -2,6 +2,11 @@ apply plugin: 'com.android.application'
 apply plugin: 'com.google.android.gms.oss-licenses-plugin'
 apply plugin: 'io.sentry.android.gradle'
 
+sentry {
+    autoProguardConfig true
+    autoUpload true
+}
+
 android {
     compileSdkVersion 29
     signingConfigs {
@@ -46,11 +51,6 @@ task printVersionName {
     doLast {
         println android.defaultConfig.versionName
     }
-}
-
-sentry {
-    autoProguardConfig true
-    autoUpload true
 }
 
 dependencies {
