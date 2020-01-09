@@ -13,6 +13,7 @@ import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
+import io.sentry.Sentry;
 
 import com.anguel.dissertation.R;
 import com.anguel.dissertation.persistence.logger.Logger;
@@ -53,6 +54,7 @@ public class SaveUsageStatsWorker extends Worker {
                 details.put("category", category);
             }
         } catch (Exception e) {
+            Sentry.capture(e);
             Log.e("worker_appDetailsFail", Objects.requireNonNull(e.getLocalizedMessage()));
             e.printStackTrace();
             details.put("name", String.format("UNDEFINED_%s", packageName)); // in this case we have only the package name. the app may have been recently uninstalled. add undefined in front as to differentiate it
@@ -118,6 +120,7 @@ public class SaveUsageStatsWorker extends Worker {
                 try {
                     boolean res = logger.saveAppCategory(getApplicationContext(), AppCategory.builder().category(additionalDetails.get("category")).appName(additionalDetails.get("name")).packageName(additionalDetails.get("packageName")).build());
                 } catch (ExecutionException | InterruptedException e) {
+                    Sentry.capture(e);
                     e.printStackTrace();
                 }
 
@@ -149,6 +152,7 @@ public class SaveUsageStatsWorker extends Worker {
             return Result.failure();
 
         } catch (ExecutionException | InterruptedException e) {
+            Sentry.capture(e);
             e.printStackTrace();
 
             builder.setContentText("failure - crash");

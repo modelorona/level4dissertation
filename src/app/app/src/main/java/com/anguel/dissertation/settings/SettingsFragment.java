@@ -20,6 +20,7 @@ import com.google.android.gms.oss.licenses.OssLicensesMenuActivity;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.SwitchPreferenceCompat;
+import io.sentry.Sentry;
 
 import com.anguel.dissertation.R;
 import com.anguel.dissertation.persistence.logger.Logger;
@@ -58,6 +59,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         try {
             Objects.requireNonNull(personSias).setSummary(String.valueOf(new Logger().getUserData(Objects.requireNonNull(getActivity()).getApplicationContext()).get(0).getSias()));
         } catch (ExecutionException | InterruptedException | IndexOutOfBoundsException e) {
+            Sentry.capture(e);
             Objects.requireNonNull(personSias).setSummary("You have not yet taken the test.");
             e.printStackTrace();
         }

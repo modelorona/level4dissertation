@@ -72,5 +72,6 @@
     <string name="save_fail_message">A system error occurred and the test score could not be saved. Please try again by clicking the button, or if the error persists, quit and immediately email me at 2255541h@student.gla.ac.uk.</string>
     <string name="know_more">If you would like to know more about this test, you can find more information in the application settings.</string>
     <string name="your_score">Thank you for taking the test. Your SIAS score is</string>
+    <string name="dsn">https://400a55aa461746a0ab09da34d9fff81b@sentry.io/1876401</string>
 
 </resources>

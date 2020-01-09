@@ -2,6 +2,7 @@ package com.anguel.dissertation;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import io.sentry.Sentry;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -110,6 +111,7 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
             d.show();
 
         } catch (InterruptedException | ExecutionException e) {
+            Sentry.capture(e);
             AlertDialog.Builder builder = new AlertDialog.Builder(QuizActivity.this);
             builder.setTitle(getString(R.string.test_save_fail))
                     .setMessage(getString(R.string.save_fail_message))
