@@ -1,11 +1,11 @@
-package com.anguel.dissertation.logger.asynctasks;
+package com.anguel.dissertation.persistence.logger.asynctasks;
 
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.anguel.dissertation.persistence.logevent.LogEvent;
-import com.anguel.dissertation.persistence.logevent.LogEventDatabase;
+import com.anguel.dissertation.persistence.database.logevent.LogEvent;
+import com.anguel.dissertation.persistence.database.logevent.LogEventDatabase;
 
 import java.util.List;
 

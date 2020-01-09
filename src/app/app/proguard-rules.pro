@@ -108,3 +108,8 @@
 -keep class com.google.apphosting.api.ApiProxy {
   static *** getCurrentEnvironment (...);
 }
+
+-keepattributes LineNumberTable,SourceFile
+-dontwarn org.slf4j.**
+-dontwarn javax.**
+-keep class io.sentry.event.Event { *; }

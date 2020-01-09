@@ -30,7 +30,7 @@ public class DataCollectionActivity extends AppCompatActivity {
         button.setOnCheckedChangeListener((buttonView, isChecked) -> {
             SharedPreferences.Editor editor = this.getSharedPreferences(
                     getString(R.string.preference_file_key), Context.MODE_PRIVATE).edit();
-            editor.putBoolean(getString(R.string.shpref_prefix) + "_RECORDING_DATA", isChecked);
+            editor.putBoolean(getString(R.string.shpref_prefix) + getString(R.string.pref_data_record), isChecked);
             editor.apply();
             toggleDataCollection(isRecordingData());
         });
@@ -50,7 +50,7 @@ public class DataCollectionActivity extends AppCompatActivity {
 
     private boolean isRecordingData() {
         return getApplicationContext().getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE)
-                .getBoolean(getString(R.string.shpref_prefix) + "_RECORDING_DATA", false);
+                .getBoolean(getString(R.string.shpref_prefix) + getString(R.string.pref_data_record), false);
     }
 
     @Override

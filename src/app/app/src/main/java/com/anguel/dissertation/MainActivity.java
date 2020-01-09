@@ -13,12 +13,15 @@ import android.os.Bundle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import io.sentry.Sentry;
+import io.sentry.android.AndroidSentryClientFactory;
 
 import android.os.PowerManager;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.anguel.dissertation.settings.SettingsActivity;
+import com.jakewharton.threetenabp.AndroidThreeTen;
 
 import java.util.Objects;
 
@@ -29,7 +32,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        AndroidThreeTen.init(this);
+        Sentry.init(getString(R.string.dsn), new AndroidSentryClientFactory(this));
+        AndroidThreeTen.init(this);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -61,12 +65,11 @@ public class MainActivity extends AppCompatActivity {
 
     private void showPermissionsMissingDialog() {
         AlertDialog.Builder alert = new AlertDialog.Builder(MainActivity.this);
-        alert.setTitle("Please enable permissions")
-                .setMessage("Please make sure to enable the Usage Statistics permisssion and then disable battery optimisations for the app to work as intended. You can find this " +
-                        "in the settings.");
+        alert.setTitle(getString(R.string.permissions))
+                .setMessage(getString(R.string.enable_permissions));
 //                        .setCancelable(false);
 
-        alert.setPositiveButton("Go to Settings", ((dialog, which) -> {
+        alert.setPositiveButton(getString(R.string.go_to_settings), ((dialog, which) -> {
             Intent settingsIntent = new Intent(getApplicationContext(), SettingsActivity.class);
             startActivity(settingsIntent);
         }));
@@ -111,8 +114,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            CharSequence name = "Collection Update";
-            String description = "Shows a notification if data is collected or not";
+            CharSequence name = getString(R.string.collection_update);
+            String description = getString(R.string.collection_update_desc);
             int importance = NotificationManager.IMPORTANCE_DEFAULT;
             NotificationChannel channel = new NotificationChannel(getString(R.string.channel_id), name, importance);
             channel.setDescription(description);

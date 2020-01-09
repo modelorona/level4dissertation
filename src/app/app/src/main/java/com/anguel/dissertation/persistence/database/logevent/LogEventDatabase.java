@@ -1,4 +1,4 @@
-package com.anguel.dissertation.persistence.logevent;
+package com.anguel.dissertation.persistence.database.logevent;
 
 import android.content.Context;
 

@@ -1,4 +1,4 @@
-package com.anguel.dissertation.persistence.appcategory;
+package com.anguel.dissertation.persistence.database.appcategory;
 
 import androidx.room.Dao;
 import androidx.room.Insert;
