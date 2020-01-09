@@ -22,7 +22,7 @@ import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.SwitchPreferenceCompat;
 
 import com.anguel.dissertation.R;
-import com.anguel.dissertation.logger.Logger;
+import com.anguel.dissertation.persistence.logger.Logger;
 
 import java.util.Objects;
 import java.util.concurrent.ExecutionException;

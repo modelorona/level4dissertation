@@ -1,15 +1,15 @@
-package com.anguel.dissertation.logger;
+package com.anguel.dissertation.persistence.logger;
 
 import android.content.Context;
 
-import com.anguel.dissertation.logger.asynctasks.AsyncCategorySave;
-import com.anguel.dissertation.logger.asynctasks.AsyncLogGet;
-import com.anguel.dissertation.logger.asynctasks.AsyncLogSave;
-import com.anguel.dissertation.logger.asynctasks.AsyncSiasGet;
-import com.anguel.dissertation.logger.asynctasks.AsyncSiasSave;
-import com.anguel.dissertation.persistence.appcategory.AppCategory;
-import com.anguel.dissertation.persistence.logevent.LogEvent;
-import com.anguel.dissertation.persistence.userdata.UserData;
+import com.anguel.dissertation.persistence.logger.asynctasks.AsyncCategorySave;
+import com.anguel.dissertation.persistence.logger.asynctasks.AsyncLogGet;
+import com.anguel.dissertation.persistence.logger.asynctasks.AsyncLogSave;
+import com.anguel.dissertation.persistence.logger.asynctasks.AsyncSiasGet;
+import com.anguel.dissertation.persistence.logger.asynctasks.AsyncSiasSave;
+import com.anguel.dissertation.persistence.database.appcategory.AppCategory;
+import com.anguel.dissertation.persistence.database.logevent.LogEvent;
+import com.anguel.dissertation.persistence.database.userdata.UserData;
 
 import java.util.List;
 import java.util.concurrent.ExecutionException;

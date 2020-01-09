@@ -1,8 +1,7 @@
-package com.anguel.dissertation.persistence.logevent;
+package com.anguel.dissertation.persistence.database.logevent;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
-import androidx.room.PrimaryKey;
 import androidx.room.TypeConverters;
 
 import java.util.List;

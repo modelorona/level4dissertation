@@ -5,31 +5,25 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toolbar;
 
-import com.anguel.dissertation.logger.Logger;
-import com.anguel.dissertation.persistence.userdata.UserData;
+import com.anguel.dissertation.persistence.logger.Logger;
+import com.anguel.dissertation.persistence.database.userdata.UserData;
+import com.anguel.dissertation.utils.Utils;
 
 import java.util.Objects;
-import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 
 public class QuizActivity extends AppCompatActivity implements View.OnClickListener {
 
 
     private int total = 0;
-    private final int AMOUNT_OF_QUESTIONS = 20;
+    private final int amountOfQuestions = 20;
     private int totalQuestionsSoFar = 0;
     private TextView question;
     private String id;
@@ -41,7 +35,7 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         setTitle(R.string.title);
 
-        id = getUserID();
+        id = new Utils().getUserID(getApplicationContext());
 
 //        get all buttons
         Button ans1 = (Button) findViewById(R.id.ans1);
@@ -61,21 +55,6 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
         question = (TextView) findViewById(R.id.question);
         question.setText(R.string.q1);
 
-    }
-
-        public String getUserID() {
-//        preferencemanager was deprecated
-        SharedPreferences sharedPref = this.getSharedPreferences(
-                getString(R.string.preference_file_key), Context.MODE_PRIVATE);
-        String id = sharedPref.getString(getString(R.string.shpref_prefix)+"_ID", "");
-        if (id.equalsIgnoreCase("")) {
-            UUID g = UUID.randomUUID();
-            id = g.toString();
-            SharedPreferences.Editor editor = sharedPref.edit();
-            editor.putString(getString(R.string.shpref_prefix)+"_ID", id);
-            editor.apply();
-        }
-        return id;
     }
 
     @Override
@@ -100,7 +79,7 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
                 break;
         }
         total += value;
-        if (totalQuestionsSoFar++ < AMOUNT_OF_QUESTIONS - 1) {
+        if (totalQuestionsSoFar++ < amountOfQuestions - 1) {
             updateQuestion(getBaseContext(), totalQuestionsSoFar);
         } else {
             finishQuiz();
@@ -120,11 +99,11 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
             logger.saveSiasScore(getApplicationContext(), UserData.builder().userId(id).sias(total).build());
 //        tell the user what has happened. give them chance to read more about the score
             AlertDialog.Builder builder = new AlertDialog.Builder(QuizActivity.this);
-            builder.setMessage("Thank you for taking the test. Your SIAS score is " + total + ". If you would like to know more about this test, you can find more information in the application settings.")
-                    .setTitle("Thank you")
+            builder.setMessage(String.format("%s %s. %s",getString(R.string.your_score), total, getString(R.string.know_more)))
+                    .setTitle(getString(R.string.thanks))
                     .setCancelable(false);
 
-            builder.setPositiveButton("Finish", (dialog, which) -> finish());
+            builder.setPositiveButton(getString(R.string.done), (dialog, which) -> finish());
 
             Dialog d = builder.create();
             d.setCanceledOnTouchOutside(false);
@@ -132,15 +111,15 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
 
         } catch (InterruptedException | ExecutionException e) {
             AlertDialog.Builder builder = new AlertDialog.Builder(QuizActivity.this);
-            builder.setTitle("Test could not save")
-                    .setMessage("A system error occured and the test score could not be saved. Please try again by clicking the button button, or if the error persists, quit and immediately email me at 2255541h@student.gla.ac.uk.")
+            builder.setTitle(getString(R.string.test_save_fail))
+                    .setMessage(getString(R.string.save_fail_message))
                     .setCancelable(false);
 
-            builder.setPositiveButton("Try again", (dialog, which) -> {
+            builder.setPositiveButton(getString(R.string.try_again), (dialog, which) -> {
                 finishQuiz(); // cheeky
             });
 
-            builder.setNeutralButton("Cancel", (dialog, which) -> finish());
+            builder.setNeutralButton(getString(R.string.cancel), (dialog, which) -> finish());
 
             Dialog d = builder.create();
             d.setCanceledOnTouchOutside(false);

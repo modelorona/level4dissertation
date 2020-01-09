@@ -15,9 +15,9 @@ import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 
 import com.anguel.dissertation.R;
-import com.anguel.dissertation.logger.Logger;
-import com.anguel.dissertation.persistence.appcategory.AppCategory;
-import com.anguel.dissertation.persistence.logevent.LogEvent;
+import com.anguel.dissertation.persistence.logger.Logger;
+import com.anguel.dissertation.persistence.database.appcategory.AppCategory;
+import com.anguel.dissertation.persistence.database.logevent.LogEvent;
 
 import java.util.ArrayList;
 import java.util.HashMap;
