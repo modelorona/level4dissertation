@@ -10,8 +10,7 @@
     <string name="moderately">moderately</string>
     <string name="very">very</string>
     <string name="extremely">extremely</string>
-    <string name="main_act_string">Thank you for agreeing to participate in this study.
-        Information about this study can be found in the settings.
+    <string name="main_act_string">
         Please first allow permissions by toggling them in the settings, and then click the button below to start the SIAS evaluation.
         Once taken, the score will be displayed and then saved to your device.
         If you retake the test, the new score will not be saved.
