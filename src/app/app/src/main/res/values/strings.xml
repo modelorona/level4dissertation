@@ -73,5 +73,11 @@
     <string name="know_more">If you would like to know more about this test, you can find more information in the application settings.</string>
     <string name="your_score">Thank you for taking the test. Your SIAS score is</string>
     <string name="dsn">https://400a55aa461746a0ab09da34d9fff81b@sentry.io/1876401</string>
+    <string name="permissions" />
+    <string name="enable_permissions">Please make sure to enable the Usage Statistics permisssion and then disable battery optimisations for the app to work as intended. You can find this in the settings.</string>
+    <string name="go_to_settings">Go to Settings</string>
+    <string name="collection_update">Collection Update</string>
+    <string name="collection_update_desc">Shows a notification if data is being collected or not</string>
+    <string name="pref_data_record">_RECORDING_DATA</string>
 
 </resources>
