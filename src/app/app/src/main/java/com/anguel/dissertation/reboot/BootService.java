@@ -1,10 +1,12 @@
 package com.anguel.dissertation.reboot;
 
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.util.Log;
 
+import com.anguel.dissertation.DataCollectionActivity;
 import com.anguel.dissertation.R;
 import com.anguel.dissertation.serviceengine.ServiceEngine;
 
@@ -12,6 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.core.app.JobIntentService;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
+import androidx.core.app.TaskStackBuilder;
 
 public class BootService extends JobIntentService {
 
@@ -28,7 +31,7 @@ public class BootService extends JobIntentService {
         SharedPreferences sharedPref = this.getSharedPreferences(
                 getString(R.string.preference_file_key), Context.MODE_PRIVATE);
 
-        boolean recordingData = sharedPref.getBoolean(getString(R.string.shpref_prefix) + "_RECORDING_DATA", false);
+        boolean recordingData = sharedPref.getBoolean(getString(R.string.shpref_prefix) + getString(R.string.pref_data_record), false);
         NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), getApplicationContext().getString(R.string.channel_id))
                 .setSmallIcon(R.drawable.ic_done_black_24dp)
                 .setContentTitle(getString(R.string.boot_notif_title))
@@ -43,6 +46,13 @@ public class BootService extends JobIntentService {
             builder.setContentText("Data collection has not resumed.");
             builder.setStyle(new NotificationCompat.BigTextStyle()
                               .bigText(getString(R.string.boot_data_disabled)));
+
+            Intent dataCollectionIntent = new Intent(getApplicationContext(), DataCollectionActivity.class);
+            TaskStackBuilder stackBuilder = TaskStackBuilder.create(getApplicationContext());
+            stackBuilder.addNextIntentWithParentStack(dataCollectionIntent);
+            PendingIntent result = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+            
+            builder.setContentIntent(result);
         }
 
         notificationManagerCompat.notify(1, builder.build());

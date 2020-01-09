@@ -3,19 +3,30 @@ package com.anguel.dissertation.settings;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.AppOpsManager;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.PowerManager;
 import android.provider.Settings;
+import android.widget.Toast;
 
+import com.anguel.dissertation.utils.Utils;
+import com.google.android.gms.oss.licenses.OssLicensesMenuActivity;
+
+import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.SwitchPreferenceCompat;
+import io.sentry.Sentry;
 
 import com.anguel.dissertation.R;
+import com.anguel.dissertation.persistence.logger.Logger;
 
 import java.util.Objects;
+import java.util.concurrent.ExecutionException;
 
 public class SettingsFragment extends PreferenceFragmentCompat {
     private SwitchPreferenceCompat batteryOpt;
@@ -27,6 +38,9 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
         batteryOpt = findPreference(getString(R.string.battery_opt_pref));
         usageStatsPms = findPreference(getString(R.string.usage_stats_pref));
+        Preference personSias = findPreference(getString(R.string.see_personal_sias_pref));
+        Preference licenseInfo = findPreference(getString(R.string.license_pref));
+        Preference optOut = findPreference(getString(R.string.opt_out_pref));
 
 //        toggle their values based on the current setting
         togglePreferenceValues();
@@ -42,6 +56,38 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             return true;
         });
 
+        try {
+            Objects.requireNonNull(personSias).setSummary(String.valueOf(new Logger().getUserData(Objects.requireNonNull(getActivity()).getApplicationContext()).get(0).getSias()));
+        } catch (ExecutionException | InterruptedException | IndexOutOfBoundsException e) {
+            Sentry.capture(e);
+            Objects.requireNonNull(personSias).setSummary("You have not yet taken the test.");
+            e.printStackTrace();
+        }
+
+        Objects.requireNonNull(licenseInfo).setOnPreferenceClickListener(preference -> {
+            startActivity(new Intent(Objects.requireNonNull(getActivity()).getApplicationContext(), OssLicensesMenuActivity.class));
+            return true;
+        });
+
+        Objects.requireNonNull(optOut).setOnPreferenceClickListener(preference -> {
+            ClipboardManager clipboard = (ClipboardManager) Objects.requireNonNull(getActivity()).getSystemService(Context.CLIPBOARD_SERVICE);
+            Utils utils = new Utils();
+            ClipData userId = ClipData.newPlainText("dissertation user id", utils.getUserID(getActivity().getApplicationContext()));
+            Objects.requireNonNull(clipboard).setPrimaryClip(userId);
+
+            CharSequence text = "Your personal identifier was copied to the clipboard.";
+            int duration = Toast.LENGTH_LONG;
+            Toast toast = Toast.makeText(getActivity().getApplicationContext(), text, duration);
+            toast.show();
+
+            Uri webpage = Uri.parse(getString(R.string.opt_out_form));
+            Intent intent = new Intent(Intent.ACTION_VIEW, webpage);
+            if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
+                startActivity(intent);
+            }
+
+            return true;
+        });
     }
 
     private void togglePreferenceValues() {

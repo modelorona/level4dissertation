@@ -21,13 +21,9 @@
         app:title="Information">
 
         <Preference
-            app:key="see_personal_sias_pref"
-            app:title="See your SIAS score">
-<!--            app:summary="See your SIAS score">-->
-<!--            <intent-->
-<!--                android:action="android.intent.action.VIEW"-->
-<!--                android:data="@string/learn_more_url">-->
-<!--            </intent>-->
+            app:key="@string/see_personal_sias_pref"
+            app:title="Your SIAS score"
+            app:summary="">
         </Preference>
 
         <Preference
@@ -60,24 +56,24 @@
             app:key="contact_me_pref"
             app:title="Contact"
             app:summary="Contact the developer">
-            <!--            <intent-->
-            <!--                android:action="android.intent.action.VIEW"-->
-            <!--                android:data="@string/learn_more_url">-->
-            <!--            </intent>-->
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:data="@string/contact_form">
+            </intent>
         </Preference>
 
         <Preference
-            app:key="opt_out_pref"
+            app:key="@string/opt_out_pref"
             app:title="Opt out"
             app:summary="Opt out of the study">
 <!--            <intent-->
 <!--                android:action="android.intent.action.VIEW"-->
-<!--                android:data="@string/learn_more_url">-->
+<!--                android:data="@string/opt_out_form">-->
 <!--            </intent>-->
         </Preference>
 
         <Preference
-            app:key="license_pref"
+            app:key="@string/license_pref"
             app:title="License information"
             app:summary="See open-source project licenses">
 

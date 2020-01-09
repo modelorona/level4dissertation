@@ -1,4 +1,4 @@
-package com.anguel.dissertation.persistence.userdata;
+package com.anguel.dissertation.persistence.database.appcategory;
 
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
@@ -18,12 +18,15 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-@Entity(tableName = "UserData")
-public class UserData {
+@Entity(tableName = "AppCategory")
+public class AppCategory {
 
     @PrimaryKey @NonNull
-    String userId;
+    String appName;
 
     @ColumnInfo
-    int sias;
+    String category;
+
+    @ColumnInfo
+    String packageName;
 }

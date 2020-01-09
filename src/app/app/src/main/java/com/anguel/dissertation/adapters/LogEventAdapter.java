@@ -9,9 +9,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.anguel.dissertation.R;
-import com.anguel.dissertation.persistence.logevent.LogEvent;
+import com.anguel.dissertation.persistence.database.logevent.LogEvent;
 
-import java.util.Date;
 import java.util.List;
 
 public class LogEventAdapter extends RecyclerView.Adapter<LogEventAdapter.ViewHolder> {
