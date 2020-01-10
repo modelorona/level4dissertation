@@ -90,5 +90,31 @@
     <string name="on_collection_desc">Shows a notification whenever data is collected in a user session</string>
     <string name="on_collection_id">on_collection_id</string>
     <string name="on_collection_group">On Data Collection Group</string>
+    <string name="UNDEFINED">UNDEFINED</string>
+    <string name="name">name</string>
+    <string name="category">category</string>
+    <string name="packageName">packageName</string>
+    <string name="sessionStart">sessionStart</string>
+    <string name="sessionEnd">sessionEnd</string>
+    <string name="collection_occurred">Dissertation App Data Collection</string>
+    <string name="fail_no_size">failure - no size</string>
+    <string name="lastTimeUsed">lastTimeUsed</string>
+    <string name="totalTimeInForeground">totalTimeInForeground</string>
+    <string name="lastTimeVisible">lastTimeVisible</string>
+    <string name="lastTimeForegroundServiceUsed">lastTimeForegroundServiceUsed</string>
+    <string name="totalTimeForegroundServiceUsed">totalTimeForegroundServiceUsed</string>
+    <string name="totalTimeVisible">totalTimeVisible</string>
+    <string name="success">success</string>
+    <string name="failure">failure</string>
+    <string name="fail_crash">failure - crash</string>
+    <string name="data_collection_activity_title">Data Collection</string>
+    <string name="not_yet_taken_test">You have not yet taken the test.</string>
+    <string name="cliptext_id">dissertation user id</string>
+    <string name="id_copied">Your personal identifier was copied to the clipboard.</string>
+    <string name="data_col_resumed">Data collection has resumed</string>
+    <string name="data_col_not_resumed">Data collection has not resumed.</string>
+    <string name="app_category_db">AppCategory.db</string>
+    <string name="log_events_db">LogEvents.db</string>
+    <string name="userdata_db">UserData.db</string>
 
 </resources>

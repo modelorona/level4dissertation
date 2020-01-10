@@ -2,6 +2,8 @@ package com.anguel.dissertation.persistence.database.appcategory;
 
 import android.content.Context;
 
+import com.anguel.dissertation.R;
+
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
@@ -16,7 +18,7 @@ public abstract class AppCategoryDatabase extends RoomDatabase {
         if (INSTANCE == null) {
             synchronized (AppCategoryDatabase.class) {
                 if (INSTANCE == null) {
-                    INSTANCE = Room.databaseBuilder(context.getApplicationContext(), AppCategoryDatabase.class, "AppCategory.db").build();
+                    INSTANCE = Room.databaseBuilder(context.getApplicationContext(), AppCategoryDatabase.class, context.getString(R.string.app_category_db)).build();
                 }
             }
         }

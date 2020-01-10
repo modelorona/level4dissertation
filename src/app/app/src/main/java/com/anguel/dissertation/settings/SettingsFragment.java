@@ -60,7 +60,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             Objects.requireNonNull(personSias).setSummary(String.valueOf(new Logger().getUserData(Objects.requireNonNull(getActivity()).getApplicationContext()).get(0).getSias()));
         } catch (ExecutionException | InterruptedException | IndexOutOfBoundsException e) {
             Sentry.capture(e);
-            Objects.requireNonNull(personSias).setSummary("You have not yet taken the test.");
+            Objects.requireNonNull(personSias).setSummary(getString(R.string.not_yet_taken_test));
             e.printStackTrace();
         }
 
@@ -72,10 +72,10 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         Objects.requireNonNull(optOut).setOnPreferenceClickListener(preference -> {
             ClipboardManager clipboard = (ClipboardManager) Objects.requireNonNull(getActivity()).getSystemService(Context.CLIPBOARD_SERVICE);
             Utils utils = new Utils();
-            ClipData userId = ClipData.newPlainText("dissertation user id", utils.getUserID(getActivity().getApplicationContext()));
+            ClipData userId = ClipData.newPlainText(getString(R.string.cliptext_id), utils.getUserID(getActivity().getApplicationContext()));
             Objects.requireNonNull(clipboard).setPrimaryClip(userId);
 
-            CharSequence text = "Your personal identifier was copied to the clipboard.";
+            CharSequence text = getString(R.string.id_copied);
             int duration = Toast.LENGTH_LONG;
             Toast toast = Toast.makeText(getActivity().getApplicationContext(), text, duration);
             toast.show();

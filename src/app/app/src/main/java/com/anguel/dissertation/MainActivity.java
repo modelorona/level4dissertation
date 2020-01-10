@@ -22,6 +22,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.anguel.dissertation.settings.SettingsActivity;
+import com.anguel.dissertation.utils.Utils;
 import com.jakewharton.threetenabp.AndroidThreeTen;
 
 import java.util.Objects;
@@ -34,7 +35,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Sentry.init(getString(R.string.dsn), new AndroidSentryClientFactory(this));
-        AndroidThreeTen.init(this);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -45,8 +45,10 @@ public class MainActivity extends AppCompatActivity {
 
         PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
 
+        Utils utils = new Utils();
+
         findViewById(R.id.startDataCollectionButton).setOnClickListener(v -> {
-            if (!hasUsageStatsPermission(this) || !Objects.requireNonNull(pm).isIgnoringBatteryOptimizations(getPackageName())) {
+            if (!utils.hasUsageStatsPermission(getApplicationContext()) || !Objects.requireNonNull(pm).isIgnoringBatteryOptimizations(getPackageName())) {
                 showPermissionsMissingDialog();
             } else {
                 Intent dataColIntent = new Intent(getApplicationContext(), DataCollectionActivity.class);
@@ -57,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
         //      start the quiz
         findViewById(R.id.start_test).setOnClickListener(v -> {
 //            see if permissions are enabled or not. prevent taking the test unless they are fin
-            if (!hasUsageStatsPermission(this) || !Objects.requireNonNull(pm).isIgnoringBatteryOptimizations(getPackageName())) {
+            if (!utils.hasUsageStatsPermission(getApplicationContext()) || !Objects.requireNonNull(pm).isIgnoringBatteryOptimizations(getPackageName())) {
                 showPermissionsMissingDialog();
             } else {
                 Intent startTestIntent = new Intent(this, QuizActivity.class);
@@ -79,17 +81,9 @@ public class MainActivity extends AppCompatActivity {
 
 
         Dialog d = alert.create();
-//                d.setCanceledOnTouchOutside(false);
         d.show();
     }
 
-    @TargetApi(Build.VERSION_CODES.KITKAT)
-    boolean hasUsageStatsPermission(Context context) {
-        AppOpsManager appOps = (AppOpsManager) context.getSystemService(Context.APP_OPS_SERVICE);
-        int mode = Objects.requireNonNull(appOps).checkOpNoThrow("android:get_usage_stats",
-                android.os.Process.myUid(), context.getPackageName());
-        return mode == AppOpsManager.MODE_ALLOWED;
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

@@ -42,9 +42,9 @@ public class BootService extends JobIntentService {
 
         if (recordingData) {
             ServiceEngine.getInstance(getApplicationContext()).startServices(getApplicationContext());
-            builder.setContentText("Data collection has resumed");
+            builder.setContentText(getString(R.string.data_col_resumed));
         } else {
-            builder.setContentText("Data collection has not resumed.");
+            builder.setContentText(getString(R.string.data_col_not_resumed));
             builder.setStyle(new NotificationCompat.BigTextStyle()
                               .bigText(getString(R.string.boot_data_disabled)));
 
