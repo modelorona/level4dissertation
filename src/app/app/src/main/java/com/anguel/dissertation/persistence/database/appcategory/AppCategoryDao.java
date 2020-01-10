@@ -10,8 +10,10 @@ import java.util.List;
 @Dao
 public interface AppCategoryDao {
 
-    @Query("SELECT * FROM AppCategory")
-    List<AppCategory> getAll();
+// --Commented out by Inspection START (1/10/20 1:52 AM):
+//    @Query("SELECT * FROM AppCategory")
+//    List<AppCategory> getAll();
+// --Commented out by Inspection STOP (1/10/20 1:52 AM)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertAppCategory(AppCategory appCategory);

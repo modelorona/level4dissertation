@@ -21,16 +21,19 @@ public class Logger {
         return runner.execute(context, data).get();
     }
 
-    public List<LogEvent> getLogData(Context context) throws ExecutionException, InterruptedException {
-        AsyncLogGet runner = new AsyncLogGet();
-        return runner.execute(context).get();
-    }
+// --Commented out by Inspection START (1/10/20 1:52 AM):
+//    public List<LogEvent> getLogData(Context context) throws ExecutionException, InterruptedException {
+//        AsyncLogGet runner = new AsyncLogGet();
+//        return runner.execute(context).get();
+//    }
+// --Commented out by Inspection STOP (1/10/20 1:52 AM)
 
     public Boolean saveAppCategory(Context context, AppCategory data) throws ExecutionException, InterruptedException {
         AsyncCategorySave runner = new AsyncCategorySave();
         return runner.execute(context, data).get();
     }
 
+    @SuppressWarnings("UnusedReturnValue")
     public Boolean saveSiasScore(Context context, UserData data) throws ExecutionException, InterruptedException {
         AsyncSiasSave runner = new AsyncSiasSave();
         return runner.execute(context, data).get();

@@ -16,7 +16,7 @@ import androidx.core.app.NotificationCompat;
 
 public class KeepAliveService extends Service {
 
-    public static boolean isServiceRunning = false;
+    private static boolean isServiceRunning = false;
 
     @Override
     public void onCreate() {
@@ -33,7 +33,7 @@ public class KeepAliveService extends Service {
         return START_STICKY;
     }
 
-    void startServiceWithNotification() {
+    private void startServiceWithNotification() {
         if (isServiceRunning) return;
         isServiceRunning = true;
 
@@ -42,16 +42,17 @@ public class KeepAliveService extends Service {
         notificationIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         PendingIntent contentPendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
 
-        Notification notification = new NotificationCompat.Builder(this, getString(R.string.channel_id))
+        Notification notification = new NotificationCompat.Builder(this, getString(R.string.persistence_notif_id))
                 .setContentTitle(getResources().getString(R.string.app_name))
                 .setTicker(getResources().getString(R.string.app_name))
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setContentText(getResources().getString(R.string.alive_notif_text))
-                .setSmallIcon(R.drawable.ic_assignment_turned_in_black_24dp)
+                .setSmallIcon(R.drawable.ic_death_star)
                 .setContentIntent(contentPendingIntent)
                 .setOngoing(true)
                 .setOnlyAlertOnce(true)
                 .setAutoCancel(false)
+                .setGroup(getString(R.string.persistence_notif_group))
                 .build();
 
         notification.flags = notification.flags | Notification.FLAG_NO_CLEAR;     // NO_CLEAR makes the notification stay when the user performs a "delete all" command
@@ -66,7 +67,7 @@ public class KeepAliveService extends Service {
         super.onDestroy();
     }
 
-    void stopMyService() {
+    private void stopMyService() {
         stopForeground(true);
         stopSelf();
         isServiceRunning = false;

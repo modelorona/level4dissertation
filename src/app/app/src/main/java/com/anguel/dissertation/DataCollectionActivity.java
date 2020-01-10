@@ -21,11 +21,11 @@ public class DataCollectionActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_data_collection);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
-        setTitle("Data Collection");
+        setTitle(getString(R.string.data_collection_activity_title));
 
         toggleDataCollection(isRecordingData());
 
-        ToggleButton button = (ToggleButton) findViewById(R.id.toggleButton);
+        ToggleButton button = findViewById(R.id.toggleButton);
 
         button.setOnCheckedChangeListener((buttonView, isChecked) -> {
             SharedPreferences.Editor editor = this.getSharedPreferences(
@@ -38,7 +38,7 @@ public class DataCollectionActivity extends AppCompatActivity {
     }
 
     private void toggleDataCollection(boolean recordingData) {
-        ToggleButton button = (ToggleButton) findViewById(R.id.toggleButton);
+        ToggleButton button = findViewById(R.id.toggleButton);
         button.setChecked(recordingData);
         ServiceEngine engine = ServiceEngine.getInstance(getApplicationContext());
         if (recordingData) {

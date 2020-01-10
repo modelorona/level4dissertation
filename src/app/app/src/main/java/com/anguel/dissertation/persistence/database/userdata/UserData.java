@@ -21,6 +21,7 @@ import lombok.ToString;
 @Entity(tableName = "UserData")
 public class UserData {
 
+    @SuppressWarnings("NullableProblems")
     @PrimaryKey @NonNull
     String userId;
 

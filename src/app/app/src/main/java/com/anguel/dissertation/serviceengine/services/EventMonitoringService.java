@@ -5,6 +5,7 @@ import android.os.Build;
 import android.os.IBinder;
 import android.util.Log;
 
+import com.anguel.dissertation.R;
 import com.anguel.dissertation.workers.SaveUsageStatsWorker;
 import com.pranavpandey.android.dynamic.engine.model.DynamicAppInfo;
 import com.pranavpandey.android.dynamic.engine.service.DynamicEngine;
@@ -49,7 +50,7 @@ public class EventMonitoringService extends DynamicEngine {
         long endTime = getTime();
         if (locked) {
 //            Log.d("event_monitor", String.format("session_end: %s", endTime));
-            Data workerData = new Data.Builder().putLong("sessionStart", startTime).putLong("sessionEnd", endTime).build();
+            Data workerData = new Data.Builder().putLong(getString(R.string.sessionStart), startTime).putLong(getString(R.string.sessionEnd), endTime).build();
             OneTimeWorkRequest saveSessionData = new OneTimeWorkRequest.Builder(SaveUsageStatsWorker.class)
                     .setInputData(workerData)
 //                    .setInitialDelay(2, TimeUnit.HOURS)

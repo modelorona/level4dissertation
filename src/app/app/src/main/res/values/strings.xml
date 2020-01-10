@@ -3,15 +3,13 @@
     tools:shrinkMode="strict">
     <string name="app_name">Dissertation</string>
     <string name="action_settings">Settings</string>
-    <string name="channel_id">notif_channel_id</string>
     <string name="title">SIAS Quiz</string>
     <string name="not_at_all">not at all</string>
     <string name="slightly">slightly</string>
     <string name="moderately">moderately</string>
     <string name="very">very</string>
     <string name="extremely">extremely</string>
-    <string name="main_act_string">Thank you for agreeing to participate in this study.
-        Information about this study can be found in the settings.
+    <string name="main_act_string">
         Please first allow permissions by toggling them in the settings, and then click the button below to start the SIAS evaluation.
         Once taken, the score will be displayed and then saved to your device.
         If you retake the test, the new score will not be saved.
@@ -23,25 +21,25 @@
 
     <!--    question strings-->
     <string name="q1">I get nervous if I have to speak with someone in authority (teacher, boss, etc.).</string>
-    <string name="q2">I have difficulty making eye contact with others.</string>
-    <string name="q3">I become tense if I have to talk about myself or my feelings.</string>
-    <string name="q4">I find it difficult to mix comfortably with the people I work with.</string>
-    <string name="q5">I find it easy to make friends my own age.</string>
-    <string name="q6">I tense up if I meet an acquaintance in the street.</string>
-    <string name="q7">When mixing socially, I am uncomfortable.</string>
-    <string name="q8">I feel tense if I am alone with just one other person.</string>
-    <string name="q9">I am at ease meeting people at parties, etc.</string>
-    <string name="q10">I have difficulty talking with other people.</string>
-    <string name="q11">I find it easy to think of things to talk about.</string>
-    <string name="q12">I worry about expressing myself in case I appear awkward.</string>
-    <string name="q13">I find it difficult to disagree with another’s point of view.</string>
-    <string name="q14">I have difficulty talking to attractive persons of the opposite sex.</string>
-    <string name="q15">I find myself worrying that I won’t know what to say in social situations.</string>
-    <string name="q16">I am nervous mixing with people I don’t know well.</string>
-    <string name="q17">I feel I’ll say something embarrassing when talking.</string>
-    <string name="q18">When mixing in a group, I find myself worrying I will be ignored.</string>
-    <string name="q19">I am tense mixing in a group.</string>
-    <string name="q20">I am unsure whether to greet someone I know only slightly.</string>
+    <string name="q2" tools:keep="@string/q2">I have difficulty making eye contact with others.</string>
+    <string name="q3" tools:keep="@string/q3">I become tense if I have to talk about myself or my feelings.</string>
+    <string name="q4" tools:keep="@string/q4">I find it difficult to mix comfortably with the people I work with.</string>
+    <string name="q5" tools:keep="@string/q5">I find it easy to make friends my own age.</string>
+    <string name="q6" tools:keep="@string/q6">I tense up if I meet an acquaintance in the street.</string>
+    <string name="q7" tools:keep="@string/q7">When mixing socially, I am uncomfortable.</string>
+    <string name="q8" tools:keep="@string/q8">I feel tense if I am alone with just one other person.</string>
+    <string name="q9" tools:keep="@string/q9">I am at ease meeting people at parties, etc.</string>
+    <string name="q10" tools:keep="@string/q10">I have difficulty talking with other people.</string>
+    <string name="q11" tools:keep="@string/q11">I find it easy to think of things to talk about.</string>
+    <string name="q12" tools:keep="@string/q12">I worry about expressing myself in case I appear awkward.</string>
+    <string name="q13" tools:keep="@string/q13">I find it difficult to disagree with another’s point of view.</string>
+    <string name="q14" tools:keep="@string/q14">I have difficulty talking to attractive persons of the opposite sex.</string>
+    <string name="q15" tools:keep="@string/q15">I find myself worrying that I won’t know what to say in social situations.</string>
+    <string name="q16" tools:keep="@string/q16">I am nervous mixing with people I don’t know well.</string>
+    <string name="q17" tools:keep="@string/q17">I feel I’ll say something embarrassing when talking.</string>
+    <string name="q18" tools:keep="@string/q18">When mixing in a group, I find myself worrying I will be ignored.</string>
+    <string name="q19" tools:keep="@string/q19">I am tense mixing in a group.</string>
+    <string name="q20" tools:keep="@string/q20">I am unsure whether to greet someone I know only slightly.</string>
 
     <string name="usage_stats_pref">usage_stats_pref</string>
     <string name="battery_opt_pref">battery_opt_pref</string>
@@ -76,8 +74,47 @@
     <string name="permissions" />
     <string name="enable_permissions">Please make sure to enable the Usage Statistics permisssion and then disable battery optimisations for the app to work as intended. You can find this in the settings.</string>
     <string name="go_to_settings">Go to Settings</string>
-    <string name="collection_update">Collection Update</string>
-    <string name="collection_update_desc">Shows a notification if data is being collected or not</string>
     <string name="pref_data_record">_RECORDING_DATA</string>
+
+    <string name="persistence_notif_id">persistence_notif_id</string>
+    <string name="persistence_notif_desc">Shows a notification if data is being collected or not</string>
+    <string name="persistence_notif_name">Persistent Notification Channel</string>
+    <string name="persistence_notif_group">Persistent Notification Group</string>
+
+    <string name="collection_on_boot_desc">Shows a notification whenever the phone restarts notifying the user if the data collection has resumed or not</string>
+    <string name="collection_on_boot_name">On Boot Notification</string>
+    <string name="collection_on_boot_id">collection_on_boot_id</string>
+    <string name="collection_on_boot_group">On Boot Group</string>
+
+    <string name="on_collection_name">On Data Collection Channel</string>
+    <string name="on_collection_desc">Shows a notification whenever data is collected in a user session</string>
+    <string name="on_collection_id">on_collection_id</string>
+    <string name="on_collection_group">On Data Collection Group</string>
+    <string name="UNDEFINED">UNDEFINED</string>
+    <string name="name">name</string>
+    <string name="category">category</string>
+    <string name="packageName">packageName</string>
+    <string name="sessionStart">sessionStart</string>
+    <string name="sessionEnd">sessionEnd</string>
+    <string name="collection_occurred">Dissertation App Data Collection</string>
+    <string name="fail_no_size">failure - no size</string>
+    <string name="lastTimeUsed">lastTimeUsed</string>
+    <string name="totalTimeInForeground">totalTimeInForeground</string>
+    <string name="lastTimeVisible">lastTimeVisible</string>
+    <string name="lastTimeForegroundServiceUsed">lastTimeForegroundServiceUsed</string>
+    <string name="totalTimeForegroundServiceUsed">totalTimeForegroundServiceUsed</string>
+    <string name="totalTimeVisible">totalTimeVisible</string>
+    <string name="success">success</string>
+    <string name="failure">failure</string>
+    <string name="fail_crash">failure - crash</string>
+    <string name="data_collection_activity_title">Data Collection</string>
+    <string name="not_yet_taken_test">You have not yet taken the test.</string>
+    <string name="cliptext_id">dissertation user id</string>
+    <string name="id_copied">Your personal identifier was copied to the clipboard.</string>
+    <string name="data_col_resumed">Data collection has resumed</string>
+    <string name="data_col_not_resumed">Data collection has not resumed.</string>
+    <string name="app_category_db">AppCategory.db</string>
+    <string name="log_events_db">LogEvents.db</string>
+    <string name="userdata_db">UserData.db</string>
 
 </resources>

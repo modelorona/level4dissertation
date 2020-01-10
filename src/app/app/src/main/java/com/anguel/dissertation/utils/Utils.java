@@ -1,10 +1,14 @@
 package com.anguel.dissertation.utils;
 
+import android.annotation.TargetApi;
+import android.app.AppOpsManager;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Build;
 
 import com.anguel.dissertation.R;
 
+import java.util.Objects;
 import java.util.UUID;
 
 public class Utils {
@@ -24,6 +28,14 @@ public class Utils {
             editor.apply();
         }
         return id;
+    }
+
+    @TargetApi(Build.VERSION_CODES.KITKAT)
+    public boolean hasUsageStatsPermission(Context context) {
+        AppOpsManager appOps = (AppOpsManager) context.getSystemService(Context.APP_OPS_SERVICE);
+        int mode = Objects.requireNonNull(appOps).checkOpNoThrow("android:get_usage_stats",
+                android.os.Process.myUid(), context.getPackageName());
+        return mode == AppOpsManager.MODE_ALLOWED;
     }
 
 
