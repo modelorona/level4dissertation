@@ -39,11 +39,11 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
         id = new Utils().getUserID(getApplicationContext());
 
 //        get all buttons
-        Button ans1 = (Button) findViewById(R.id.ans1);
-        Button ans2 = (Button) findViewById(R.id.ans2);
-        Button ans3 = (Button) findViewById(R.id.ans3);
-        Button ans4 = (Button) findViewById(R.id.ans4);
-        Button ans5 = (Button) findViewById(R.id.ans5);
+        Button ans1 = findViewById(R.id.ans1);
+        Button ans2 = findViewById(R.id.ans2);
+        Button ans3 = findViewById(R.id.ans3);
+        Button ans4 = findViewById(R.id.ans4);
+        Button ans5 = findViewById(R.id.ans5);
 
 //        attach handler to all buttons
         ans1.setOnClickListener(this);
@@ -53,7 +53,7 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
         ans5.setOnClickListener(this);
 
 //        set initial question text
-        question = (TextView) findViewById(R.id.question);
+        question = findViewById(R.id.question);
         question.setText(R.string.q1);
 
     }
@@ -87,13 +87,13 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    public void updateQuestion(Context context, int index) {
+    private void updateQuestion(Context context, int index) {
         String resource = String.format("q%s", String.valueOf(index + 1));
         int requestedId = context.getResources().getIdentifier(resource, "string", context.getPackageName());
         question.setText(getString(requestedId));
     }
 
-    public void finishQuiz() {
+    private void finishQuiz() {
 //        save score before doing anything else
         Logger logger = new Logger();
         try {

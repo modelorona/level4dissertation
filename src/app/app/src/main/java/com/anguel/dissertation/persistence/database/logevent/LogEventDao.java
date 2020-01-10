@@ -20,6 +20,8 @@ public interface LogEventDao {
 //    @Insert(onConflict = OnConflictStrategy.REPLACE)
 //    void insertLogEvents(List<LogEvent> logEvents);
 
-    @Delete
-    void delete(LogEvent logEvent);
+// --Commented out by Inspection START (1/10/20 1:52 AM):
+//    @Delete
+//    void delete(LogEvent logEvent);
+// --Commented out by Inspection STOP (1/10/20 1:52 AM)
 }

@@ -21,6 +21,7 @@ import lombok.ToString;
 @Entity(tableName = "AppCategory")
 public class AppCategory {
 
+    @SuppressWarnings("NullableProblems")
     @PrimaryKey @NonNull
     String appName;
 

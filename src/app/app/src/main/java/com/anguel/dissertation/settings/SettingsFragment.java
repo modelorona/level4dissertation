@@ -1,14 +1,11 @@
 package com.anguel.dissertation.settings;
 
 import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
-import android.app.AppOpsManager;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.PowerManager;
 import android.provider.Settings;

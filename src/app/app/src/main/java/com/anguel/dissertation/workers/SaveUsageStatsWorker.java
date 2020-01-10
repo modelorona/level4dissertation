@@ -32,6 +32,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class SaveUsageStatsWorker extends Worker {
 
+    @SuppressWarnings("CanBeFinal")
     private AtomicInteger nId = new AtomicInteger();
 
     public SaveUsageStatsWorker(@NonNull Context context, @NonNull WorkerParameters workerParams) {
@@ -124,7 +125,7 @@ public class SaveUsageStatsWorker extends Worker {
                 appData.put(getString(R.string.totalTimeInForeground), String.valueOf(usageStats.getTotalTimeInForeground()));
 
                 try {
-                    boolean res = logger.saveAppCategory(getApplicationContext(), AppCategory.builder().category(additionalDetails.get(getString(R.string.category))).appName(additionalDetails.get(getString(R.string.name))).packageName(additionalDetails.get(getString(R.string.packageName))).build());
+                    @SuppressWarnings("unused") boolean res = logger.saveAppCategory(getApplicationContext(), AppCategory.builder().category(additionalDetails.get(getString(R.string.category))).appName(additionalDetails.get(getString(R.string.name))).packageName(additionalDetails.get(getString(R.string.packageName))).build());
                 } catch (ExecutionException | InterruptedException e) {
                     Sentry.capture(e);
                     e.printStackTrace();

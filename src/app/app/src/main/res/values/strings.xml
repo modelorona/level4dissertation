@@ -21,25 +21,25 @@
 
     <!--    question strings-->
     <string name="q1">I get nervous if I have to speak with someone in authority (teacher, boss, etc.).</string>
-    <string name="q2">I have difficulty making eye contact with others.</string>
-    <string name="q3">I become tense if I have to talk about myself or my feelings.</string>
-    <string name="q4">I find it difficult to mix comfortably with the people I work with.</string>
-    <string name="q5">I find it easy to make friends my own age.</string>
-    <string name="q6">I tense up if I meet an acquaintance in the street.</string>
-    <string name="q7">When mixing socially, I am uncomfortable.</string>
-    <string name="q8">I feel tense if I am alone with just one other person.</string>
-    <string name="q9">I am at ease meeting people at parties, etc.</string>
-    <string name="q10">I have difficulty talking with other people.</string>
-    <string name="q11">I find it easy to think of things to talk about.</string>
-    <string name="q12">I worry about expressing myself in case I appear awkward.</string>
-    <string name="q13">I find it difficult to disagree with another’s point of view.</string>
-    <string name="q14">I have difficulty talking to attractive persons of the opposite sex.</string>
-    <string name="q15">I find myself worrying that I won’t know what to say in social situations.</string>
-    <string name="q16">I am nervous mixing with people I don’t know well.</string>
-    <string name="q17">I feel I’ll say something embarrassing when talking.</string>
-    <string name="q18">When mixing in a group, I find myself worrying I will be ignored.</string>
-    <string name="q19">I am tense mixing in a group.</string>
-    <string name="q20">I am unsure whether to greet someone I know only slightly.</string>
+    <string name="q2" tools:keep="@string/q2">I have difficulty making eye contact with others.</string>
+    <string name="q3" tools:keep="@string/q3">I become tense if I have to talk about myself or my feelings.</string>
+    <string name="q4" tools:keep="@string/q4">I find it difficult to mix comfortably with the people I work with.</string>
+    <string name="q5" tools:keep="@string/q5">I find it easy to make friends my own age.</string>
+    <string name="q6" tools:keep="@string/q6">I tense up if I meet an acquaintance in the street.</string>
+    <string name="q7" tools:keep="@string/q7">When mixing socially, I am uncomfortable.</string>
+    <string name="q8" tools:keep="@string/q8">I feel tense if I am alone with just one other person.</string>
+    <string name="q9" tools:keep="@string/q9">I am at ease meeting people at parties, etc.</string>
+    <string name="q10" tools:keep="@string/q10">I have difficulty talking with other people.</string>
+    <string name="q11" tools:keep="@string/q11">I find it easy to think of things to talk about.</string>
+    <string name="q12" tools:keep="@string/q12">I worry about expressing myself in case I appear awkward.</string>
+    <string name="q13" tools:keep="@string/q13">I find it difficult to disagree with another’s point of view.</string>
+    <string name="q14" tools:keep="@string/q14">I have difficulty talking to attractive persons of the opposite sex.</string>
+    <string name="q15" tools:keep="@string/q15">I find myself worrying that I won’t know what to say in social situations.</string>
+    <string name="q16" tools:keep="@string/q16">I am nervous mixing with people I don’t know well.</string>
+    <string name="q17" tools:keep="@string/q17">I feel I’ll say something embarrassing when talking.</string>
+    <string name="q18" tools:keep="@string/q18">When mixing in a group, I find myself worrying I will be ignored.</string>
+    <string name="q19" tools:keep="@string/q19">I am tense mixing in a group.</string>
+    <string name="q20" tools:keep="@string/q20">I am unsure whether to greet someone I know only slightly.</string>
 
     <string name="usage_stats_pref">usage_stats_pref</string>
     <string name="battery_opt_pref">battery_opt_pref</string>

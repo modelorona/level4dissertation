@@ -16,7 +16,7 @@ import androidx.core.app.NotificationCompat;
 
 public class KeepAliveService extends Service {
 
-    public static boolean isServiceRunning = false;
+    private static boolean isServiceRunning = false;
 
     @Override
     public void onCreate() {
@@ -33,7 +33,7 @@ public class KeepAliveService extends Service {
         return START_STICKY;
     }
 
-    void startServiceWithNotification() {
+    private void startServiceWithNotification() {
         if (isServiceRunning) return;
         isServiceRunning = true;
 
@@ -67,7 +67,7 @@ public class KeepAliveService extends Service {
         super.onDestroy();
     }
 
-    void stopMyService() {
+    private void stopMyService() {
         stopForeground(true);
         stopSelf();
         isServiceRunning = false;

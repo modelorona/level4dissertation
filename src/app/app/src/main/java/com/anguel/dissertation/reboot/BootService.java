@@ -18,7 +18,7 @@ import androidx.core.app.TaskStackBuilder;
 
 public class BootService extends JobIntentService {
 
-    public static final int JOB_ID = R.integer.BOOT_SERVICE;
+    private static final int JOB_ID = R.integer.BOOT_SERVICE;
 
     public static void enqueueWork(Context context, Intent work) {
         enqueueWork(context, BootService.class, JOB_ID, work);

@@ -1,7 +1,5 @@
 package com.anguel.dissertation;
 
-import android.annotation.TargetApi;
-import android.app.AppOpsManager;
 import android.app.Dialog;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -23,7 +21,6 @@ import android.view.MenuItem;
 
 import com.anguel.dissertation.settings.SettingsActivity;
 import com.anguel.dissertation.utils.Utils;
-import com.jakewharton.threetenabp.AndroidThreeTen;
 
 import java.util.Objects;
 
@@ -99,7 +96,6 @@ public class MainActivity extends AppCompatActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             Intent settingsIntent = new Intent(this, SettingsActivity.class);
             startActivity(settingsIntent);
