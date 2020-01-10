@@ -21,7 +21,6 @@ public class DataCollectionActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_data_collection);
-        AndroidThreeTen.init(this);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         setTitle(getString(R.string.data_collection_activity_title));
 
