@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -38,7 +39,9 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        createNotificationChannel();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            setUpNotificationChannels();
+        }
 
         PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
 
@@ -112,17 +115,35 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void createNotificationChannel() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            CharSequence name = getString(R.string.collection_update);
-            String description = getString(R.string.collection_update_desc);
-            int importance = NotificationManager.IMPORTANCE_DEFAULT;
-            NotificationChannel channel = new NotificationChannel(getString(R.string.channel_id), name, importance);
-            channel.setDescription(description);
-            // Register the channel with the system; you can't change the importance
-            // or other notification behaviors after this
-            NotificationManager notificationManager = getApplicationContext().getSystemService(NotificationManager.class);
-            Objects.requireNonNull(notificationManager).createNotificationChannel(channel);
-        }
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private NotificationChannel createChannel(CharSequence name, String description, int importance, String channelId) {
+        NotificationChannel channel = new NotificationChannel(channelId, name, importance);
+        channel.setDescription(description);
+        return channel;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private void setUpNotificationChannels() {
+        NotificationChannel persistentCollectionChannel = createChannel(
+                getString(R.string.persistence_notif_name), getString(R.string.persistence_notif_desc),
+                NotificationManager.IMPORTANCE_HIGH, getString(R.string.persistence_notif_id)
+        );
+
+        NotificationChannel onBootCollectionChannel = createChannel(
+                getString(R.string.collection_on_boot_name), getString(R.string.collection_on_boot_desc),
+                NotificationManager.IMPORTANCE_DEFAULT, getString(R.string.collection_on_boot_id)
+        );
+
+        NotificationChannel onCollectionChannel = createChannel(
+                getString(R.string.on_collection_name), getString(R.string.on_collection_desc),
+                NotificationManager.IMPORTANCE_LOW, getString(R.string.on_collection_id)
+        );
+
+        // Register the channel with the system; you can't change the importance
+        // or other notification behaviors after this
+        NotificationManager notificationManager = getApplicationContext().getSystemService(NotificationManager.class);
+        Objects.requireNonNull(notificationManager).createNotificationChannel(persistentCollectionChannel);
+        Objects.requireNonNull(notificationManager).createNotificationChannel(onBootCollectionChannel);
+        Objects.requireNonNull(notificationManager).createNotificationChannel(onCollectionChannel);
     }
 }

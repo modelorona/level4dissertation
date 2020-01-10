@@ -32,8 +32,9 @@ public class BootService extends JobIntentService {
                 getString(R.string.preference_file_key), Context.MODE_PRIVATE);
 
         boolean recordingData = sharedPref.getBoolean(getString(R.string.shpref_prefix) + getString(R.string.pref_data_record), false);
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), getApplicationContext().getString(R.string.channel_id))
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), getApplicationContext().getString(R.string.collection_on_boot_id))
                 .setSmallIcon(R.drawable.ic_done_black_24dp)
+                .setGroup(getString(R.string.collection_on_boot_group))
                 .setContentTitle(getString(R.string.boot_notif_title))
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT);
 

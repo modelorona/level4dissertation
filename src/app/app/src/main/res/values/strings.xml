@@ -3,7 +3,6 @@
     tools:shrinkMode="strict">
     <string name="app_name">Dissertation</string>
     <string name="action_settings">Settings</string>
-    <string name="channel_id">notif_channel_id</string>
     <string name="title">SIAS Quiz</string>
     <string name="not_at_all">not at all</string>
     <string name="slightly">slightly</string>
@@ -75,8 +74,21 @@
     <string name="permissions" />
     <string name="enable_permissions">Please make sure to enable the Usage Statistics permisssion and then disable battery optimisations for the app to work as intended. You can find this in the settings.</string>
     <string name="go_to_settings">Go to Settings</string>
-    <string name="collection_update">Collection Update</string>
-    <string name="collection_update_desc">Shows a notification if data is being collected or not</string>
     <string name="pref_data_record">_RECORDING_DATA</string>
+
+    <string name="persistence_notif_id">persistence_notif_id</string>
+    <string name="persistence_notif_desc">Shows a notification if data is being collected or not</string>
+    <string name="persistence_notif_name">Persistent Notification Channel</string>
+    <string name="persistence_notif_group">Persistent Notification Group</string>
+
+    <string name="collection_on_boot_desc">Shows a notification whenever the phone restarts notifying the user if the data collection has resumed or not</string>
+    <string name="collection_on_boot_name">On Boot Notification</string>
+    <string name="collection_on_boot_id">collection_on_boot_id</string>
+    <string name="collection_on_boot_group">On Boot Group</string>
+
+    <string name="on_collection_name">On Data Collection Channel</string>
+    <string name="on_collection_desc">Shows a notification whenever data is collected in a user session</string>
+    <string name="on_collection_id">on_collection_id</string>
+    <string name="on_collection_group">On Data Collection Group</string>
 
 </resources>

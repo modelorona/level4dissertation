@@ -77,9 +77,11 @@ public class SaveUsageStatsWorker extends Worker {
 
         List<UsageStats> appList = Objects.requireNonNull(usm).queryUsageStats(UsageStatsManager.INTERVAL_BEST, startTime, endTime);
 
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), getApplicationContext().getString(R.string.channel_id))
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), getApplicationContext().getString(R.string.on_collection_id))
                 .setSmallIcon(R.drawable.ic_done_black_24dp)
                 .setContentTitle("Dissertation App Data Collection")
+                .setAutoCancel(true)
+                .setGroup(getApplicationContext().getString(R.string.on_collection_group))
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT);
 
         NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(getApplicationContext());
