@@ -31,6 +31,7 @@ import java.util.concurrent.ExecutionException;
 public class SettingsFragment extends PreferenceFragmentCompat {
     private SwitchPreferenceCompat batteryOpt;
     private SwitchPreferenceCompat usageStatsPms;
+    private Utils utils;
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
@@ -41,6 +42,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         Preference personSias = findPreference(getString(R.string.see_personal_sias_pref));
         Preference licenseInfo = findPreference(getString(R.string.license_pref));
         Preference optOut = findPreference(getString(R.string.opt_out_pref));
+        utils = new Utils();
 
 //        toggle their values based on the current setting
         togglePreferenceValues();
@@ -71,7 +73,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
         Objects.requireNonNull(optOut).setOnPreferenceClickListener(preference -> {
             ClipboardManager clipboard = (ClipboardManager) Objects.requireNonNull(getActivity()).getSystemService(Context.CLIPBOARD_SERVICE);
-            Utils utils = new Utils();
             ClipData userId = ClipData.newPlainText(getString(R.string.cliptext_id), utils.getUserID(getActivity().getApplicationContext()));
             Objects.requireNonNull(clipboard).setPrimaryClip(userId);
 
@@ -91,7 +92,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     }
 
     private void togglePreferenceValues() {
-        if (hasUsageStatsPermission(Objects.requireNonNull(getActivity()))) {
+        if (utils.hasUsageStatsPermission(Objects.requireNonNull(getActivity()).getApplicationContext())) {
             Objects.requireNonNull(usageStatsPms).setChecked(true);
             Objects.requireNonNull(usageStatsPms).setEnabled(false);
         } else {
@@ -114,7 +115,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     }
 
     private void requestUsageStatsPermission() {
-        if (!hasUsageStatsPermission(Objects.requireNonNull(getActivity()))) {
+        if (!utils.hasUsageStatsPermission(Objects.requireNonNull(getActivity()).getApplicationContext())) {
             startActivityForResult(new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS), 102);
         }
     }
@@ -124,13 +125,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         startActivityForResult(new Intent(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS), 101);
     }
 
-    @TargetApi(Build.VERSION_CODES.KITKAT)
-    private boolean hasUsageStatsPermission(Context context) {
-        AppOpsManager appOps = (AppOpsManager) context.getSystemService(Context.APP_OPS_SERVICE);
-        int mode = Objects.requireNonNull(appOps).checkOpNoThrow("android:get_usage_stats",
-                android.os.Process.myUid(), context.getPackageName());
-        return mode == AppOpsManager.MODE_ALLOWED;
-    }
 
     private boolean isBatteryOptDisabled() {
         PowerManager pm = (PowerManager) Objects.requireNonNull(getActivity()).getSystemService(Context.POWER_SERVICE);
