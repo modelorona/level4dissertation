@@ -12,6 +12,7 @@
     <string name="main_act_string">
         Please first allow permissions by toggling them in the settings, and then click the button below to start the SIAS evaluation.
         Once taken, the score will be displayed and then saved to your device.
+        Once you have taken the test, please start the data collection using the second button.
         If you retake the test, the new score will not be saved.
         Please, do not clear any application space for the duration of the study.</string>
     <string name="yourid">Your personal unique ID is: </string>

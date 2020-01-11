@@ -6,7 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.util.Log;
 
-import com.anguel.dissertation.DataCollectionActivity;
+import com.anguel.dissertation.MainActivity;
 import com.anguel.dissertation.R;
 import com.anguel.dissertation.serviceengine.ServiceEngine;
 
@@ -48,7 +48,7 @@ public class BootService extends JobIntentService {
             builder.setStyle(new NotificationCompat.BigTextStyle()
                               .bigText(getString(R.string.boot_data_disabled)));
 
-            Intent dataCollectionIntent = new Intent(getApplicationContext(), DataCollectionActivity.class);
+            Intent dataCollectionIntent = new Intent(getApplicationContext(), MainActivity.class);
             TaskStackBuilder stackBuilder = TaskStackBuilder.create(getApplicationContext());
             stackBuilder.addNextIntentWithParentStack(dataCollectionIntent);
             PendingIntent result = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
