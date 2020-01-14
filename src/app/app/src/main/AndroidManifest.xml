@@ -47,12 +47,9 @@
             </intent-filter>
         </receiver>
 
-        <!--        <service-->
-<!--            android:name=".workers.SaveUsageStatsWorker"-->
-<!--            android:permission="android.permission.BIND_JOB_SERVICE" />-->
         <service android:name=".serviceengine.services.KeepAliveService"
-            android:permission="android.permission.FOREGROUND_SERVICE" />
-<!--            android:process=":stayingAlive"/>-->
+            android:permission="android.permission.FOREGROUND_SERVICE"
+            android:process=":stayingAlive"/>
 
         <service android:name=".serviceengine.services.EventMonitoringService"
             android:permission="android.permission.FOREGROUND_SERVICE" />
