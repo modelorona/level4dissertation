@@ -75,8 +75,36 @@ const AppCategory = sequelize.define('AppCategory', {
 
 sequelize.sync();
 fastify.post('/', opts, async (request, reply) => {
+    if (!process.env.DB_ENABLED) {
+        return {code: 1, reason: 'disabled'};
+    }
 
-    return {hello: 'world'};
+    const reqBody = request.body;
+    // todo: look at how to implement a key or something that gets sent from the phone
+    const type = reqBody.type;
+    let result;
+
+    if (type === 'category') {
+        result = await AppCategory.create({
+            app_name: reqBody.app_name,
+            category: reqBody.category,
+            app_package: reqBody.app_package
+        });
+    } else if (type === 'session') {
+        result = await SessionData.create({
+            uid: reqBody.uid,
+            session_data: reqBody.session_data
+        });
+    } else if (type === 'user') {
+        result = await User.create({
+            uid: reqBody.uid,
+            sias: reqBody.sias
+        });
+    } else {
+        return {code: 1, reason: 'failed'};
+    }
+
+    return {code: 0, reason: 'success'};
 });
 
 // Start listening.
