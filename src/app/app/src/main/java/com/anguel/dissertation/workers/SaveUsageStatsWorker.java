@@ -80,7 +80,7 @@ public class SaveUsageStatsWorker extends Worker {
 
         long startTime = getInputData().getLong(getString(R.string.sessionStart), -1L);
         long endTime = getInputData().getLong(getString(R.string.sessionEnd), -1L);
-
+//todo: check this out https://developer.android.com/reference/android/app/usage/UsageStatsManager#queryAndAggregateUsageStats(long,%20long)
         List<UsageStats> appList = Objects.requireNonNull(usm).queryUsageStats(UsageStatsManager.INTERVAL_BEST, startTime, endTime);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), getApplicationContext().getString(R.string.on_collection_id))
