@@ -17,10 +17,8 @@ import io.sentry.Sentry;
 import io.sentry.android.AndroidSentryClientFactory;
 
 import android.os.PowerManager;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.anguel.dissertation.serviceengine.ServiceEngine;
@@ -40,8 +38,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        Toast.makeText(this, BuildConfig.app_key, Toast.LENGTH_LONG).show();
-        Log.d("app_key", BuildConfig.app_key);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             setUpNotificationChannels();
         }
