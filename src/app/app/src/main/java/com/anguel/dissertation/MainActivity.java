@@ -5,6 +5,7 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -16,9 +17,13 @@ import io.sentry.Sentry;
 import io.sentry.android.AndroidSentryClientFactory;
 
 import android.os.PowerManager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
+import android.widget.ToggleButton;
 
+import com.anguel.dissertation.serviceengine.ServiceEngine;
 import com.anguel.dissertation.settings.SettingsActivity;
 import com.anguel.dissertation.utils.Utils;
 
@@ -35,7 +40,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
+        Toast.makeText(this, BuildConfig.app_key, Toast.LENGTH_LONG).show();
+        Log.d("app_key", BuildConfig.app_key);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             setUpNotificationChannels();
         }
@@ -44,12 +50,18 @@ public class MainActivity extends AppCompatActivity {
 
         Utils utils = new Utils();
 
-        findViewById(R.id.startDataCollectionButton).setOnClickListener(v -> {
+        ToggleButton button = findViewById(R.id.startDataCollectionButton);
+
+        button.setOnCheckedChangeListener((buttonView, isChecked)  -> {
             if (!utils.hasUsageStatsPermission(getApplicationContext()) || !Objects.requireNonNull(pm).isIgnoringBatteryOptimizations(getPackageName())) {
+                button.setChecked(false);
                 showPermissionsMissingDialog();
             } else {
-                Intent dataColIntent = new Intent(getApplicationContext(), DataCollectionActivity.class);
-                startActivity(dataColIntent);
+                SharedPreferences.Editor editor = this.getSharedPreferences(
+                        getString(R.string.preference_file_key), Context.MODE_PRIVATE).edit();
+                editor.putBoolean(getString(R.string.shpref_prefix) + getString(R.string.pref_data_record), isChecked);
+                editor.apply();
+                toggleDataCollection(isRecordingData());
             }
         });
 
@@ -63,6 +75,24 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(startTestIntent);
             }
         });
+
+        toggleDataCollection(isRecordingData());
+    }
+
+    private boolean isRecordingData() {
+        return getApplicationContext().getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE)
+                .getBoolean(getString(R.string.shpref_prefix) + getString(R.string.pref_data_record), false);
+    }
+
+    private void toggleDataCollection(boolean recordingData) {
+        ToggleButton button = findViewById(R.id.startDataCollectionButton);
+        button.setChecked(recordingData);
+        ServiceEngine engine = ServiceEngine.getInstance(getApplicationContext());
+        if (recordingData) {
+            engine.startServices(getApplicationContext());
+        } else {
+            engine.stopServices(getApplicationContext());
+        }
     }
 
     private void showPermissionsMissingDialog() {

@@ -79,6 +79,9 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
                 value = 0;
                 break;
         }
+        if (totalQuestionsSoFar == 4 || totalQuestionsSoFar == 8 || totalQuestionsSoFar == 10) {
+            value = 4 - value;
+        }
         total += value;
         if (totalQuestionsSoFar++ < amountOfQuestions - 1) {
             updateQuestion(getBaseContext(), totalQuestionsSoFar);

@@ -6,7 +6,7 @@ import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
 
-import com.anguel.dissertation.DataCollectionActivity;
+import com.anguel.dissertation.MainActivity;
 import com.anguel.dissertation.R;
 
 import java.util.Objects;
@@ -37,7 +37,7 @@ public class KeepAliveService extends Service {
         if (isServiceRunning) return;
         isServiceRunning = true;
 
-        Intent notificationIntent = new Intent(getApplicationContext(), DataCollectionActivity.class);
+        Intent notificationIntent = new Intent(getApplicationContext(), MainActivity.class);
         notificationIntent.setAction(getString(R.string.keep_alive_service));  // A string containing the action name
         notificationIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         PendingIntent contentPendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);

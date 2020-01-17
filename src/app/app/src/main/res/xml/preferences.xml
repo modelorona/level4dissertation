@@ -31,7 +31,7 @@
         <Preference
             app:key="learn_more_pref"
             app:title="Learn more"
-            app:summary="Learn more about the study you are participating in">
+            app:summary="Learn more about the data being collected">
             <intent
                 android:action="android.intent.action.VIEW"
                 android:data="@string/learn_more_url">

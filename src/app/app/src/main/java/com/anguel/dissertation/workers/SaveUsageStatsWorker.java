@@ -14,6 +14,7 @@ import androidx.core.app.NotificationManagerCompat;
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 import io.sentry.Sentry;
+import io.sentry.event.BreadcrumbBuilder;
 
 import com.anguel.dissertation.R;
 import com.anguel.dissertation.persistence.logger.Logger;
@@ -79,7 +80,7 @@ public class SaveUsageStatsWorker extends Worker {
 
         long startTime = getInputData().getLong(getString(R.string.sessionStart), -1L);
         long endTime = getInputData().getLong(getString(R.string.sessionEnd), -1L);
-
+//todo: check this out https://developer.android.com/reference/android/app/usage/UsageStatsManager#queryAndAggregateUsageStats(long,%20long)
         List<UsageStats> appList = Objects.requireNonNull(usm).queryUsageStats(UsageStatsManager.INTERVAL_BEST, startTime, endTime);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), getApplicationContext().getString(R.string.on_collection_id))
@@ -92,6 +93,10 @@ public class SaveUsageStatsWorker extends Worker {
         NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(getApplicationContext());
 
         if (appList != null && appList.size() == 0) {
+            Sentry.getContext().recordBreadcrumb(
+                    new BreadcrumbBuilder().setMessage("Could not get application usage statistics").build()
+            );
+            Sentry.capture("App list null - no apps found - most likely forgot to enable permissions");
             builder.setContentText(getString(R.string.fail_no_size));
             notificationManagerCompat.notify(nId.getAndIncrement(), builder.build());
             Log.d("Executed", "######### NO APP FOUND ##########");
@@ -150,8 +155,8 @@ public class SaveUsageStatsWorker extends Worker {
             boolean res = logger.saveAppStatistics(getApplicationContext(), logEvent);
 
             if (res) {
-                builder.setContentText(getString(R.string.success));
-                notificationManagerCompat.notify(nId.getAndIncrement(), builder.build());
+//                builder.setContentText(getString(R.string.success));
+//                notificationManagerCompat.notify(nId.getAndIncrement(), builder.build());
                 return Result.success();
             }
             builder.setContentText(getString(R.string.failure));
