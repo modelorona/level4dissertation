@@ -80,28 +80,67 @@ fastify.post('/', opts, async (request, reply) => {
     }
 
     const reqBody = request.body;
-    // todo: look at how to implement a key or something that gets sent from the phone
-    const type = reqBody.type;
-    let result;
+    const appKey = reqBody.key;
+    if (appKey !== process.env.APP_KEY) {
+        return {code: 1, reason: 'Failed'};
+    }
 
-    if (type === 'category') {
-        result = await AppCategory.create({
-            app_name: reqBody.app_name,
-            category: reqBody.category,
-            app_package: reqBody.app_package
-        });
-    } else if (type === 'session') {
-        result = await SessionData.create({
-            uid: reqBody.uid,
-            session_data: reqBody.session_data
-        });
-    } else if (type === 'user') {
-        result = await User.create({
-            uid: reqBody.uid,
-            sias: reqBody.sias
-        });
-    } else {
-        return {code: 1, reason: 'failed'};
+    const type = reqBody.type;
+
+    try {
+        if (type === 'category') {
+            const exists = await AppCategory.findOne({
+                where: {
+                    app_name: reqBody.app_name
+                }
+            });
+            if (!exists) {
+                await AppCategory.create({
+                    where: {
+                        app_name: reqBody.app_name,
+                        category: reqBody.category,
+                        app_package: reqBody.app_package
+                    }
+                });
+            } else {
+                // if it already exists, for now do nothing
+            }
+
+        } else if (type === 'session') {
+            const exists = await SessionData.findOne({
+                where: {
+                    uid: reqBody.uid
+                }
+            });
+            if (!exists) {
+                await SessionData.create({
+                    uid: reqBody.uid,
+                    session_data: reqBody.session_data
+                });
+            } else {
+            //    same as above
+            }
+
+        } else if (type === 'user') {
+            const exists = await User.findOne({
+                where: {
+                    uid: reqBody.uid
+                }
+            });
+            if (!exists) {
+                await User.create({
+                    uid: reqBody.uid,
+                    sias: reqBody.sias
+                });
+            } else {
+            //    same as above
+            }
+        } else {
+            return {code: 1, reason: 'failed'};
+        }
+    } catch (e) {
+        fastify.log.error(e);
+        return {code: 1, reason: 'dbfail'};
     }
 
     return {code: 0, reason: 'success'};
