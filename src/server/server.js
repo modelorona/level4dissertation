@@ -96,6 +96,7 @@ fastify.post('/', opts, async (request, reply) => {
                 }
             });
             if (!exists) {
+                console.log('here');
                 await AppCategory.create({
                     where: {
                         app_name: reqBody.app_name,
