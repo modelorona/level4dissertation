@@ -5,7 +5,7 @@ require('make-promises-safe');
 const fastify = require('fastify')({
     logging: process.env.LOGGING_ENABLED
 });
-const { Sequelize, DataTypes } = require('sequelize');
+const {Sequelize, DataTypes} = require('sequelize');
 const opts = {
     bodyLimit: 5242880 // increase the body limit size in case the data is too big. 5mb should be enough, but will test
 };
@@ -96,13 +96,10 @@ fastify.post('/', opts, async (request, reply) => {
                 }
             });
             if (!exists) {
-                console.log('here');
                 await AppCategory.create({
-                    where: {
-                        app_name: reqBody.app_name,
-                        category: reqBody.category,
-                        app_package: reqBody.app_package
-                    }
+                    app_name: reqBody.app_name,
+                    category: reqBody.category,
+                    app_package: reqBody.app_package
                 });
             } else {
                 // if it already exists, for now do nothing
@@ -120,7 +117,7 @@ fastify.post('/', opts, async (request, reply) => {
                     session_data: reqBody.session_data
                 });
             } else {
-            //    same as above
+                //    same as above
             }
 
         } else if (type === 'user') {
@@ -135,7 +132,7 @@ fastify.post('/', opts, async (request, reply) => {
                     sias: reqBody.sias
                 });
             } else {
-            //    same as above
+                //    same as above
             }
         } else {
             return {code: 1, reason: 'failed'};
