@@ -139,6 +139,7 @@ fastify.post('/', opts, async (request, reply) => {
             return {code: 1, reason: 'failed'};
         }
     } catch (e) {
+        console.log(e);
         fastify.log.error(e);
         return {code: 1, reason: 'dbfail'};
     }
