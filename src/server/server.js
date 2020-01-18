@@ -89,7 +89,6 @@ fastify.post('/', opts, async (request, reply) => {
 
     try {
         if (type === 'category') {
-            console.log(reqBody.app_name);
             const exists = await AppCategory.findOne({
                 where: {
                     app_name: reqBody.app_name
