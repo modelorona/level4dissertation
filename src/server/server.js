@@ -76,10 +76,11 @@ const AppCategory = sequelize.define('AppCategory', {
 sequelize.sync();
 
 fastify.get('/', async (request, reply) => {
-    if (process.env.ACTIVE === true) {
-        return {"code": 0};
+    let active = process.env.ACTIVE;
+    if (active) {
+        return {code: 0};
     } else {
-        return {"code": 1};
+        return {code: 1};
     }
 });
 
