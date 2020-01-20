@@ -74,6 +74,16 @@ const AppCategory = sequelize.define('AppCategory', {
 });
 
 sequelize.sync();
+
+fastify.get('/', async (request, reply) => {
+    if (process.env.ACTIVE === true) {
+        return {"code": 0};
+    } else {
+        return {"code": 1};
+    }
+});
+
+
 fastify.post('/', opts, async (request, reply) => {
     if (!process.env.DB_ENABLED) {
         return {code: 1, reason: 'disabled'};
