@@ -74,6 +74,8 @@ public class MainActivity extends AppCompatActivity {
         });
 
         toggleDataCollection(isRecordingData());
+
+
     }
 
     private boolean isRecordingData() {
