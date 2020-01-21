@@ -76,7 +76,7 @@ const AppCategory = sequelize.define('AppCategory', {
 sequelize.sync();
 
 fastify.get('/', async (request, reply) => {
-    let active = process.env.ACTIVE;
+    let active = process.env.DB_ENABLED;
     if (active) {
         return {code: 0};
     } else {
@@ -97,9 +97,10 @@ fastify.post('/', opts, async (request, reply) => {
     }
 
     const type = reqBody.type;
-
+ 
     try {
         if (type === 'category') {
+	    
             const exists = await AppCategory.findOne({
                 where: {
                     app_name: reqBody.app_name
@@ -111,6 +112,7 @@ fastify.post('/', opts, async (request, reply) => {
                     category: reqBody.category,
                     app_package: reqBody.app_package
                 });
+		console.log('category saved');
             } else {
                 // if it already exists, for now do nothing
             }
@@ -126,6 +128,7 @@ fastify.post('/', opts, async (request, reply) => {
                     uid: reqBody.uid,
                     session_data: reqBody.session_data
                 });
+		console.log('session saved');
             } else {
                 //    same as above
             }
@@ -141,6 +144,7 @@ fastify.post('/', opts, async (request, reply) => {
                     uid: reqBody.uid,
                     sias: reqBody.sias
                 });
+		console.log('user saved');
             } else {
                 //    same as above
             }
