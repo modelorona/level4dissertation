@@ -117,5 +117,25 @@
     <string name="app_category_db">AppCategory.db</string>
     <string name="log_events_db">LogEvents.db</string>
     <string name="userdata_db">UserData.db</string>
+    <string name="export_data">Export Data</string>
+    <string name="upload_data_service">upload_data_service</string>
+    <string name="data_upload_started">Data upload has begun</string>
+    <string name="data_upload_finished">Data upload has finished</string>
+    <string name="data_upload_unavailable">Data upload is not available at the moment</string>
+    <string name="data_can_upload_code">code</string>
+    <string name="media_type">application/json; charset=utf-8</string>
+    <string name="data_upload_key">key</string>
+    <string name="data_upload_type">type</string>
+    <string name="data_upload_type_session">session</string>
+    <string name="data_upload_uid">uid</string>
+    <string name="data_upload_sd">session_data</string>
+    <string name="data_upload_ss">session_start</string>
+    <string name="data_upload_se">session_end</string>
+    <string name="data_upload_type_user">user</string>
+    <string name="data_upload_type_category">category</string>
+    <string name="data_upload_sias">sias</string>
+    <string name="data_upload_app_name">app_name</string>
+    <string name="data_upload_category">category</string>
+    <string name="data_upload_app_package">app_package</string>
 
 </resources>

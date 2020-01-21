@@ -13,6 +13,7 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+
 import io.sentry.Sentry;
 import io.sentry.android.AndroidSentryClientFactory;
 
@@ -21,6 +22,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ToggleButton;
 
+import com.anguel.dissertation.export.ExportService;
 import com.anguel.dissertation.serviceengine.ServiceEngine;
 import com.anguel.dissertation.settings.SettingsActivity;
 import com.anguel.dissertation.utils.Utils;
@@ -70,6 +72,10 @@ public class MainActivity extends AppCompatActivity {
                 Intent startTestIntent = new Intent(this, QuizActivity.class);
                 startActivity(startTestIntent);
             }
+        });
+
+        findViewById(R.id.exportDataButton).setOnClickListener(v -> {
+            startService(new Intent(getApplicationContext(), ExportService.class).setAction(getString(R.string.upload_data_service)));
         });
 
         toggleDataCollection(isRecordingData());

@@ -2,6 +2,7 @@ package com.anguel.dissertation.persistence.logger;
 
 import android.content.Context;
 
+import com.anguel.dissertation.persistence.logger.asynctasks.AsyncCategoryGet;
 import com.anguel.dissertation.persistence.logger.asynctasks.AsyncCategorySave;
 import com.anguel.dissertation.persistence.logger.asynctasks.AsyncLogGet;
 import com.anguel.dissertation.persistence.logger.asynctasks.AsyncLogSave;
@@ -21,12 +22,10 @@ public class Logger {
         return runner.execute(context, data).get();
     }
 
-// --Commented out by Inspection START (1/10/20 1:52 AM):
-//    public List<LogEvent> getLogData(Context context) throws ExecutionException, InterruptedException {
-//        AsyncLogGet runner = new AsyncLogGet();
-//        return runner.execute(context).get();
-//    }
-// --Commented out by Inspection STOP (1/10/20 1:52 AM)
+    public List<LogEvent> getLogData(Context context) throws ExecutionException, InterruptedException {
+        AsyncLogGet runner = new AsyncLogGet();
+        return runner.execute(context).get();
+    }
 
     public Boolean saveAppCategory(Context context, AppCategory data) throws ExecutionException, InterruptedException {
         AsyncCategorySave runner = new AsyncCategorySave();
@@ -41,6 +40,11 @@ public class Logger {
 
     public List<UserData> getUserData(Context context) throws ExecutionException, InterruptedException {
         AsyncSiasGet runner = new AsyncSiasGet();
+        return runner.execute(context).get();
+    }
+
+    public List<AppCategory> getAppCategories(Context context) throws ExecutionException, InterruptedException {
+        AsyncCategoryGet runner = new AsyncCategoryGet();
         return runner.execute(context).get();
     }
 }
