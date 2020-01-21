@@ -3,7 +3,7 @@
 require('dotenv').config();
 require('make-promises-safe');
 const fastify = require('fastify')({
-    logging: process.env.LOGGING_ENABLED
+    logging: new Boolean(process.env.LOGGING_ENABLED).valueOf()
 });
 const {Sequelize, DataTypes} = require('sequelize');
 const opts = {
@@ -50,6 +50,12 @@ const SessionData = sequelize.define('SessionData', {
     },
     session_data: {
         type: DataTypes.TEXT('long')
+    },
+    session_start: {
+	type: DataTypes.STRING(1024)
+    },
+    session_end: {
+	type: DataTypes.STRING(1024)
     }
 }, {
     tableName: 'user_session_data',
@@ -77,7 +83,7 @@ sequelize.sync();
 
 fastify.get('/', async (request, reply) => {
     let active = process.env.DB_ENABLED;
-    if (active) {
+    if (active == 'true') {
         return {code: 0};
     } else {
         return {code: 1};
@@ -120,13 +126,17 @@ fastify.post('/', opts, async (request, reply) => {
         } else if (type === 'session') {
             const exists = await SessionData.findOne({
                 where: {
-                    uid: reqBody.uid
+                    uid: reqBody.uid,
+		    session_start: reqBody.session_start,
+		    session_end: reqBody.session_end
                 }
             });
             if (!exists) {
                 await SessionData.create({
                     uid: reqBody.uid,
-                    session_data: reqBody.session_data
+                    session_data: reqBody.session_data,
+		    session_start: reqBody.session_start,
+		    session_end: reqBody.session_end
                 });
 		console.log('session saved');
             } else {
