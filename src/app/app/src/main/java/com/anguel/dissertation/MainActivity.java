@@ -13,16 +13,16 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+
 import io.sentry.Sentry;
 import io.sentry.android.AndroidSentryClientFactory;
 
 import android.os.PowerManager;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import com.anguel.dissertation.export.ExportService;
 import com.anguel.dissertation.serviceengine.ServiceEngine;
 import com.anguel.dissertation.settings.SettingsActivity;
 import com.anguel.dissertation.utils.Utils;
@@ -40,8 +40,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        Toast.makeText(this, BuildConfig.app_key, Toast.LENGTH_LONG).show();
-        Log.d("app_key", BuildConfig.app_key);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             setUpNotificationChannels();
         }
@@ -74,6 +72,10 @@ public class MainActivity extends AppCompatActivity {
                 Intent startTestIntent = new Intent(this, QuizActivity.class);
                 startActivity(startTestIntent);
             }
+        });
+
+        findViewById(R.id.exportDataButton).setOnClickListener(v -> {
+            startService(new Intent(getApplicationContext(), ExportService.class).setAction(getString(R.string.upload_data_service)));
         });
 
         toggleDataCollection(isRecordingData());
