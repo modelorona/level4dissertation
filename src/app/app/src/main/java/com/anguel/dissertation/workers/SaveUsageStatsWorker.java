@@ -34,7 +34,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class SaveUsageStatsWorker extends Worker {
 
     @SuppressWarnings("CanBeFinal")
-    private AtomicInteger nId = new AtomicInteger();
+//    private AtomicInteger nId = new AtomicInteger();
 
     public SaveUsageStatsWorker(@NonNull Context context, @NonNull WorkerParameters workerParams) {
         super(context, workerParams);
@@ -83,22 +83,22 @@ public class SaveUsageStatsWorker extends Worker {
 //todo: check this out https://developer.android.com/reference/android/app/usage/UsageStatsManager#queryAndAggregateUsageStats(long,%20long)
         List<UsageStats> appList = Objects.requireNonNull(usm).queryUsageStats(UsageStatsManager.INTERVAL_BEST, startTime, endTime);
 
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), getApplicationContext().getString(R.string.on_collection_id))
-                .setSmallIcon(R.drawable.ic_done_black_24dp)
-                .setContentTitle(getString(R.string.collection_occurred))
-                .setAutoCancel(true)
-                .setGroup(getApplicationContext().getString(R.string.on_collection_group))
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+//        NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), getApplicationContext().getString(R.string.on_collection_id))
+//                .setSmallIcon(R.drawable.ic_done_black_24dp)
+//                .setContentTitle(getString(R.string.collection_occurred))
+//                .setAutoCancel(true)
+//                .setGroup(getApplicationContext().getString(R.string.on_collection_group))
+//                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
 
-        NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(getApplicationContext());
+//        NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(getApplicationContext());
 
         if (appList != null && appList.size() == 0) {
             Sentry.getContext().recordBreadcrumb(
-                    new BreadcrumbBuilder().setMessage("Could not get application usage statistics").build()
+                    new BreadcrumbBuilder().setMessage(getString(R.string.sentry_fail_usagestats)).build()
             );
-            Sentry.capture("App list null - no apps found - most likely forgot to enable permissions");
-            builder.setContentText(getString(R.string.fail_no_size));
-            notificationManagerCompat.notify(nId.getAndIncrement(), builder.build());
+            Sentry.capture(getString(R.string.sentry_forgot_permissions));
+//            builder.setContentText(getString(R.string.fail_no_size));
+//            notificationManagerCompat.notify(nId.getAndIncrement(), builder.build());
             Log.d("Executed", "######### NO APP FOUND ##########");
             return Result.failure();
         }
@@ -152,23 +152,24 @@ public class SaveUsageStatsWorker extends Worker {
         }
 
         try {
-            boolean res = logger.saveAppStatistics(getApplicationContext(), logEvent);
+            boolean res = logger.saveLogData(getApplicationContext(), logEvent);
 
             if (res) {
 //                builder.setContentText(getString(R.string.success));
 //                notificationManagerCompat.notify(nId.getAndIncrement(), builder.build());
                 return Result.success();
             }
-            builder.setContentText(getString(R.string.failure));
-            notificationManagerCompat.notify(nId.getAndIncrement(), builder.build());
+//            builder.setContentText(getString(R.string.failure));
+//            notificationManagerCompat.notify(nId.getAndIncrement(), builder.build());
+            Sentry.capture(getString(R.string.unknown_fail_save));
             return Result.failure();
 
         } catch (ExecutionException | InterruptedException e) {
             Sentry.capture(e);
             e.printStackTrace();
 
-            builder.setContentText(getString(R.string.fail_crash));
-            notificationManagerCompat.notify(nId.getAndIncrement(), builder.build());
+//            builder.setContentText(getString(R.string.fail_crash));
+//            notificationManagerCompat.notify(nId.getAndIncrement(), builder.build());
             return Result.failure();
         }
     }
