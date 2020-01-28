@@ -137,5 +137,11 @@
     <string name="data_upload_app_name">app_name</string>
     <string name="data_upload_category">category</string>
     <string name="data_upload_app_package">app_package</string>
+    <string name="call_db">Calls.db</string>
+    <string name="unknown_fail_save">Failed to save data for unknown reason</string>
+    <string name="sentry_forgot_permissions">App list null - no apps found - most likely forgot to enable permissions</string>
+    <string name="sentry_fail_usagestats">Could not get application usage statistics</string>
+    <string name="callStart">callStart</string>
+    <string name="callEnd">callEnd</string>
 
 </resources>
