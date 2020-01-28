@@ -6,6 +6,7 @@ import android.os.IBinder;
 import android.util.Log;
 
 import com.anguel.dissertation.R;
+import com.anguel.dissertation.workers.SaveCallTimesWorker;
 import com.anguel.dissertation.workers.SaveUsageStatsWorker;
 import com.pranavpandey.android.dynamic.engine.model.DynamicAppInfo;
 import com.pranavpandey.android.dynamic.engine.service.DynamicEngine;
@@ -20,6 +21,7 @@ import androidx.work.WorkManager;
 public class EventMonitoringService extends DynamicEngine {
 
     private long startTime = getTime();
+    private long callStartTime = getTime();
 
     @Nullable
     @Override
@@ -35,6 +37,19 @@ public class EventMonitoringService extends DynamicEngine {
     @Override
     public void onCallStateChange(boolean call) {
         super.onCallStateChange(call);
+//        if the device is in a call, then the start time is recorded
+//        else the end time is recorded and then save the start/end times in the database
+        long endTime = getTime();
+        if (!call) {
+            Data workerData = new Data.Builder().putLong(getString(R.string.callStart), callStartTime).putLong(getString(R.string.callEnd), endTime).build();
+            OneTimeWorkRequest saveCallData = new OneTimeWorkRequest.Builder(SaveCallTimesWorker.class)
+                    .setInputData(workerData)
+                    .build();
+            WorkManager.getInstance(this).enqueue(saveCallData);
+            Log.d("event_monitor", "call worker enqueued");
+        } else {
+            callStartTime = getTime();
+        }
     }
 
     @Override
@@ -56,7 +71,7 @@ public class EventMonitoringService extends DynamicEngine {
 //                    .setInitialDelay(2, TimeUnit.HOURS)
                     .build();
             WorkManager.getInstance(this).enqueue(saveSessionData);
-            Log.d("event_monitor", "session worked enqueued");
+            Log.d("event_monitor", "session worker enqueued");
         } else {
             startTime = getTime();
 //            Log.d("event_monitor", String.format("session_start: %s", startTime));
