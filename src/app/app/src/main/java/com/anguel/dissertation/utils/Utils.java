@@ -1,10 +1,15 @@
 package com.anguel.dissertation.utils;
 
+import android.Manifest;
 import android.annotation.TargetApi;
 import android.app.AppOpsManager;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.os.Build;
+import android.os.PowerManager;
+
+import androidx.core.content.ContextCompat;
 
 import com.anguel.dissertation.R;
 
@@ -38,5 +43,18 @@ public class Utils {
         return mode == AppOpsManager.MODE_ALLOWED;
     }
 
+    public boolean isCallPermissionEnabled(Context context) {
+        return (ContextCompat.checkSelfPermission(Objects.requireNonNull(context), Manifest.permission.READ_CALL_LOG) == PackageManager.PERMISSION_GRANTED) &&
+                (ContextCompat.checkSelfPermission(Objects.requireNonNull(context), Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED);
+    }
+
+    public boolean isBatteryOptDisabled(Context context) {
+        PowerManager pm = (PowerManager) Objects.requireNonNull(context).getSystemService(Context.POWER_SERVICE);
+        return Objects.requireNonNull(pm).isIgnoringBatteryOptimizations(context.getPackageName());
+    }
+
+    public boolean areAllPermissionsEnabled(Context context) {
+        return hasUsageStatsPermission(context) && isCallPermissionEnabled(context) && isBatteryOptDisabled(context);
+    }
 
 }

@@ -1,5 +1,6 @@
 package com.anguel.dissertation.settings;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -7,17 +8,16 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.PowerManager;
 import android.provider.Settings;
 import android.widget.Toast;
 
 import com.anguel.dissertation.utils.Utils;
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity;
 
+import androidx.core.app.ActivityCompat;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.SwitchPreferenceCompat;
-import io.sentry.Sentry;
 
 import com.anguel.dissertation.R;
 import com.anguel.dissertation.persistence.logger.Logger;
@@ -28,6 +28,7 @@ import java.util.concurrent.ExecutionException;
 public class SettingsFragment extends PreferenceFragmentCompat {
     private SwitchPreferenceCompat batteryOpt;
     private SwitchPreferenceCompat usageStatsPms;
+    private SwitchPreferenceCompat callPms;
     private Utils utils;
 
     @Override
@@ -36,6 +37,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
         batteryOpt = findPreference(getString(R.string.battery_opt_pref));
         usageStatsPms = findPreference(getString(R.string.usage_stats_pref));
+        callPms = findPreference(getString(R.string.call_pms));
         Preference personSias = findPreference(getString(R.string.see_personal_sias_pref));
         Preference licenseInfo = findPreference(getString(R.string.license_pref));
         Preference optOut = findPreference(getString(R.string.opt_out_pref));
@@ -45,13 +47,18 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         togglePreferenceValues();
 
         batteryOpt.setOnPreferenceClickListener(preference -> {
-//            even if they try to disable it, it won't do anything. better to let them know instead of mislead
+//            even if they try to disable it, it won't do anything
             disableBatteryOptimisation();
             return true;
         });
 
         usageStatsPms.setOnPreferenceClickListener(preference -> {
             requestUsageStatsPermission();
+            return true;
+        });
+
+        callPms.setOnPreferenceClickListener(preference -> {
+            requestCallPermissions();
             return true;
         });
 
@@ -88,6 +95,13 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         });
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+//        to make sure it cannot be toggled right after
+        togglePreferenceValues();
+    }
+
     private void togglePreferenceValues() {
         if (utils.hasUsageStatsPermission(Objects.requireNonNull(getActivity()).getApplicationContext())) {
             Objects.requireNonNull(usageStatsPms).setChecked(true);
@@ -96,35 +110,36 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             Objects.requireNonNull(usageStatsPms).setChecked(false);
         }
 
-        if (isBatteryOptDisabled()) {
+        if (utils.isBatteryOptDisabled(getActivity().getApplicationContext())) {
             Objects.requireNonNull(batteryOpt).setChecked(true);
             Objects.requireNonNull(batteryOpt).setEnabled(false);
         } else {
             Objects.requireNonNull(batteryOpt).setChecked(false);
         }
+
+        if (utils.isCallPermissionEnabled(getActivity().getApplicationContext())) {
+            Objects.requireNonNull(callPms).setChecked(true);
+            Objects.requireNonNull(callPms).setEnabled(false);
+        } else {
+            Objects.requireNonNull(callPms).setChecked(false);
+        }
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-//        to make sure it cannot be toggled right after
-        togglePreferenceValues();
+    private void requestCallPermissions() {
+        ActivityCompat.requestPermissions(Objects.requireNonNull(getActivity()),
+                new String[]{Manifest.permission.READ_CALL_LOG, Manifest.permission.READ_PHONE_STATE},
+                getResources().getInteger(R.integer.request_call_permissions));
     }
 
     private void requestUsageStatsPermission() {
         if (!utils.hasUsageStatsPermission(Objects.requireNonNull(getActivity()).getApplicationContext())) {
-            startActivityForResult(new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS), 102);
+            startActivityForResult(new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS), getActivity().getResources().getInteger(R.integer.request_usage_stats_code));
         }
     }
 
     @SuppressLint("BatteryLife")
     private void disableBatteryOptimisation() {
-        startActivityForResult(new Intent(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS), 101);
+        startActivityForResult(new Intent(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS), Objects.requireNonNull(getActivity()).getResources().getInteger(R.integer.request_battery_optimisation_code));
     }
 
-
-    private boolean isBatteryOptDisabled() {
-        PowerManager pm = (PowerManager) Objects.requireNonNull(getActivity()).getSystemService(Context.POWER_SERVICE);
-        return Objects.requireNonNull(pm).isIgnoringBatteryOptimizations(getActivity().getPackageName());
-    }
 }

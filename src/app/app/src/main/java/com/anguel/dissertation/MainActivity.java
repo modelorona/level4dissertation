@@ -50,8 +50,8 @@ public class MainActivity extends AppCompatActivity {
 
         ToggleButton button = findViewById(R.id.startDataCollectionButton);
 
-        button.setOnCheckedChangeListener((buttonView, isChecked)  -> {
-            if (!utils.hasUsageStatsPermission(getApplicationContext()) || !Objects.requireNonNull(pm).isIgnoringBatteryOptimizations(getPackageName())) {
+        button.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (!utils.areAllPermissionsEnabled(getApplicationContext())) {
                 button.setChecked(false);
                 showPermissionsMissingDialog();
             } else {
@@ -65,8 +65,8 @@ public class MainActivity extends AppCompatActivity {
 
         //      start the quiz
         findViewById(R.id.start_test).setOnClickListener(v -> {
-//            see if permissions are enabled or not. prevent taking the test unless they are fin
-            if (!utils.hasUsageStatsPermission(getApplicationContext()) || !Objects.requireNonNull(pm).isIgnoringBatteryOptimizations(getPackageName())) {
+//            see if permissions are enabled or not. prevent taking the test unless they are on
+            if (!utils.areAllPermissionsEnabled(getApplicationContext())) {
                 showPermissionsMissingDialog();
             } else {
                 Intent startTestIntent = new Intent(this, QuizActivity.class);
@@ -74,9 +74,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        findViewById(R.id.exportDataButton).setOnClickListener(v -> {
-            startService(new Intent(getApplicationContext(), ExportService.class).setAction(getString(R.string.upload_data_service)));
-        });
+        findViewById(R.id.exportDataButton).setOnClickListener(v ->
+                startService(new Intent(getApplicationContext(), ExportService.class).setAction(getString(R.string.upload_data_service))));
 
         toggleDataCollection(isRecordingData());
     }

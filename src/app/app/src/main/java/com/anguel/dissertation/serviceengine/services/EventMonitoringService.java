@@ -41,7 +41,7 @@ public class EventMonitoringService extends DynamicEngine {
 //        else the end time is recorded and then save the start/end times in the database
         long endTime = getTime();
         if (!call) {
-            Data workerData = new Data.Builder().putLong(getString(R.string.callStart), callStartTime).putLong(getString(R.string.callEnd), endTime).build();
+            Data workerData = new Data.Builder().putLong(getString(R.string.call_start), callStartTime).putLong(getString(R.string.call_end), endTime).build();
             OneTimeWorkRequest saveCallData = new OneTimeWorkRequest.Builder(SaveCallTimesWorker.class)
                     .setInputData(workerData)
                     .build();
@@ -65,7 +65,7 @@ public class EventMonitoringService extends DynamicEngine {
         long endTime = getTime();
         if (locked) {
 //            Log.d("event_monitor", String.format("session_end: %s", endTime));
-            Data workerData = new Data.Builder().putLong(getString(R.string.sessionStart), startTime).putLong(getString(R.string.sessionEnd), endTime).build();
+            Data workerData = new Data.Builder().putLong(getString(R.string.session_start), startTime).putLong(getString(R.string.session_end), endTime).build();
             OneTimeWorkRequest saveSessionData = new OneTimeWorkRequest.Builder(SaveUsageStatsWorker.class)
                     .setInputData(workerData)
 //                    .setInitialDelay(2, TimeUnit.HOURS)

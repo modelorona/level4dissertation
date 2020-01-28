@@ -30,8 +30,8 @@ public class SaveCallTimesWorker extends Worker {
         Logger logger = new Logger();
 
         Call call = new Call();
-        call.setStartTime(getInputData().getLong(getString(R.string.callStart), -1L));
-        call.setEndTime(getInputData().getLong(getString(R.string.callEnd), -1L));
+        call.setStartTime(getInputData().getLong(getString(R.string.call_start), -1L));
+        call.setEndTime(getInputData().getLong(getString(R.string.call_end), -1L));
 
         try {
             boolean res = logger.saveCall(getApplicationContext(), call);

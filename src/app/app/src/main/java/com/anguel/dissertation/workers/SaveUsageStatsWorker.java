@@ -9,8 +9,6 @@ import android.os.Build;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
-import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationManagerCompat;
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 import io.sentry.Sentry;
@@ -29,7 +27,6 @@ import java.util.Objects;
 import java.util.SortedMap;
 import java.util.TreeMap;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class SaveUsageStatsWorker extends Worker {
 
@@ -42,14 +39,14 @@ public class SaveUsageStatsWorker extends Worker {
 
     private Map<String, String> getAdditionalAppDetails(String packageName) {
         Map<String, String> details = new HashMap<>();
-        details.put(getString(R.string.packageName), packageName);
+        details.put(getString(R.string.package_name), packageName);
         try {
             PackageManager packManager = getApplicationContext().getPackageManager();
             ApplicationInfo app = packManager.getApplicationInfo(packageName, 0);
             details.put(getString(R.string.name), packManager.getApplicationLabel(app).toString());
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 //                damn getCategoryTitle throws a null, got to check that if it's null, the category is UNDEFINED.
-                String category = getString(R.string.UNDEFINED);
+                String category = getString(R.string.undefined);
                 if (ApplicationInfo.getCategoryTitle(getApplicationContext(), app.category) != null) {
                     category = ApplicationInfo.getCategoryTitle(getApplicationContext(), app.category).toString();
                 }
@@ -59,8 +56,8 @@ public class SaveUsageStatsWorker extends Worker {
             Sentry.capture(e);
             Log.e("worker_appDetailsFail", Objects.requireNonNull(e.getLocalizedMessage()));
             e.printStackTrace();
-            details.put(getString(R.string.name), String.format("%s_%s", getString(R.string.UNDEFINED), packageName)); // in this case we have only the package name. the app may have been recently uninstalled. add undefined in front as to differentiate it
-            details.put(getString(R.string.category), getString(R.string.UNDEFINED));
+            details.put(getString(R.string.name), String.format("%s_%s", getString(R.string.undefined), packageName)); // in this case we have only the package name. the app may have been recently uninstalled. add undefined in front as to differentiate it
+            details.put(getString(R.string.category), getString(R.string.undefined));
         }
 
         return details;
@@ -78,8 +75,8 @@ public class SaveUsageStatsWorker extends Worker {
 
         UsageStatsManager usm = (UsageStatsManager) getApplicationContext().getSystemService(Context.USAGE_STATS_SERVICE);
 
-        long startTime = getInputData().getLong(getString(R.string.sessionStart), -1L);
-        long endTime = getInputData().getLong(getString(R.string.sessionEnd), -1L);
+        long startTime = getInputData().getLong(getString(R.string.session_start), -1L);
+        long endTime = getInputData().getLong(getString(R.string.session_end), -1L);
 //todo: check this out https://developer.android.com/reference/android/app/usage/UsageStatsManager#queryAndAggregateUsageStats(long,%20long)
         List<UsageStats> appList = Objects.requireNonNull(usm).queryUsageStats(UsageStatsManager.INTERVAL_BEST, startTime, endTime);
 
@@ -104,8 +101,8 @@ public class SaveUsageStatsWorker extends Worker {
         }
 
         LogEvent logEvent = new LogEvent();
-        logEvent.setSessionStart(getInputData().getLong(getString(R.string.sessionStart), -1L));
-        logEvent.setSessionEnd(getInputData().getLong(getString(R.string.sessionEnd), -1L));
+        logEvent.setSessionStart(getInputData().getLong(getString(R.string.session_start), -1L));
+        logEvent.setSessionEnd(getInputData().getLong(getString(R.string.session_end), -1L));
 
         if (Objects.requireNonNull(appList).size() > 0) {
             List<Map<String, String>> logEventData = new ArrayList<>();
@@ -126,11 +123,11 @@ public class SaveUsageStatsWorker extends Worker {
                 Map<String, String> appData = new HashMap<>();
 
                 appData.put(getString(R.string.name), additionalDetails.get(getString(R.string.name)));
-                appData.put(getString(R.string.lastTimeUsed), String.valueOf(usageStats.getLastTimeUsed()));
-                appData.put(getString(R.string.totalTimeInForeground), String.valueOf(usageStats.getTotalTimeInForeground()));
+                appData.put(getString(R.string.last_time_used), String.valueOf(usageStats.getLastTimeUsed()));
+                appData.put(getString(R.string.total_time_in_foreground), String.valueOf(usageStats.getTotalTimeInForeground()));
 
                 try {
-                    @SuppressWarnings("unused") boolean res = logger.saveAppCategory(getApplicationContext(), AppCategory.builder().category(additionalDetails.get(getString(R.string.category))).appName(additionalDetails.get(getString(R.string.name))).packageName(additionalDetails.get(getString(R.string.packageName))).build());
+                    @SuppressWarnings("unused") boolean res = logger.saveAppCategory(getApplicationContext(), AppCategory.builder().category(additionalDetails.get(getString(R.string.category))).appName(additionalDetails.get(getString(R.string.name))).packageName(additionalDetails.get(getString(R.string.package_name))).build());
                 } catch (ExecutionException | InterruptedException e) {
                     Sentry.capture(e);
                     e.printStackTrace();
@@ -139,10 +136,10 @@ public class SaveUsageStatsWorker extends Worker {
 //                with android Q, more usage data is available, but we need to check to make sure the device actually supports it as the current min
 //                target version is 24
                 if (Build.VERSION.SDK_INT == Build.VERSION_CODES.Q) {
-                    appData.put(getString(R.string.lastTimeVisible), String.valueOf(usageStats.getLastTimeVisible()));
-                    appData.put(getString(R.string.lastTimeForegroundServiceUsed), String.valueOf(usageStats.getLastTimeForegroundServiceUsed()));
-                    appData.put(getString(R.string.totalTimeForegroundServiceUsed), String.valueOf(usageStats.getTotalTimeForegroundServiceUsed()));
-                    appData.put(getString(R.string.totalTimeVisible), String.valueOf(usageStats.getTotalTimeVisible()));
+                    appData.put(getString(R.string.last_time_visible), String.valueOf(usageStats.getLastTimeVisible()));
+                    appData.put(getString(R.string.last_time_foreground_service_used), String.valueOf(usageStats.getLastTimeForegroundServiceUsed()));
+                    appData.put(getString(R.string.total_time_foreground_service_used), String.valueOf(usageStats.getTotalTimeForegroundServiceUsed()));
+                    appData.put(getString(R.string.total_time_visible), String.valueOf(usageStats.getTotalTimeVisible()));
                 }
 
                 logEventData.add(appData);

@@ -15,7 +15,6 @@
         Once you have taken the test, please start the data collection using the second button.
         If you retake the test, the new score will not be saved.
         Please, do not clear any application space for the duration of the study.</string>
-    <string name="yourid">Your personal unique ID is: </string>
     <string name="start_sias_test">Start SIAS Test</string>
     <string name="shpref_prefix">level4dissertation2255541h</string>
     <string name="preference_file_key">level4dissertationprefs</string>
@@ -44,13 +43,8 @@
 
     <string name="usage_stats_pref">usage_stats_pref</string>
     <string name="battery_opt_pref">battery_opt_pref</string>
-    <string name="no_change">Setting not changed</string>
-    <string name="manual_change">The option to disable this is turned on for the purpose of the study. Please do not manually go into the system settings and change it from there.</string>
-    <string name="see_data_collection">See data collection</string>
-    <string name="toggle_data_collection">Toggle data collection</string>
     <string name="data_collection_is_off">Data Collection is Off</string>
     <string name="data_collection_is_on">Data Collection is On</string>
-    <string name="use_the_button_below_to_turn_on_and_off_the_data_collection">Use the button below to turn on and off the data collection.</string>
     <string name="keep_alive_service">keep_alive</string>
     <string name="alive_notif_text">Data is being collected in the background.</string>
     <string name="monitor_service">monitoring_service</string>
@@ -73,7 +67,7 @@
     <string name="your_score">Thank you for taking the test. Your SIAS score is</string>
     <string name="dsn">https://400a55aa461746a0ab09da34d9fff81b@sentry.io/1876401</string>
     <string name="permissions" />
-    <string name="enable_permissions">Please make sure to enable the Usage Statistics permisssion and then disable battery optimisations for the app to work as intended. You can find this in the settings.</string>
+    <string name="enable_permissions">Please make sure to enable the Usage Statistics permisssion, then disable battery optimisations, and finally enable call permissions for the app to work as intended. You can find this in the settings.</string>
     <string name="go_to_settings">Go to Settings</string>
     <string name="pref_data_record">_RECORDING_DATA</string>
 
@@ -90,25 +84,24 @@
     <string name="on_collection_name">On Data Collection Channel</string>
     <string name="on_collection_desc">Shows a notification whenever data is collected in a user session</string>
     <string name="on_collection_id">on_collection_id</string>
-    <string name="on_collection_group">On Data Collection Group</string>
-    <string name="UNDEFINED">UNDEFINED</string>
+    <string name="on_collection_group" tools:keep="@string/on_collection_group">On Data Collection Group</string>
+    <string name="undefined">UNDEFINED</string>
     <string name="name">name</string>
     <string name="category">category</string>
-    <string name="packageName">packageName</string>
-    <string name="sessionStart">sessionStart</string>
-    <string name="sessionEnd">sessionEnd</string>
-    <string name="collection_occurred">Dissertation App Data Collection</string>
-    <string name="fail_no_size">failure - no size</string>
-    <string name="lastTimeUsed">lastTimeUsed</string>
-    <string name="totalTimeInForeground">totalTimeInForeground</string>
-    <string name="lastTimeVisible">lastTimeVisible</string>
-    <string name="lastTimeForegroundServiceUsed">lastTimeForegroundServiceUsed</string>
-    <string name="totalTimeForegroundServiceUsed">totalTimeForegroundServiceUsed</string>
-    <string name="totalTimeVisible">totalTimeVisible</string>
-    <string name="success">success</string>
-    <string name="failure">failure</string>
-    <string name="fail_crash">failure - crash</string>
-    <string name="data_collection_activity_title">Data Collection</string>
+    <string name="package_name">packageName</string>
+    <string name="session_start">sessionStart</string>
+    <string name="session_end">sessionEnd</string>
+    <string name="collection_occurred" tools:keep="@string/collection_occurred">Dissertation App Data Collection</string>
+    <string name="fail_no_size" tools:keep="@string/fail_no_size">failure - no size</string>
+    <string name="last_time_used">lastTimeUsed</string>
+    <string name="total_time_in_foreground">totalTimeInForeground</string>
+    <string name="last_time_visible">lastTimeVisible</string>
+    <string name="last_time_foreground_service_used">lastTimeForegroundServiceUsed</string>
+    <string name="total_time_foreground_service_used">totalTimeForegroundServiceUsed</string>
+    <string name="total_time_visible">totalTimeVisible</string>
+    <string name="success" tools:keep="@string/success">success</string>
+    <string name="failure" tools:keep="@string/failure">failure</string>
+    <string name="fail_crash" tools:keep="@string/fail_crash">failure - crash</string>
     <string name="not_yet_taken_test">You have not yet taken the test.</string>
     <string name="cliptext_id">dissertation user id</string>
     <string name="id_copied">Your personal identifier was copied to the clipboard.</string>
@@ -141,7 +134,9 @@
     <string name="unknown_fail_save">Failed to save data for unknown reason</string>
     <string name="sentry_forgot_permissions">App list null - no apps found - most likely forgot to enable permissions</string>
     <string name="sentry_fail_usagestats">Could not get application usage statistics</string>
-    <string name="callStart">callStart</string>
-    <string name="callEnd">callEnd</string>
+    <string name="call_start">callStart</string>
+    <string name="call_end">callEnd</string>
+    <string name="call_permission_granted" tools:keep="@string/call_permission_granted">Call permission granted</string>
+    <string name="call_pms">call_permission_pref</string>
 
 </resources>
