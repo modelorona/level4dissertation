@@ -58,7 +58,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         try {
             Objects.requireNonNull(personSias).setSummary(String.valueOf(new Logger().getUserData(Objects.requireNonNull(getActivity()).getApplicationContext()).get(0).getSias()));
         } catch (ExecutionException | InterruptedException | IndexOutOfBoundsException e) {
-            Sentry.capture(e);
+//            Sentry.capture(e);
             Objects.requireNonNull(personSias).setSummary(getString(R.string.not_yet_taken_test));
             e.printStackTrace();
         }
