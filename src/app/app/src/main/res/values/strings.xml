@@ -145,5 +145,6 @@
     <string name="on_data_export_desc">Shows a notification for data upload progress</string>
     <string name="on_data_export_id">on_data_export_id</string>
     <string name="data_export_group">Data export group</string>
+    <string name="location_service">location_service</string>
 
 </resources>
