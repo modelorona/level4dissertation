@@ -52,10 +52,10 @@ const SessionData = sequelize.define('SessionData', {
         type: DataTypes.TEXT('long')
     },
     session_start: {
-	type: DataTypes.STRING(1024)
+        type: DataTypes.STRING(1024)
     },
     session_end: {
-	type: DataTypes.STRING(1024)
+        type: DataTypes.STRING(1024)
     }
 }, {
     tableName: 'user_session_data',
@@ -76,6 +76,27 @@ const AppCategory = sequelize.define('AppCategory', {
     }
 }, {
     tableName: 'app_categories',
+    timestamps: false
+});
+
+const Call = sequelize.define('Call', {
+    id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true
+    },
+    uid: {
+        type: DataTypes.STRING(1024),
+        allowNull: false
+    },
+    call_start: {
+        type: DataTypes.STRING(1024)
+    },
+    call_end: {
+        type: DataTypes.STRING(1024)
+    }
+}, {
+    tableName: 'calls',
     timestamps: false
 });
 
@@ -103,10 +124,10 @@ fastify.post('/', opts, async (request, reply) => {
     }
 
     const type = reqBody.type;
- 
+
     try {
         if (type === 'category') {
-	    
+
             const exists = await AppCategory.findOne({
                 where: {
                     app_name: reqBody.app_name
@@ -118,7 +139,7 @@ fastify.post('/', opts, async (request, reply) => {
                     category: reqBody.category,
                     app_package: reqBody.app_package
                 });
-		console.log('category saved');
+                console.log('category saved');
             } else {
                 // if it already exists, for now do nothing
             }
@@ -127,18 +148,18 @@ fastify.post('/', opts, async (request, reply) => {
             const exists = await SessionData.findOne({
                 where: {
                     uid: reqBody.uid,
-		    session_start: reqBody.session_start,
-		    session_end: reqBody.session_end
+                    session_start: reqBody.session_start,
+                    session_end: reqBody.session_end
                 }
             });
             if (!exists) {
                 await SessionData.create({
                     uid: reqBody.uid,
                     session_data: reqBody.session_data,
-		    session_start: reqBody.session_start,
-		    session_end: reqBody.session_end
+                    session_start: reqBody.session_start,
+                    session_end: reqBody.session_end
                 });
-		console.log('session saved');
+                console.log('session saved');
             } else {
                 //    same as above
             }
@@ -154,9 +175,25 @@ fastify.post('/', opts, async (request, reply) => {
                     uid: reqBody.uid,
                     sias: reqBody.sias
                 });
-		console.log('user saved');
+                console.log('user saved');
             } else {
                 //    same as above
+            }
+        } else if (type === 'call') {
+            const exists = await Call.findOne({
+                where: {
+                    uid: reqBody.uid
+                }
+            });
+            if (exists) {
+                await Call.create({
+                    uid: reqBody.uid,
+                    call_start: reqBody.call_start,
+                    call_end: reqBody.call_end
+                });
+                console.log('call saved');
+            } else {
+            //    same as above
             }
         } else {
             return {code: 1, reason: 'failed'};
