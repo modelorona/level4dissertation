@@ -3,7 +3,7 @@
 require('dotenv').config();
 require('make-promises-safe');
 const fastify = require('fastify')({
-    logging: new Boolean(process.env.LOGGING_ENABLED).valueOf()
+    logging: Boolean(process.env.LOGGING_ENABLED).valueOf()
 });
 const {Sequelize, DataTypes} = require('sequelize');
 const opts = {
