@@ -172,7 +172,7 @@ public class ExportService extends Service {
                 jsonObject.put(getString(R.string.data_upload_call_end), String.valueOf(call.getEndTime()));
                 result.add(jsonObject.toString());
             }
-        } catch (ExecutionException | InterruptedException | JSONException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             Sentry.capture(e);
         }
@@ -198,7 +198,7 @@ public class ExportService extends Service {
 
                 result.add(jsonObject.toString());
             }
-        } catch (ExecutionException | InterruptedException | JSONException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             Sentry.capture(e);
         }
@@ -216,7 +216,7 @@ public class ExportService extends Service {
             jsonObject.put(getString(R.string.data_upload_type), getString(R.string.data_upload_type_user));
             jsonObject.put(getString(R.string.data_upload_uid), userData.getUserId());
             jsonObject.put(getString(R.string.data_upload_sias), userData.getSias());
-        } catch (ExecutionException | InterruptedException | JSONException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             Sentry.capture(e);
         }
@@ -240,7 +240,7 @@ public class ExportService extends Service {
 
                 result.add(jsonObject.toString());
             }
-        } catch (ExecutionException | InterruptedException | JSONException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             Sentry.capture(e);
         }
