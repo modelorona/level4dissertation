@@ -24,7 +24,6 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
 
 
     private int total = 0;
-    private final int amountOfQuestions = 20;
     private int totalQuestionsSoFar = 0;
     private TextView question;
     private String id;
@@ -83,6 +82,7 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
             value = 4 - value;
         }
         total += value;
+        int amountOfQuestions = 20;
         if (totalQuestionsSoFar++ < amountOfQuestions - 1) {
             updateQuestion(getBaseContext(), totalQuestionsSoFar);
         } else {

@@ -12,6 +12,7 @@ import androidx.annotation.Nullable;
 import com.anguel.dissertation.BuildConfig;
 import com.anguel.dissertation.R;
 import com.anguel.dissertation.persistence.database.appcategory.AppCategory;
+import com.anguel.dissertation.persistence.database.calls.Call;
 import com.anguel.dissertation.persistence.database.logevent.LogEvent;
 import com.anguel.dissertation.persistence.database.userdata.UserData;
 import com.anguel.dissertation.persistence.logger.Logger;
@@ -121,6 +122,23 @@ public class ExportService extends Service {
             Sentry.capture(e);
         }
 
+//        now send call data
+        List<String> callData = getCallDataJSON();
+        for (String call : callData) {
+            RequestBody exportCallDataReqBody = RequestBody.create(call, MediaType.parse(getString(R.string.media_type)));
+
+            Request exportCallDataRequest = requestBuild.post(exportCallDataReqBody).build();
+
+            try (Response response = client.newCall(exportCallDataRequest).execute()) {
+                if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+
+                System.out.println(Objects.requireNonNull(response.body()).string());
+            } catch (IOException e) {
+                e.printStackTrace();
+                Sentry.capture(e);
+            }
+        }
+
 //        finally send session data
         List<String> sessionData = getSessionDataJSON();
         for (String session : sessionData) {
@@ -137,6 +155,29 @@ public class ExportService extends Service {
                 Sentry.capture(e);
             }
         }
+    }
+
+    private List<String> getCallDataJSON() {
+        Logger logger = new Logger();
+        List<String> result = new LinkedList<>();
+        try {
+            List<Call> calls = logger.getCallData(getApplicationContext());
+            UserData userData = logger.getUserData(getApplicationContext()).get(0);
+            for (Call call : calls) {
+                JSONObject jsonObject = new JSONObject();
+                jsonObject.put(getString(R.string.data_upload_key), BuildConfig.app_key);
+                jsonObject.put(getString(R.string.data_upload_type), getString(R.string.data_upload_type_call));
+                jsonObject.put(getString(R.string.data_upload_uid), userData.getUserId());
+                jsonObject.put(getString(R.string.data_upload_call_start), String.valueOf(call.getStartTime()));
+                jsonObject.put(getString(R.string.data_upload_call_end), String.valueOf(call.getEndTime()));
+                result.add(jsonObject.toString());
+            }
+        } catch (ExecutionException | InterruptedException | JSONException e) {
+            e.printStackTrace();
+            Sentry.capture(e);
+        }
+
+        return result;
     }
 
     private List<String> getSessionDataJSON() {

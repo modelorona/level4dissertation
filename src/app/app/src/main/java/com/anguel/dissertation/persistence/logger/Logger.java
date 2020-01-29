@@ -2,6 +2,9 @@ package com.anguel.dissertation.persistence.logger;
 
 import android.content.Context;
 
+import com.anguel.dissertation.persistence.database.calls.Call;
+import com.anguel.dissertation.persistence.logger.asynctasks.AsyncCallGet;
+import com.anguel.dissertation.persistence.logger.asynctasks.AsyncCallSave;
 import com.anguel.dissertation.persistence.logger.asynctasks.AsyncCategoryGet;
 import com.anguel.dissertation.persistence.logger.asynctasks.AsyncCategorySave;
 import com.anguel.dissertation.persistence.logger.asynctasks.AsyncLogGet;
@@ -17,7 +20,7 @@ import java.util.concurrent.ExecutionException;
 
 public class Logger {
 
-    public Boolean saveAppStatistics(Context context, LogEvent data) throws ExecutionException, InterruptedException {
+    public Boolean saveLogData(Context context, LogEvent data) throws ExecutionException, InterruptedException {
         AsyncLogSave runner = new AsyncLogSave();
         return runner.execute(context, data).get();
     }
@@ -32,6 +35,11 @@ public class Logger {
         return runner.execute(context, data).get();
     }
 
+    public List<AppCategory> getAppCategories(Context context) throws ExecutionException, InterruptedException {
+        AsyncCategoryGet runner = new AsyncCategoryGet();
+        return runner.execute(context).get();
+    }
+
     @SuppressWarnings("UnusedReturnValue")
     public Boolean saveSiasScore(Context context, UserData data) throws ExecutionException, InterruptedException {
         AsyncSiasSave runner = new AsyncSiasSave();
@@ -43,8 +51,13 @@ public class Logger {
         return runner.execute(context).get();
     }
 
-    public List<AppCategory> getAppCategories(Context context) throws ExecutionException, InterruptedException {
-        AsyncCategoryGet runner = new AsyncCategoryGet();
+    public Boolean saveCall(Context context, Call data) throws ExecutionException, InterruptedException {
+        AsyncCallSave runner = new AsyncCallSave();
+        return runner.execute(context, data).get();
+    }
+
+    public List<Call> getCallData(Context context) throws ExecutionException, InterruptedException {
+        AsyncCallGet runner = new AsyncCallGet();
         return runner.execute(context).get();
     }
 }

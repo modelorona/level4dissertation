@@ -19,7 +19,6 @@ public class ServiceEngine {
     private static ServiceEngine instance;
     @SuppressWarnings("CanBeFinal")
     private List<Intent> services;
-    private boolean servicesEnabled;
 
 
     private ServiceEngine(Context context) {
@@ -51,11 +50,6 @@ public class ServiceEngine {
         }
     }
 
-// --Commented out by Inspection START (1/10/20 1:53 AM):
-//    public boolean areServicesEnabled() {
-//        return servicesEnabled;
-//    }
-// --Commented out by Inspection STOP (1/10/20 1:53 AM)
 
 
 }

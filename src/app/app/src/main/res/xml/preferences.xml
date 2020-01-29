@@ -16,6 +16,11 @@
             app:title="Battery"
             app:summary="Click here to disable battery optimization"/>
 
+        <SwitchPreferenceCompat
+            app:key="call_permission_pref"
+            app:title="Calls"
+            app:summary="Click here to allow call log permissions"/>
+
     </PreferenceCategory>
 
     <PreferenceCategory
