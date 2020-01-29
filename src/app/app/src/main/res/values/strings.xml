@@ -138,5 +138,8 @@
     <string name="call_end">callEnd</string>
     <string name="call_permission_granted" tools:keep="@string/call_permission_granted">Call permission granted</string>
     <string name="call_pms">call_permission_pref</string>
+    <string name="data_upload_type_call">call</string>
+    <string name="data_upload_call_start">call_start</string>
+    <string name="data_upload_call_end">call_end</string>
 
 </resources>
