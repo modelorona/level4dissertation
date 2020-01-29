@@ -8,6 +8,8 @@ import android.os.Looper;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 
 import com.anguel.dissertation.BuildConfig;
 import com.anguel.dissertation.R;
@@ -24,7 +26,6 @@ import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
-import java.util.concurrent.ExecutionException;
 
 import io.sentry.Sentry;
 import okhttp3.MediaType;
@@ -53,10 +54,23 @@ public class ExportService extends Service {
         final OkHttpClient client = new OkHttpClient();
 
         Handler handler = new Handler(Looper.getMainLooper());
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), getApplicationContext().getString(R.string.on_data_export_id))
+                .setGroup(getString(R.string.data_export_group))
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+
+        NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(getApplicationContext());
+
         if (canUpload(client)) {
-            handler.post(() -> Toast.makeText(getApplicationContext(), getString(R.string.data_upload_started), Toast.LENGTH_LONG).show());
+            handler.post(() -> Toast.makeText(getApplicationContext(), getString(R.string.data_upload_started), Toast.LENGTH_SHORT).show());
             run(client);
-            handler.post(() -> Toast.makeText(getApplicationContext(), getString(R.string.data_upload_finished), Toast.LENGTH_LONG).show());
+//            show a small notification when the upload is done
+            handler.post(() -> {
+                builder.setSmallIcon(R.drawable.ic_cloud_done_black_24dp)
+                        .setContentTitle(getString(R.string.data_upload_finished))
+                        .setAutoCancel(true);
+                notificationManagerCompat.notify(4, builder.build());
+            });
         } else {
             handler.post(() -> Toast.makeText(getApplicationContext(), getString(R.string.data_upload_unavailable), Toast.LENGTH_LONG).show());
         }

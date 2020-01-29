@@ -141,5 +141,9 @@
     <string name="data_upload_type_call">call</string>
     <string name="data_upload_call_start">call_start</string>
     <string name="data_upload_call_end">call_end</string>
+    <string name="on_data_export_name">On data export channel</string>
+    <string name="on_data_export_desc">Shows a notification for data upload progress</string>
+    <string name="on_data_export_id">on_data_export_id</string>
+    <string name="data_export_group">Data export group</string>
 
 </resources>
