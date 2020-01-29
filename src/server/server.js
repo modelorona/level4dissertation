@@ -182,10 +182,12 @@ fastify.post('/', opts, async (request, reply) => {
         } else if (type === 'call') {
             const exists = await Call.findOne({
                 where: {
-                    uid: reqBody.uid
+                    uid: reqBody.uid,
+		    call_start: reqBody.call_start,
+		    call_end: reqBody.call_end
                 }
             });
-            if (exists) {
+            if (!exists) {
                 await Call.create({
                     uid: reqBody.uid,
                     call_start: reqBody.call_start,
