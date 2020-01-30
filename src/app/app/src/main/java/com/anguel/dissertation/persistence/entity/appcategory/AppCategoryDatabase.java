@@ -1,4 +1,4 @@
-package com.anguel.dissertation.persistence.database.appcategory;
+package com.anguel.dissertation.persistence.entity.appcategory;
 
 import android.content.Context;
 

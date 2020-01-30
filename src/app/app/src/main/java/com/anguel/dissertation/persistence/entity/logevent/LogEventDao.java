@@ -1,7 +1,6 @@
-package com.anguel.dissertation.persistence.database.logevent;
+package com.anguel.dissertation.persistence.entity.logevent;
 
 import androidx.room.Dao;
-import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;

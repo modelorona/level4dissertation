@@ -1,4 +1,4 @@
-package com.anguel.dissertation.persistence.database.calls;
+package com.anguel.dissertation.persistence.entity.calls;
 
 import androidx.room.Dao;
 import androidx.room.Insert;

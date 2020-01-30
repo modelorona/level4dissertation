@@ -1,4 +1,4 @@
-package com.anguel.dissertation.persistence.database.location;
+package com.anguel.dissertation.persistence.entity.location;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;

@@ -1,28 +1,40 @@
-package com.anguel.dissertation.persistence.logger;
+package com.anguel.dissertation.persistence;
 
 import android.content.Context;
 
-import com.anguel.dissertation.persistence.database.calls.Call;
-import com.anguel.dissertation.persistence.database.location.Location;
-import com.anguel.dissertation.persistence.logger.asynctasks.calls.AsyncCallGet;
-import com.anguel.dissertation.persistence.logger.asynctasks.calls.AsyncCallSave;
-import com.anguel.dissertation.persistence.logger.asynctasks.categories.AsyncCategoryGet;
-import com.anguel.dissertation.persistence.logger.asynctasks.categories.AsyncCategorySave;
-import com.anguel.dissertation.persistence.logger.asynctasks.location.AsyncLocationGet;
-import com.anguel.dissertation.persistence.logger.asynctasks.location.AsyncLocationSave;
-import com.anguel.dissertation.persistence.logger.asynctasks.location.AsyncLocationsSaveMultiple;
-import com.anguel.dissertation.persistence.logger.asynctasks.logs.AsyncLogGet;
-import com.anguel.dissertation.persistence.logger.asynctasks.logs.AsyncLogSave;
-import com.anguel.dissertation.persistence.logger.asynctasks.sias.AsyncSiasGet;
-import com.anguel.dissertation.persistence.logger.asynctasks.sias.AsyncSiasSave;
-import com.anguel.dissertation.persistence.database.appcategory.AppCategory;
-import com.anguel.dissertation.persistence.database.logevent.LogEvent;
-import com.anguel.dissertation.persistence.database.userdata.UserData;
+import com.anguel.dissertation.persistence.entity.calls.Call;
+import com.anguel.dissertation.persistence.entity.location.Location;
+import com.anguel.dissertation.persistence.asynctasks.calls.AsyncCallGet;
+import com.anguel.dissertation.persistence.asynctasks.calls.AsyncCallSave;
+import com.anguel.dissertation.persistence.asynctasks.categories.AsyncCategoryGet;
+import com.anguel.dissertation.persistence.asynctasks.categories.AsyncCategorySave;
+import com.anguel.dissertation.persistence.asynctasks.location.AsyncLocationGet;
+import com.anguel.dissertation.persistence.asynctasks.location.AsyncLocationSave;
+import com.anguel.dissertation.persistence.asynctasks.location.AsyncLocationsSaveMultiple;
+import com.anguel.dissertation.persistence.asynctasks.logs.AsyncLogGet;
+import com.anguel.dissertation.persistence.asynctasks.logs.AsyncLogSave;
+import com.anguel.dissertation.persistence.asynctasks.sias.AsyncSiasGet;
+import com.anguel.dissertation.persistence.asynctasks.sias.AsyncSiasSave;
+import com.anguel.dissertation.persistence.entity.appcategory.AppCategory;
+import com.anguel.dissertation.persistence.entity.logevent.LogEvent;
+import com.anguel.dissertation.persistence.entity.userdata.UserData;
 
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
-public class Logger {
+public class DatabaseAPI {
+
+    private static volatile DatabaseAPI instance;
+
+    public static DatabaseAPI getInstance() {
+        if (instance == null) {
+            synchronized (DatabaseAPI.class) {
+                instance = new DatabaseAPI();
+            }
+        } return instance;
+    }
+
+    private DatabaseAPI() {}
 
     public Boolean saveLogData(Context context, LogEvent data) throws ExecutionException, InterruptedException {
         AsyncLogSave runner = new AsyncLogSave();

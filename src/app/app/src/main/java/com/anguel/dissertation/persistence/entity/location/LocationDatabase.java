@@ -1,4 +1,4 @@
-package com.anguel.dissertation.persistence.database.location;
+package com.anguel.dissertation.persistence.entity.location;
 
 import android.content.Context;
 

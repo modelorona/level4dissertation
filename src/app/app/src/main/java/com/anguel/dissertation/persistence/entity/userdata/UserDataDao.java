@@ -1,4 +1,4 @@
-package com.anguel.dissertation.persistence.database.userdata;
+package com.anguel.dissertation.persistence.entity.userdata;
 
 import androidx.room.Dao;
 import androidx.room.Insert;
