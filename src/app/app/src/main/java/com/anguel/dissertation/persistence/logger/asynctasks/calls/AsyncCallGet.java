@@ -1,4 +1,4 @@
-package com.anguel.dissertation.persistence.logger.asynctasks;
+package com.anguel.dissertation.persistence.logger.asynctasks.calls;
 
 import android.content.Context;
 import android.os.AsyncTask;
