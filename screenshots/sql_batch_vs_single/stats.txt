@@ -1,0 +1,7 @@
+9615 Location records
+
+single_record_single_call -> time taken ~4.1 minutes (0.0387326085 min, 4.1187406 min)
+
+1000_record_single_call -> time taken ~1.4 minutes (0.049370069883 min, 1.44570915 min)
+
+1000_record_bulk_call -> time taken ~2.17 seconds (1.58989538 sec, 3.7686505959928 sec)
