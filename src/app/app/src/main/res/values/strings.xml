@@ -147,5 +147,6 @@
     <string name="data_export_group">Data export group</string>
     <string name="location_service">location_service</string>
     <string name="location_pref">location_pref</string>
+    <string name="location_db">Locations.db</string>
 
 </resources>

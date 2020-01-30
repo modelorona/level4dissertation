@@ -8,6 +8,7 @@ import android.util.Log;
 import com.anguel.dissertation.R;
 import com.anguel.dissertation.serviceengine.services.EventMonitoringService;
 import com.anguel.dissertation.serviceengine.services.KeepAliveService;
+import com.anguel.dissertation.serviceengine.services.LocationService;
 
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -25,7 +26,8 @@ public class ServiceEngine {
 //        add the different kinds of services available
         services = new LinkedList<>(Arrays.asList(
                 new Intent(context.getApplicationContext(), EventMonitoringService.class).setAction(context.getString(R.string.monitor_service)),
-                new Intent(context.getApplicationContext(), KeepAliveService.class).setAction(context.getString(R.string.keep_alive_service))
+                new Intent(context.getApplicationContext(), KeepAliveService.class).setAction(context.getString(R.string.keep_alive_service)),
+                new Intent(context.getApplicationContext(), LocationService.class).setAction(context.getString(R.string.location_service))
         ));
     }
 
