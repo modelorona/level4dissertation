@@ -1,11 +1,11 @@
-package com.anguel.dissertation.persistence.logger.asynctasks.sias;
+package com.anguel.dissertation.persistence.asynctasks.sias;
 
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.anguel.dissertation.persistence.database.userdata.UserData;
-import com.anguel.dissertation.persistence.database.userdata.UserDataDatabase;
+import com.anguel.dissertation.persistence.entity.userdata.UserData;
+import com.anguel.dissertation.persistence.entity.userdata.UserDataDatabase;
 
 public class AsyncSiasSave extends AsyncTask<Object, Void, Boolean> {
     @Override

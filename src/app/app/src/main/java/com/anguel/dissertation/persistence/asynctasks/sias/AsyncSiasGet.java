@@ -1,10 +1,10 @@
-package com.anguel.dissertation.persistence.logger.asynctasks.sias;
+package com.anguel.dissertation.persistence.asynctasks.sias;
 
 import android.content.Context;
 import android.os.AsyncTask;
 
-import com.anguel.dissertation.persistence.database.userdata.UserData;
-import com.anguel.dissertation.persistence.database.userdata.UserDataDatabase;
+import com.anguel.dissertation.persistence.entity.userdata.UserData;
+import com.anguel.dissertation.persistence.entity.userdata.UserDataDatabase;
 
 import java.util.List;
 
