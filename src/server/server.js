@@ -1,6 +1,7 @@
 'use strict';
 
 require('dotenv').config();
+const { performance } = require('perf_hooks');
 require('make-promises-safe');
 const fastify = require('fastify')({
     logging: Boolean(process.env.LOGGING_ENABLED).valueOf()
@@ -21,6 +22,7 @@ const sequelize = new Sequelize(process.env.DB_DATABASE, process.env.DB_USER, pr
     define: {
         timestamps: false
     },
+    logging: () => {}
 });
 
 // declare the models in the database
@@ -257,31 +259,47 @@ fastify.post('/', opts, async (request, reply) => {
                 //    same as above
             }
         } else if (type === 'location') {
-            const exists = await Location.findOne({
+		console.log(performance.now());
+            /*for (let x = 0; x < reqBody.data.length; x++){
+	       let loc = reqBody.data[x];
+		
+		const exists = await Location.findOne({
                 where: {
-                    id: reqBody.id,
+                    id: loc.id,
                     uid: reqBody.uid
                 }
-            });
-            if (!exists) {
-                await Location.create({
-                    id: reqBody.id,
+            });*/
+            //if (!exists) {
+		let items = reqBody.data;
+		items.forEach((element) => {
+		    element.uid = reqBody.uid;
+		});
+
+		await Location.bulkCreate(items, {
+		    ignoreDuplicates: true
+		}).then(() => {
+		    console.log('added all');
+		});
+
+                /*await Location.create({
+                    id: loc.id,
                     uid: reqBody.uid,
-                    altitude: reqBody.altitude,
-                    hAccuracy: reqBody.hAccuracy,
-                    vAccuracy: reqBody.vAccuracy,
-                    bearing: reqBody.bearing,
-                    bearingAccuracy: reqBody.bearingAccuracy,
-                    latitude: reqBody.latitude,
-                    longitude: reqBody.longitude,
-                    speed: reqBody.speed,
-                    speedAccuracy: reqBody.speedAccuracy,
-                    provider: reqBody.provider
-                });
-                console.log('location saved');
-            } else {
-                //    same as above
-            }
+                    altitude: loc.altitude,
+                    hAccuracy: loc.hAccuracy,
+                    vAccuracy: loc.vAccuracy,
+                    bearing: loc.bearing,
+                    bearingAccuracy: loc.bearingAccuracy,
+                    latitude: loc.latitude,
+                    longitude: loc.longitude,
+                    speed: loc.speed,
+                    speedAccuracy: loc.speedAccuracy,
+                    provider: loc.provider
+                });*/
+                //console.log('location saved');
+            //} else {
+               //     same as above
+            //}
+		console.log(performance.now());
         } else {
             return {code: 1, reason: 'failed'};
         }
