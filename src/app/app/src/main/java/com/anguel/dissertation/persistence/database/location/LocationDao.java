@@ -15,4 +15,7 @@ public interface LocationDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertLocationEvent(Location location);
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void insertLocations(List<Location> locations);
 }

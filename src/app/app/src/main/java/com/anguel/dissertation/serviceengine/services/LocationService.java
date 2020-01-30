@@ -18,6 +18,9 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Objects;
 
 import io.sentry.Sentry;
@@ -43,7 +46,7 @@ public class LocationService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         if (intent != null && Objects.requireNonNull(intent.getAction()).equals(getString(R.string.location_service))) {
             startService();
-        } else stopMyService();
+        }
         return START_STICKY;
     }
 
@@ -54,8 +57,10 @@ public class LocationService extends Service {
                 if (locationResult == null) {
                     Log.d("location_service", "locationResult is null");
                 }
+                List<com.anguel.dissertation.persistence.database.location.Location> locations = new ArrayList<>(Objects.requireNonNull(locationResult).getLocations().size());
+                Logger logger = new Logger();
+
                 for (Location loc : Objects.requireNonNull(locationResult).getLocations()) {
-                    Logger logger = new Logger();
                     com.anguel.dissertation.persistence.database.location.Location.LocationBuilder location = com.anguel.dissertation.persistence.database.location.Location.builder();
 //                    accuracy MAY be useful, collect it for now
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -69,13 +74,14 @@ public class LocationService extends Service {
                             .speed(loc.getSpeed())
                             .timeNanos(loc.getElapsedRealtimeNanos())
                             .provider(loc.getProvider());
+                    locations.add(location.build());
+                }
 
-                    try {
-                        logger.saveLocation(getApplicationContext(), location.build());
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        Sentry.capture(e);
-                    }
+                try {
+                    logger.saveMultipleLocations(getApplicationContext(), locations);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Sentry.capture(e);
                 }
             }
         };
@@ -91,15 +97,8 @@ public class LocationService extends Service {
         return locationRequest;
     }
 
-    // In case the service is deleted or crashes some how
     @Override
     public void onDestroy() {
-        stopMyService();
-        super.onDestroy();
-    }
-
-    private void stopMyService() {
-//        stopForeground(true);
         fusedLocationProviderClient.removeLocationUpdates(locationCallback);
         stopSelf();
     }

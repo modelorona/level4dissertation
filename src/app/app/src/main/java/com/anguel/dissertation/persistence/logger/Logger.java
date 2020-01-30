@@ -10,6 +10,7 @@ import com.anguel.dissertation.persistence.logger.asynctasks.categories.AsyncCat
 import com.anguel.dissertation.persistence.logger.asynctasks.categories.AsyncCategorySave;
 import com.anguel.dissertation.persistence.logger.asynctasks.location.AsyncLocationGet;
 import com.anguel.dissertation.persistence.logger.asynctasks.location.AsyncLocationSave;
+import com.anguel.dissertation.persistence.logger.asynctasks.location.AsyncLocationsSaveMultiple;
 import com.anguel.dissertation.persistence.logger.asynctasks.logs.AsyncLogGet;
 import com.anguel.dissertation.persistence.logger.asynctasks.logs.AsyncLogSave;
 import com.anguel.dissertation.persistence.logger.asynctasks.sias.AsyncSiasGet;
@@ -72,5 +73,10 @@ public class Logger {
     public List<Location> getLocationData(Context context) throws ExecutionException, InterruptedException {
         AsyncLocationGet runner = new AsyncLocationGet();
         return runner.execute(context).get();
+    }
+
+    public Boolean saveMultipleLocations(Context context, List<Location> data) throws ExecutionException, InterruptedException {
+        AsyncLocationsSaveMultiple runner = new AsyncLocationsSaveMultiple();
+        return runner.execute(context, data).get();
     }
 }

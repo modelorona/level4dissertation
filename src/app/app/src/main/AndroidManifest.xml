@@ -65,7 +65,7 @@
         <service
             android:name=".serviceengine.services.EventMonitoringService"
             android:permission="android.permission.FOREGROUND_SERVICE" />
-<!--            android:process=":eventMonitor" />-->
+        <!--            android:process=":eventMonitor" />-->
 
         <service
             android:name=".reboot.BootService"
@@ -79,8 +79,9 @@
             android:name=".serviceengine.services.LocationService"
             android:foregroundServiceType="location"
             android:permission="android.permission.FOREGROUND_SERVICE"
-            android:process=":locationMonitor"
             tools:targetApi="q" />
+        <!--            android:process=":locationMonitor"-->
+
 
     </application>
 
