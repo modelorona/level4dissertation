@@ -1,11 +1,11 @@
-package com.anguel.dissertation.persistence.logger.asynctasks.categories;
+package com.anguel.dissertation.persistence.asynctasks.categories;
 
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.anguel.dissertation.persistence.database.appcategory.AppCategory;
-import com.anguel.dissertation.persistence.database.appcategory.AppCategoryDatabase;
+import com.anguel.dissertation.persistence.entity.appcategory.AppCategory;
+import com.anguel.dissertation.persistence.entity.appcategory.AppCategoryDatabase;
 
 public class AsyncCategorySave extends AsyncTask<Object, Void, Boolean> {
     @Override
