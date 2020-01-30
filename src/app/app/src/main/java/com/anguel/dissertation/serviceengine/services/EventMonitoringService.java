@@ -38,7 +38,7 @@ public class EventMonitoringService extends DynamicEngine {
     public void onCallStateChange(boolean call) {
         super.onCallStateChange(call);
 //        if the device is in a call, then the start time is recorded
-//        else the end time is recorded and then save the start/end times in the database
+//        else the end time is recorded and then save the start/end times in the entity
         long endTime = getTime();
         if (!call) {
             Data workerData = new Data.Builder().putLong(getString(R.string.call_start), callStartTime).putLong(getString(R.string.call_end), endTime).build();

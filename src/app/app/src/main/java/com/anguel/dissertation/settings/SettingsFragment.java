@@ -21,7 +21,7 @@ import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.SwitchPreferenceCompat;
 
 import com.anguel.dissertation.R;
-import com.anguel.dissertation.persistence.logger.Logger;
+import com.anguel.dissertation.persistence.DatabaseAPI;
 
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -74,7 +74,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         });
 
         try {
-            Objects.requireNonNull(personSias).setSummary(String.valueOf(new Logger().getUserData(Objects.requireNonNull(getActivity()).getApplicationContext()).get(0).getSias()));
+            Objects.requireNonNull(personSias).setSummary(String.valueOf(DatabaseAPI.getInstance().getUserData(Objects.requireNonNull(getActivity()).getApplicationContext()).get(0).getSias()));
         } catch (ExecutionException | InterruptedException | IndexOutOfBoundsException e) {
 //            Sentry.capture(e);
             Objects.requireNonNull(personSias).setSummary(getString(R.string.not_yet_taken_test));

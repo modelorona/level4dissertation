@@ -17,7 +17,7 @@ import java.util.List;
 
 public class ServiceEngine {
 
-    private static ServiceEngine instance;
+    private static volatile ServiceEngine instance;
     @SuppressWarnings("CanBeFinal")
     private List<Intent> services;
 
@@ -34,7 +34,9 @@ public class ServiceEngine {
     public static ServiceEngine getInstance(Context context) {
         if (instance == null) {
             Log.d("service_engine", "creating instance");
-            instance = new ServiceEngine(context);
+            synchronized (ServiceEngine.class) {
+                instance = new ServiceEngine(context);
+            }
         }
         Log.d("service_engine", "reusing instance");
         return instance;

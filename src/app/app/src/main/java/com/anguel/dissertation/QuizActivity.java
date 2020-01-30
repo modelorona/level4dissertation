@@ -13,8 +13,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.anguel.dissertation.persistence.logger.Logger;
-import com.anguel.dissertation.persistence.database.userdata.UserData;
+import com.anguel.dissertation.persistence.DatabaseAPI;
+import com.anguel.dissertation.persistence.entity.userdata.UserData;
 import com.anguel.dissertation.utils.Utils;
 
 import java.util.Objects;
@@ -98,9 +98,9 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
 
     private void finishQuiz() {
 //        save score before doing anything else
-        Logger logger = new Logger();
+        DatabaseAPI databaseAPI = DatabaseAPI.getInstance();
         try {
-            logger.saveSiasScore(getApplicationContext(), UserData.builder().userId(id).sias(total).build());
+            databaseAPI.saveSiasScore(getApplicationContext(), UserData.builder().userId(id).sias(total).build());
 //        tell the user what has happened. give them chance to read more about the score
             AlertDialog.Builder builder = new AlertDialog.Builder(QuizActivity.this);
             builder.setMessage(String.format("%s %s. %s",getString(R.string.your_score), total, getString(R.string.know_more)))

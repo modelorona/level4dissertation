@@ -7,8 +7,8 @@ import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 
 import com.anguel.dissertation.R;
-import com.anguel.dissertation.persistence.database.calls.Call;
-import com.anguel.dissertation.persistence.logger.Logger;
+import com.anguel.dissertation.persistence.entity.calls.Call;
+import com.anguel.dissertation.persistence.DatabaseAPI;
 
 import java.util.concurrent.ExecutionException;
 
@@ -27,14 +27,14 @@ public class SaveCallTimesWorker extends Worker {
     @NonNull
     @Override
     public Result doWork() {
-        Logger logger = new Logger();
+        DatabaseAPI databaseAPI = DatabaseAPI.getInstance();
 
         Call call = new Call();
         call.setStartTime(getInputData().getLong(getString(R.string.call_start), -1L));
         call.setEndTime(getInputData().getLong(getString(R.string.call_end), -1L));
 
         try {
-            boolean res = logger.saveCall(getApplicationContext(), call);
+            boolean res = databaseAPI.saveCall(getApplicationContext(), call);
             if (res) {
                 return Result.success();
             }
