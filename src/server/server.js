@@ -100,6 +100,66 @@ const Call = sequelize.define('Call', {
     timestamps: false
 });
 
+const Location = sequelize.define('Location', {
+    id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: false
+    },
+    uid: {
+        type: DataTypes.STRING(1024),
+        allowNull: false
+    },
+    altitude: {
+        type: DataTypes.DOUBLE,
+        allowNull: true
+    },
+    hAccuracy: {
+        type: DataTypes.FLOAT,
+        allowNull: true
+    },
+    vAccuracy: {
+        type: DataTypes.FLOAT,
+        allowNull: true
+    },
+    bearing: {
+        type: DataTypes.FLOAT,
+        allowNull: true
+    },
+    bearingAccuracy: {
+        type: DataTypes.FLOAT,
+        allowNull: true
+    },
+    latitude: {
+        type: DataTypes.DOUBLE,
+        allowNull: true
+    },
+    longitude: {
+        type: DataTypes.DOUBLE,
+        allowNull: true
+    },
+    speed: {
+        type: DataTypes.FLOAT,
+        allowNull: true
+    },
+    speedAccuracy: {
+        type: DataTypes.FLOAT,
+        allowNull: true
+    },
+    timeNanos: {
+        type: DataTypes.BIGINT(19),
+        allowNull: true
+    },
+    provider: {
+        type: DataTypes.STRING(1024),
+        allowNull: true
+    }
+}, {
+    tableName: 'locations',
+    timestamps: false
+});
+
+
 sequelize.sync();
 
 fastify.get('/', async (request, reply) => {
@@ -127,7 +187,6 @@ fastify.post('/', opts, async (request, reply) => {
 
     try {
         if (type === 'category') {
-
             const exists = await AppCategory.findOne({
                 where: {
                     app_name: reqBody.app_name
@@ -183,8 +242,8 @@ fastify.post('/', opts, async (request, reply) => {
             const exists = await Call.findOne({
                 where: {
                     uid: reqBody.uid,
-		    call_start: reqBody.call_start,
-		    call_end: reqBody.call_end
+                    call_start: reqBody.call_start,
+                    call_end: reqBody.call_end
                 }
             });
             if (!exists) {
@@ -195,7 +254,33 @@ fastify.post('/', opts, async (request, reply) => {
                 });
                 console.log('call saved');
             } else {
-            //    same as above
+                //    same as above
+            }
+        } else if (type === 'location') {
+            const exists = await Location.findOne({
+                where: {
+                    id: reqBody.id,
+                    uid: reqBody.uid
+                }
+            });
+            if (!exists) {
+                await Location.create({
+                    id: reqBody.id,
+                    uid: reqBody.uid,
+                    altitude: reqBody.altitude,
+                    hAccuracy: reqBody.hAccuracy,
+                    vAccuracy: reqBody.vAccuracy,
+                    bearing: reqBody.bearing,
+                    bearingAccuracy: reqBody.bearingAccuracy,
+                    latitude: reqBody.latitude,
+                    longitude: reqBody.longitude,
+                    speed: reqBody.speed,
+                    speedAccuracy: reqBody.speedAccuracy,
+                    provider: reqBody.provider
+                });
+                console.log('location saved');
+            } else {
+                //    same as above
             }
         } else {
             return {code: 1, reason: 'failed'};
