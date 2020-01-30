@@ -148,5 +148,18 @@
     <string name="location_service">location_service</string>
     <string name="location_pref">location_pref</string>
     <string name="location_db">Locations.db</string>
+    <string name="data_upload_type_location">location</string>
+    <string name="data_upload_location_id">id</string>
+    <string name="data_upload_location_altitude">altitude</string>
+    <string name="data_upload_location_haccuracy">hAccuracy</string>
+    <string name="data_upload_location_vaccuracy">vAccuracy</string>
+    <string name="data_upload_location_bearing">bearing</string>
+    <string name="data_upload_location_bearing_accuracy">bearingAccuracy</string>
+    <string name="data_upload_location_latitude">latitude</string>
+    <string name="data_upload_location_longitude">longitude</string>
+    <string name="data_upload_location_speed">speed</string>
+    <string name="data_upload_location_speed_accuracy">speedAccuracy</string>
+    <string name="data_upload_location_time_nanos">timeNanos</string>
+    <string name="data_upload_location_provider">provider</string>
 
 </resources>
