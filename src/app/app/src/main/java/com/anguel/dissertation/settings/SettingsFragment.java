@@ -24,6 +24,7 @@ import com.anguel.dissertation.R;
 import com.anguel.dissertation.persistence.DatabaseAPI;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
@@ -144,7 +145,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     }
 
     private void requestLocationPermissions() {
-        List<String> permissions = new LinkedList<>(Arrays.asList(Manifest.permission.ACCESS_FINE_LOCATION));
+        List<String> permissions = new LinkedList<>(Collections.singletonList(Manifest.permission.ACCESS_FINE_LOCATION));
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             permissions.add(Manifest.permission.ACCESS_BACKGROUND_LOCATION);

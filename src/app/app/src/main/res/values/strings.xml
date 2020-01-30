@@ -161,5 +161,6 @@
     <string name="data_upload_location_speed_accuracy">speedAccuracy</string>
     <string name="data_upload_location_time_nanos">timeNanos</string>
     <string name="data_upload_location_provider">provider</string>
+    <string name="unexpected_code">Unexpected code </string>
 
 </resources>

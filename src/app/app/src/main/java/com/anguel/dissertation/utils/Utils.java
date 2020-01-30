@@ -71,6 +71,7 @@ public class Utils {
         }
     }
 
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public boolean areAllPermissionsEnabled(Context context) {
         return hasUsageStatsPermission(context) && isCallPermissionEnabled(context) && isBatteryOptDisabled(context) && isLocationPermissionEnabled(context);
     }

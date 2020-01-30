@@ -8,6 +8,7 @@ import com.anguel.dissertation.persistence.entity.location.LocationDatabase;
 
 import java.util.List;
 
+@SuppressWarnings("unchecked")
 public class AsyncLocationsSaveMultiple extends AsyncTask<Object, Void, Boolean> {
     @Override
     protected Boolean doInBackground(Object... objects) {

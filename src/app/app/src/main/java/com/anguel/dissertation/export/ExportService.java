@@ -13,14 +13,17 @@ import androidx.core.app.NotificationManagerCompat;
 
 import com.anguel.dissertation.BuildConfig;
 import com.anguel.dissertation.R;
-import com.anguel.dissertation.persistence.database.appcategory.AppCategory;
-import com.anguel.dissertation.persistence.database.calls.Call;
-import com.anguel.dissertation.persistence.database.logevent.LogEvent;
-import com.anguel.dissertation.persistence.database.userdata.UserData;
-import com.anguel.dissertation.persistence.logger.Logger;
-
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.anguel.dissertation.persistence.entity.appcategory.AppCategory;
+import com.anguel.dissertation.persistence.entity.calls.Call;
+import com.anguel.dissertation.persistence.entity.location.Location;
+import com.anguel.dissertation.persistence.entity.logevent.LogEvent;
+import com.anguel.dissertation.persistence.entity.userdata.UserData;
+import com.anguel.dissertation.persistence.DatabaseAPI;
+import com.anguel.dissertation.utils.Utils;
+import com.google.common.collect.Lists;
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 
 import java.io.IOException;
 import java.util.LinkedList;
@@ -34,6 +37,7 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
+@SuppressWarnings("EmptyMethod")
 public class ExportService extends Service {
 
     @Override
@@ -46,7 +50,7 @@ public class ExportService extends Service {
         if (intent != null && Objects.requireNonNull(intent.getAction()).equals(getString(R.string.upload_data_service))) {
             Thread thread = new Thread(this::startDataUpload);
             thread.start();
-        } else stopSelf();
+        }
         return START_STICKY;
     }
 
@@ -84,13 +88,14 @@ public class ExportService extends Service {
                 .build();
 
         try (Response response = client.newCall(request).execute()) {
-            if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+            if (!response.isSuccessful())
+                throw new IOException(getString(R.string.unexpected_code) + response);
 
-            JSONObject object = new JSONObject(Objects.requireNonNull(response.body()).string());
+            JsonObject object = new Gson().fromJson(Objects.requireNonNull(response.body()).string(), JsonObject.class);
 
             return String.valueOf(object.get(getString(R.string.data_can_upload_code))).equals("0");
 
-        } catch (IOException | JSONException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             Sentry.capture(e);
         }
@@ -99,18 +104,21 @@ public class ExportService extends Service {
     }
 
     private void run(OkHttpClient client) {
+        DatabaseAPI databaseAPI = DatabaseAPI.getInstance();
+
         Request.Builder requestBuild = new Request.Builder()
                 .url(BuildConfig.db_url);
 
 //        first send categories
-        List<String> appCategories = getAppCategoriesJSON();
+        List<String> appCategories = getAppCategoriesJSON(databaseAPI);
         for (String app : appCategories) {
             RequestBody exportCategoryDataReqBody = RequestBody.create(app, MediaType.parse(getString(R.string.media_type)));
 
             Request exportCategoryDataRequest = requestBuild.post(exportCategoryDataReqBody).build();
 
             try (Response response = client.newCall(exportCategoryDataRequest).execute()) {
-                if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+                if (!response.isSuccessful())
+                    throw new IOException(getString(R.string.unexpected_code) + response);
 
                 System.out.println(Objects.requireNonNull(response.body()).string());
 
@@ -120,14 +128,34 @@ public class ExportService extends Service {
             }
         }
 
+//        now send location data
+        List<String> locationData = getLocationBatchJSON(databaseAPI);
+        for (String location : locationData) {
+            RequestBody exportLocationDataReqBody = RequestBody.create(location, MediaType.parse(getString(R.string.media_type)));
+
+            Request exportLocationDataRequest = requestBuild.post(exportLocationDataReqBody).build();
+
+            try (Response response = client.newCall(exportLocationDataRequest).execute()) {
+                if (!response.isSuccessful())
+                    throw new IOException(getString(R.string.unexpected_code) + response);
+
+                System.out.println(Objects.requireNonNull(response.body()).string());
+            } catch (IOException e) {
+                e.printStackTrace();
+                Sentry.capture(e);
+            }
+        }
+
+
 //        now send user info
-        String userData = getUserDataJSON();
+        String userData = getUserDataJSON(databaseAPI);
         RequestBody exportUserDataReqBody = RequestBody.create(userData, MediaType.parse(getString(R.string.media_type)));
 
         Request exportUserDataRequest = requestBuild.post(exportUserDataReqBody).build();
 
         try (Response response = client.newCall(exportUserDataRequest).execute()) {
-            if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+            if (!response.isSuccessful())
+                throw new IOException(getString(R.string.unexpected_code) + response);
 
             System.out.println(Objects.requireNonNull(response.body()).string());
 
@@ -137,14 +165,15 @@ public class ExportService extends Service {
         }
 
 //        now send call data
-        List<String> callData = getCallDataJSON();
+        List<String> callData = getCallDataJSON(databaseAPI);
         for (String call : callData) {
             RequestBody exportCallDataReqBody = RequestBody.create(call, MediaType.parse(getString(R.string.media_type)));
 
             Request exportCallDataRequest = requestBuild.post(exportCallDataReqBody).build();
 
             try (Response response = client.newCall(exportCallDataRequest).execute()) {
-                if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+                if (!response.isSuccessful())
+                    throw new IOException(getString(R.string.unexpected_code) + response);
 
                 System.out.println(Objects.requireNonNull(response.body()).string());
             } catch (IOException e) {
@@ -154,14 +183,15 @@ public class ExportService extends Service {
         }
 
 //        finally send session data
-        List<String> sessionData = getSessionDataJSON();
+        List<String> sessionData = getSessionDataJSON(databaseAPI);
         for (String session : sessionData) {
             RequestBody exportSessionDataReqBody = RequestBody.create(session, MediaType.parse(getString(R.string.media_type)));
 
             Request exportSessionDataRequest = requestBuild.post(exportSessionDataReqBody).build();
 
             try (Response response = client.newCall(exportSessionDataRequest).execute()) {
-                if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+                if (!response.isSuccessful())
+                    throw new IOException(getString(R.string.unexpected_code) + response);
 
                 System.out.println(Objects.requireNonNull(response.body()).string());
             } catch (IOException e) {
@@ -171,19 +201,64 @@ public class ExportService extends Service {
         }
     }
 
-    private List<String> getCallDataJSON() {
-        Logger logger = new Logger();
+    private List<String> getLocationBatchJSON(DatabaseAPI databaseAPI) {
+        List<String> result = new LinkedList<>(); // list of all the requests to send out
+
+//        a request is of the form:
+//        key, type, uid, data
+//            data -> [jsonObject strings]
+        try {
+            List<Location> locations = databaseAPI.getLocationData(getApplicationContext());
+
+            List<List<Location>> locationLists = Lists.partition(locations, Math.floorMod(locations.size(), 1000));
+
+            for (List<Location> list : locationLists) {
+                JsonObject request = new JsonObject();
+                request.addProperty(getString(R.string.data_upload_key), BuildConfig.app_key);
+                request.addProperty(getString(R.string.data_upload_type), getString(R.string.data_upload_type_location));
+                request.addProperty(getString(R.string.data_upload_uid), Utils.getInstance().getUserID(getApplication()));
+                JsonArray batch = new JsonArray();
+
+                for (Location location : list) {
+                    JsonObject loc = new JsonObject();
+                    loc.addProperty(getString(R.string.data_upload_location_id), location.getId());
+                    loc.addProperty(getString(R.string.data_upload_location_altitude), location.getAltitude());
+                    loc.addProperty(getString(R.string.data_upload_location_haccuracy), location.getAltitude());
+                    loc.addProperty(getString(R.string.data_upload_location_vaccuracy), location.getVAccuracy());
+                    loc.addProperty(getString(R.string.data_upload_location_bearing), location.getBearing());
+                    loc.addProperty(getString(R.string.data_upload_location_bearing_accuracy), location.getBearingAccuracy());
+                    loc.addProperty(getString(R.string.data_upload_location_latitude), location.getLatitude());
+                    loc.addProperty(getString(R.string.data_upload_location_longitude), location.getLongitude());
+                    loc.addProperty(getString(R.string.data_upload_location_speed), location.getSpeed());
+                    loc.addProperty(getString(R.string.data_upload_location_speed_accuracy), location.getSpeedAccuracy());
+                    loc.addProperty(getString(R.string.data_upload_location_time_nanos), location.getTimeNanos());
+                    loc.addProperty(getString(R.string.data_upload_location_provider), location.getProvider());
+                    batch.add(loc);
+                }
+                request.add("data", batch);
+                result.add(request.toString());
+            }
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            Sentry.capture(e);
+        }
+
+        return result;
+    }
+
+    private List<String> getCallDataJSON(DatabaseAPI databaseAPI) {
         List<String> result = new LinkedList<>();
         try {
-            List<Call> calls = logger.getCallData(getApplicationContext());
-            UserData userData = logger.getUserData(getApplicationContext()).get(0);
+            List<Call> calls = databaseAPI.getCallData(getApplicationContext());
             for (Call call : calls) {
-                JSONObject jsonObject = new JSONObject();
-                jsonObject.put(getString(R.string.data_upload_key), BuildConfig.app_key);
-                jsonObject.put(getString(R.string.data_upload_type), getString(R.string.data_upload_type_call));
-                jsonObject.put(getString(R.string.data_upload_uid), userData.getUserId());
-                jsonObject.put(getString(R.string.data_upload_call_start), String.valueOf(call.getStartTime()));
-                jsonObject.put(getString(R.string.data_upload_call_end), String.valueOf(call.getEndTime()));
+                JsonObject jsonObject = new JsonObject();
+                jsonObject.addProperty(getString(R.string.data_upload_key), BuildConfig.app_key);
+                jsonObject.addProperty(getString(R.string.data_upload_type), getString(R.string.data_upload_type_call));
+                jsonObject.addProperty(getString(R.string.data_upload_uid), Utils.getInstance().getUserID(getApplicationContext()));
+                jsonObject.addProperty(getString(R.string.data_upload_call_start), String.valueOf(call.getStartTime()));
+                jsonObject.addProperty(getString(R.string.data_upload_call_end), String.valueOf(call.getEndTime()));
                 result.add(jsonObject.toString());
             }
         } catch (Exception e) {
@@ -194,21 +269,19 @@ public class ExportService extends Service {
         return result;
     }
 
-    private List<String> getSessionDataJSON() {
-        Logger logger = new Logger();
+    private List<String> getSessionDataJSON(DatabaseAPI databaseAPI) {
         List<String> result = new LinkedList<>();
 
         try {
-            List<LogEvent> logEvents = logger.getLogData(getApplicationContext());
-            UserData userData = logger.getUserData(getApplicationContext()).get(0);
+            List<LogEvent> logEvents = databaseAPI.getLogData(getApplicationContext());
             for (LogEvent logEvent : logEvents) {
-                JSONObject jsonObject = new JSONObject();
-                jsonObject.put(getString(R.string.data_upload_key), BuildConfig.app_key);
-                jsonObject.put(getString(R.string.data_upload_type), getString(R.string.data_upload_type_session));
-                jsonObject.put(getString(R.string.data_upload_uid), userData.getUserId());
-                jsonObject.put(getString(R.string.data_upload_sd), logEvent.getData().toString());
-                jsonObject.put(getString(R.string.data_upload_ss), String.valueOf(logEvent.getSessionStart()));
-                jsonObject.put(getString(R.string.data_upload_se), String.valueOf(logEvent.getSessionEnd()));
+                JsonObject jsonObject = new JsonObject();
+                jsonObject.addProperty(getString(R.string.data_upload_key), BuildConfig.app_key);
+                jsonObject.addProperty(getString(R.string.data_upload_type), getString(R.string.data_upload_type_session));
+                jsonObject.addProperty(getString(R.string.data_upload_uid), Utils.getInstance().getUserID(getApplicationContext()));
+                jsonObject.addProperty(getString(R.string.data_upload_sd), logEvent.getData().toString());
+                jsonObject.addProperty(getString(R.string.data_upload_ss), String.valueOf(logEvent.getSessionStart()));
+                jsonObject.addProperty(getString(R.string.data_upload_se), String.valueOf(logEvent.getSessionEnd()));
 
                 result.add(jsonObject.toString());
             }
@@ -220,16 +293,15 @@ public class ExportService extends Service {
         return result;
     }
 
-    private String getUserDataJSON() {
-        Logger logger = new Logger();
-        JSONObject jsonObject = new JSONObject();
+    private String getUserDataJSON(DatabaseAPI databaseAPI) {
+        JsonObject jsonObject = new JsonObject();
 
         try {
-            UserData userData = logger.getUserData(getApplicationContext()).get(0);
-            jsonObject.put(getString(R.string.data_upload_key), BuildConfig.app_key);
-            jsonObject.put(getString(R.string.data_upload_type), getString(R.string.data_upload_type_user));
-            jsonObject.put(getString(R.string.data_upload_uid), userData.getUserId());
-            jsonObject.put(getString(R.string.data_upload_sias), userData.getSias());
+            UserData userData = databaseAPI.getUserData(getApplicationContext()).get(0);
+            jsonObject.addProperty(getString(R.string.data_upload_key), BuildConfig.app_key);
+            jsonObject.addProperty(getString(R.string.data_upload_type), getString(R.string.data_upload_type_user));
+            jsonObject.addProperty(getString(R.string.data_upload_uid), userData.getUserId());
+            jsonObject.addProperty(getString(R.string.data_upload_sias), userData.getSias());
         } catch (Exception e) {
             e.printStackTrace();
             Sentry.capture(e);
@@ -238,20 +310,18 @@ public class ExportService extends Service {
         return jsonObject.toString();
     }
 
-    private List<String> getAppCategoriesJSON() {
-        Logger logger = new Logger();
+    private List<String> getAppCategoriesJSON(DatabaseAPI databaseAPI) {
         List<String> result = new LinkedList<>();
 
         try {
-            List<AppCategory> appCategories = logger.getAppCategories(getApplicationContext());
+            List<AppCategory> appCategories = databaseAPI.getAppCategories(getApplicationContext());
             for (AppCategory category : appCategories) {
-                JSONObject jsonObject = new JSONObject();
-                jsonObject.put(getString(R.string.data_upload_key), BuildConfig.app_key);
-                jsonObject.put(getString(R.string.data_upload_type), getString(R.string.data_upload_type_category));
-                jsonObject.put(getString(R.string.data_upload_app_name), category.getAppName());
-                jsonObject.put(getString(R.string.data_upload_category), category.getCategory());
-                jsonObject.put(getString(R.string.data_upload_app_package), category.getPackageName());
-
+                JsonObject jsonObject = new JsonObject();
+                jsonObject.addProperty(getString(R.string.data_upload_key), BuildConfig.app_key);
+                jsonObject.addProperty(getString(R.string.data_upload_type), getString(R.string.data_upload_type_category));
+                jsonObject.addProperty(getString(R.string.data_upload_app_name), category.getAppName());
+                jsonObject.addProperty(getString(R.string.data_upload_category), category.getCategory());
+                jsonObject.addProperty(getString(R.string.data_upload_app_package), category.getPackageName());
                 result.add(jsonObject.toString());
             }
         } catch (Exception e) {
@@ -263,11 +333,6 @@ public class ExportService extends Service {
 
     @Override
     public void onDestroy() {
-        stopMyService();
-        super.onDestroy();
-    }
-
-    private void stopMyService() {
         stopForeground(true);
         stopSelf();
     }
