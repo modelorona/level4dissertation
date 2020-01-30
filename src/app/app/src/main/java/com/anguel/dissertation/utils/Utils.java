@@ -18,7 +18,15 @@ import java.util.UUID;
 
 public class Utils {
 
-    public Utils() {}
+    private static Utils INSTANCE;
+
+    public static Utils getInstance() {
+        if (INSTANCE == null) {
+            INSTANCE = new Utils();
+        } return INSTANCE;
+    }
+
+    private Utils() {}
 
     public String getUserID(Context ctx) {
 //        preferencemanager was deprecated
@@ -53,8 +61,19 @@ public class Utils {
         return Objects.requireNonNull(pm).isIgnoringBatteryOptimizations(context.getPackageName());
     }
 
+    public boolean isLocationPermissionEnabled(Context context) {
+        boolean x = ContextCompat.checkSelfPermission(Objects.requireNonNull(context), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            return x &&
+                    (ContextCompat.checkSelfPermission(Objects.requireNonNull(context), Manifest.permission.ACCESS_BACKGROUND_LOCATION) == PackageManager.PERMISSION_GRANTED);
+        } else {
+            return x;
+        }
+    }
+
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public boolean areAllPermissionsEnabled(Context context) {
-        return hasUsageStatsPermission(context) && isCallPermissionEnabled(context) && isBatteryOptDisabled(context);
+        return hasUsageStatsPermission(context) && isCallPermissionEnabled(context) && isBatteryOptDisabled(context) && isLocationPermissionEnabled(context);
     }
 
 }
