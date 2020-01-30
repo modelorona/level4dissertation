@@ -35,7 +35,7 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         setTitle(R.string.title);
 
-        id = new Utils().getUserID(getApplicationContext());
+        id = Utils.getInstance().getUserID(getApplicationContext());
 
 //        get all buttons
         Button ans1 = findViewById(R.id.ans1);

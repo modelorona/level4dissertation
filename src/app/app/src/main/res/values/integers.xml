@@ -6,4 +6,5 @@
     <integer name="request_call_permissions">103</integer>
     <integer name="request_usage_stats_code">102</integer>
     <integer name="request_battery_optimisation_code">101</integer>
+    <integer name="request_location_permissions">104</integer>
 </resources>

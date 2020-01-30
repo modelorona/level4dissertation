@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
             setUpNotificationChannels();
         }
 
-        Utils utils = new Utils();
+        Utils utils = Utils.getInstance();
 
         ToggleButton button = findViewById(R.id.startDataCollectionButton);
 

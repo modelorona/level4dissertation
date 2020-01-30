@@ -18,7 +18,15 @@ import java.util.UUID;
 
 public class Utils {
 
-    public Utils() {}
+    private static Utils INSTANCE;
+
+    public static Utils getInstance() {
+        if (INSTANCE == null) {
+            INSTANCE = new Utils();
+        } return INSTANCE;
+    }
+
+    private Utils() {}
 
     public String getUserID(Context ctx) {
 //        preferencemanager was deprecated
@@ -53,8 +61,13 @@ public class Utils {
         return Objects.requireNonNull(pm).isIgnoringBatteryOptimizations(context.getPackageName());
     }
 
+    public boolean isLocationPermissionEnabled(Context context) {
+        return (ContextCompat.checkSelfPermission(Objects.requireNonNull(context), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED);
+//                (ContextCompat.checkSelfPermission(Objects.requireNonNull(context), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED);
+    }
+
     public boolean areAllPermissionsEnabled(Context context) {
-        return hasUsageStatsPermission(context) && isCallPermissionEnabled(context) && isBatteryOptDisabled(context);
+        return hasUsageStatsPermission(context) && isCallPermissionEnabled(context) && isBatteryOptDisabled(context) && isLocationPermissionEnabled(context);
     }
 
 }

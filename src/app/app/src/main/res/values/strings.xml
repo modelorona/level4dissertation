@@ -67,7 +67,7 @@
     <string name="your_score">Thank you for taking the test. Your SIAS score is</string>
     <string name="dsn">https://400a55aa461746a0ab09da34d9fff81b@sentry.io/1876401</string>
     <string name="permissions" />
-    <string name="enable_permissions">Please make sure to enable the Usage Statistics permisssion, then disable battery optimisations, and finally enable call permissions for the app to work as intended. You can find this in the settings.</string>
+    <string name="enable_permissions">Please make sure to enable the Usage Statistics permisssion, then disable battery optimisations, then enable call permissions, and finally enable location permissions for the app to work as intended. You can find this in the settings.</string>
     <string name="go_to_settings">Go to Settings</string>
     <string name="pref_data_record">_RECORDING_DATA</string>
 
@@ -146,5 +146,6 @@
     <string name="on_data_export_id">on_data_export_id</string>
     <string name="data_export_group">Data export group</string>
     <string name="location_service">location_service</string>
+    <string name="location_pref">location_pref</string>
 
 </resources>
