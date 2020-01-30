@@ -15,9 +15,9 @@ import io.sentry.Sentry;
 import io.sentry.event.BreadcrumbBuilder;
 
 import com.anguel.dissertation.R;
-import com.anguel.dissertation.persistence.logger.Logger;
-import com.anguel.dissertation.persistence.database.appcategory.AppCategory;
-import com.anguel.dissertation.persistence.database.logevent.LogEvent;
+import com.anguel.dissertation.persistence.DatabaseAPI;
+import com.anguel.dissertation.persistence.entity.appcategory.AppCategory;
+import com.anguel.dissertation.persistence.entity.logevent.LogEvent;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -71,7 +71,7 @@ public class SaveUsageStatsWorker extends Worker {
     @NonNull
     @Override
     public Result doWork() {
-        Logger logger = new Logger();
+        DatabaseAPI databaseAPI = DatabaseAPI.getInstance();
 
         UsageStatsManager usm = (UsageStatsManager) getApplicationContext().getSystemService(Context.USAGE_STATS_SERVICE);
 
@@ -127,7 +127,7 @@ public class SaveUsageStatsWorker extends Worker {
                 appData.put(getString(R.string.total_time_in_foreground), String.valueOf(usageStats.getTotalTimeInForeground()));
 
                 try {
-                    @SuppressWarnings("unused") boolean res = logger.saveAppCategory(getApplicationContext(), AppCategory.builder().category(additionalDetails.get(getString(R.string.category))).appName(additionalDetails.get(getString(R.string.name))).packageName(additionalDetails.get(getString(R.string.package_name))).build());
+                    @SuppressWarnings("unused") boolean res = databaseAPI.saveAppCategory(getApplicationContext(), AppCategory.builder().category(additionalDetails.get(getString(R.string.category))).appName(additionalDetails.get(getString(R.string.name))).packageName(additionalDetails.get(getString(R.string.package_name))).build());
                 } catch (ExecutionException | InterruptedException e) {
                     Sentry.capture(e);
                     e.printStackTrace();
@@ -149,7 +149,7 @@ public class SaveUsageStatsWorker extends Worker {
         }
 
         try {
-            boolean res = logger.saveLogData(getApplicationContext(), logEvent);
+            boolean res = databaseAPI.saveLogData(getApplicationContext(), logEvent);
 
             if (res) {
 //                builder.setContentText(getString(R.string.success));

@@ -7,6 +7,7 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.widget.Toast;
@@ -20,8 +21,12 @@ import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.SwitchPreferenceCompat;
 
 import com.anguel.dissertation.R;
-import com.anguel.dissertation.persistence.logger.Logger;
+import com.anguel.dissertation.persistence.DatabaseAPI;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 
@@ -29,6 +34,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     private SwitchPreferenceCompat batteryOpt;
     private SwitchPreferenceCompat usageStatsPms;
     private SwitchPreferenceCompat callPms;
+    private SwitchPreferenceCompat locationPms;
     private Utils utils;
 
     @Override
@@ -38,10 +44,11 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         batteryOpt = findPreference(getString(R.string.battery_opt_pref));
         usageStatsPms = findPreference(getString(R.string.usage_stats_pref));
         callPms = findPreference(getString(R.string.call_pms));
+        locationPms = findPreference(getString(R.string.location_pref));
         Preference personSias = findPreference(getString(R.string.see_personal_sias_pref));
         Preference licenseInfo = findPreference(getString(R.string.license_pref));
         Preference optOut = findPreference(getString(R.string.opt_out_pref));
-        utils = new Utils();
+        utils = Utils.getInstance();
 
 //        toggle their values based on the current setting
         togglePreferenceValues();
@@ -62,8 +69,13 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             return true;
         });
 
+        locationPms.setOnPreferenceClickListener(preference -> {
+            requestLocationPermissions();
+            return true;
+        });
+
         try {
-            Objects.requireNonNull(personSias).setSummary(String.valueOf(new Logger().getUserData(Objects.requireNonNull(getActivity()).getApplicationContext()).get(0).getSias()));
+            Objects.requireNonNull(personSias).setSummary(String.valueOf(DatabaseAPI.getInstance().getUserData(Objects.requireNonNull(getActivity()).getApplicationContext()).get(0).getSias()));
         } catch (ExecutionException | InterruptedException | IndexOutOfBoundsException e) {
 //            Sentry.capture(e);
             Objects.requireNonNull(personSias).setSummary(getString(R.string.not_yet_taken_test));
@@ -123,6 +135,25 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         } else {
             Objects.requireNonNull(callPms).setChecked(false);
         }
+
+        if (utils.isLocationPermissionEnabled(getActivity().getApplicationContext())) {
+            Objects.requireNonNull(locationPms).setChecked(true);
+            Objects.requireNonNull(locationPms).setEnabled(false);
+        } else {
+            Objects.requireNonNull(locationPms).setChecked(false);
+        }
+    }
+
+    private void requestLocationPermissions() {
+        List<String> permissions = new LinkedList<>(Collections.singletonList(Manifest.permission.ACCESS_FINE_LOCATION));
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            permissions.add(Manifest.permission.ACCESS_BACKGROUND_LOCATION);
+        }
+
+        ActivityCompat.requestPermissions(Objects.requireNonNull(getActivity()),
+                permissions.toArray(new String[0]),
+                getResources().getInteger(R.integer.request_location_permissions));
     }
 
     private void requestCallPermissions() {

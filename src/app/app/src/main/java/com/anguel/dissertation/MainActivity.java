@@ -17,7 +17,6 @@ import androidx.appcompat.widget.Toolbar;
 import io.sentry.Sentry;
 import io.sentry.android.AndroidSentryClientFactory;
 
-import android.os.PowerManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ToggleButton;
@@ -44,9 +43,7 @@ public class MainActivity extends AppCompatActivity {
             setUpNotificationChannels();
         }
 
-        PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
-
-        Utils utils = new Utils();
+        Utils utils = Utils.getInstance();
 
         ToggleButton button = findViewById(R.id.startDataCollectionButton);
 
@@ -160,11 +157,17 @@ public class MainActivity extends AppCompatActivity {
                 NotificationManager.IMPORTANCE_LOW, getString(R.string.on_collection_id)
         );
 
+        NotificationChannel onDataExportChannel = createChannel(
+                getString(R.string.on_data_export_name), getString(R.string.on_data_export_desc),
+                NotificationManager.IMPORTANCE_LOW, getString(R.string.on_data_export_id)
+        );
+
         // Register the channel with the system; you can't change the importance
         // or other notification behaviors after this
         NotificationManager notificationManager = getApplicationContext().getSystemService(NotificationManager.class);
         Objects.requireNonNull(notificationManager).createNotificationChannel(persistentCollectionChannel);
         Objects.requireNonNull(notificationManager).createNotificationChannel(onBootCollectionChannel);
         Objects.requireNonNull(notificationManager).createNotificationChannel(onCollectionChannel);
+        Objects.requireNonNull(notificationManager).createNotificationChannel(onDataExportChannel);
     }
 }

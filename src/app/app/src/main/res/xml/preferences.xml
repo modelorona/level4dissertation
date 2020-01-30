@@ -21,6 +21,11 @@
             app:title="Calls"
             app:summary="Click here to allow call log permissions"/>
 
+        <SwitchPreferenceCompat
+            app:key="location_pref"
+            app:title="Location"
+            app:summary="Click here to allow location permissions"/>
+
     </PreferenceCategory>
 
     <PreferenceCategory

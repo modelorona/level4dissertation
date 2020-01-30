@@ -67,7 +67,7 @@
     <string name="your_score">Thank you for taking the test. Your SIAS score is</string>
     <string name="dsn">https://400a55aa461746a0ab09da34d9fff81b@sentry.io/1876401</string>
     <string name="permissions" />
-    <string name="enable_permissions">Please make sure to enable the Usage Statistics permisssion, then disable battery optimisations, and finally enable call permissions for the app to work as intended. You can find this in the settings.</string>
+    <string name="enable_permissions">Please make sure to enable the Usage Statistics permisssion, then disable battery optimisations, then enable call permissions, and finally enable location permissions for the app to work as intended. You can find this in the settings.</string>
     <string name="go_to_settings">Go to Settings</string>
     <string name="pref_data_record">_RECORDING_DATA</string>
 
@@ -141,5 +141,26 @@
     <string name="data_upload_type_call">call</string>
     <string name="data_upload_call_start">call_start</string>
     <string name="data_upload_call_end">call_end</string>
+    <string name="on_data_export_name">On data export channel</string>
+    <string name="on_data_export_desc">Shows a notification for data upload progress</string>
+    <string name="on_data_export_id">on_data_export_id</string>
+    <string name="data_export_group">Data export group</string>
+    <string name="location_service">location_service</string>
+    <string name="location_pref">location_pref</string>
+    <string name="location_db">Locations.db</string>
+    <string name="data_upload_type_location">location</string>
+    <string name="data_upload_location_id">id</string>
+    <string name="data_upload_location_altitude">altitude</string>
+    <string name="data_upload_location_haccuracy">hAccuracy</string>
+    <string name="data_upload_location_vaccuracy">vAccuracy</string>
+    <string name="data_upload_location_bearing">bearing</string>
+    <string name="data_upload_location_bearing_accuracy">bearingAccuracy</string>
+    <string name="data_upload_location_latitude">latitude</string>
+    <string name="data_upload_location_longitude">longitude</string>
+    <string name="data_upload_location_speed">speed</string>
+    <string name="data_upload_location_speed_accuracy">speedAccuracy</string>
+    <string name="data_upload_location_time_nanos">timeNanos</string>
+    <string name="data_upload_location_provider">provider</string>
+    <string name="unexpected_code">Unexpected code </string>
 
 </resources>
