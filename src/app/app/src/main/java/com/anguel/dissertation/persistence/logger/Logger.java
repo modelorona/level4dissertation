@@ -3,14 +3,17 @@ package com.anguel.dissertation.persistence.logger;
 import android.content.Context;
 
 import com.anguel.dissertation.persistence.database.calls.Call;
-import com.anguel.dissertation.persistence.logger.asynctasks.AsyncCallGet;
-import com.anguel.dissertation.persistence.logger.asynctasks.AsyncCallSave;
-import com.anguel.dissertation.persistence.logger.asynctasks.AsyncCategoryGet;
-import com.anguel.dissertation.persistence.logger.asynctasks.AsyncCategorySave;
-import com.anguel.dissertation.persistence.logger.asynctasks.AsyncLogGet;
-import com.anguel.dissertation.persistence.logger.asynctasks.AsyncLogSave;
-import com.anguel.dissertation.persistence.logger.asynctasks.AsyncSiasGet;
-import com.anguel.dissertation.persistence.logger.asynctasks.AsyncSiasSave;
+import com.anguel.dissertation.persistence.database.location.Location;
+import com.anguel.dissertation.persistence.logger.asynctasks.calls.AsyncCallGet;
+import com.anguel.dissertation.persistence.logger.asynctasks.calls.AsyncCallSave;
+import com.anguel.dissertation.persistence.logger.asynctasks.categories.AsyncCategoryGet;
+import com.anguel.dissertation.persistence.logger.asynctasks.categories.AsyncCategorySave;
+import com.anguel.dissertation.persistence.logger.asynctasks.location.AsyncLocationGet;
+import com.anguel.dissertation.persistence.logger.asynctasks.location.AsyncLocationSave;
+import com.anguel.dissertation.persistence.logger.asynctasks.logs.AsyncLogGet;
+import com.anguel.dissertation.persistence.logger.asynctasks.logs.AsyncLogSave;
+import com.anguel.dissertation.persistence.logger.asynctasks.sias.AsyncSiasGet;
+import com.anguel.dissertation.persistence.logger.asynctasks.sias.AsyncSiasSave;
 import com.anguel.dissertation.persistence.database.appcategory.AppCategory;
 import com.anguel.dissertation.persistence.database.logevent.LogEvent;
 import com.anguel.dissertation.persistence.database.userdata.UserData;
@@ -58,6 +61,16 @@ public class Logger {
 
     public List<Call> getCallData(Context context) throws ExecutionException, InterruptedException {
         AsyncCallGet runner = new AsyncCallGet();
+        return runner.execute(context).get();
+    }
+
+    public Boolean saveLocation(Context context, Location data) throws ExecutionException, InterruptedException {
+        AsyncLocationSave runner = new AsyncLocationSave();
+        return runner.execute(context, data).get();
+    }
+
+    public List<Location> getLocationData(Context context) throws ExecutionException, InterruptedException {
+        AsyncLocationGet runner = new AsyncLocationGet();
         return runner.execute(context).get();
     }
 }
