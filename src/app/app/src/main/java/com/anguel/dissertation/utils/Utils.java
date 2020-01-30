@@ -62,8 +62,13 @@ public class Utils {
     }
 
     public boolean isLocationPermissionEnabled(Context context) {
-        return (ContextCompat.checkSelfPermission(Objects.requireNonNull(context), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED);
-//                (ContextCompat.checkSelfPermission(Objects.requireNonNull(context), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED);
+        boolean x = ContextCompat.checkSelfPermission(Objects.requireNonNull(context), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            return x &&
+                    (ContextCompat.checkSelfPermission(Objects.requireNonNull(context), Manifest.permission.ACCESS_BACKGROUND_LOCATION) == PackageManager.PERMISSION_GRANTED);
+        } else {
+            return x;
+        }
     }
 
     public boolean areAllPermissionsEnabled(Context context) {
