@@ -33,10 +33,10 @@ public class Location {
     float vAccuracy;
 
     @ColumnInfo
-    float bearingAccuracy;
+    float bearing;
 
     @ColumnInfo
-    float bearing;
+    float bearingAccuracy;
 
     @ColumnInfo
     double latitude;
@@ -51,7 +51,7 @@ public class Location {
     float speedAccuracy;
 
     @ColumnInfo
-    long timeUTC;
+    long timeNanos;
 
     @ColumnInfo
     String provider;

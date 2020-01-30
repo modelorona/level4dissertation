@@ -2,6 +2,8 @@ package com.anguel.dissertation.serviceengine.services;
 
 import android.app.Service;
 import android.content.Intent;
+import android.location.Location;
+import android.os.Build;
 import android.os.IBinder;
 import android.os.Looper;
 import android.util.Log;
@@ -17,6 +19,8 @@ import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 
 import java.util.Objects;
+
+import io.sentry.Sentry;
 
 public class LocationService extends Service {
 
@@ -39,21 +43,40 @@ public class LocationService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         if (intent != null && Objects.requireNonNull(intent.getAction()).equals(getString(R.string.location_service))) {
             startService();
-        }
-        else stopMyService();
+        } else stopMyService();
         return START_STICKY;
     }
 
     private void startService() {
-        Logger logger = new Logger();
-
         locationCallback = new LocationCallback() {
             @Override
             public void onLocationResult(LocationResult locationResult) {
                 if (locationResult == null) {
                     Log.d("location_service", "locationResult is null");
                 }
+                for (Location loc : Objects.requireNonNull(locationResult).getLocations()) {
+                    Logger logger = new Logger();
+                    com.anguel.dissertation.persistence.database.location.Location.LocationBuilder location = com.anguel.dissertation.persistence.database.location.Location.builder();
+//                    accuracy MAY be useful, collect it for now
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        location.bearingAccuracy(loc.getBearingAccuracyDegrees()).vAccuracy(loc.getVerticalAccuracyMeters()).speedAccuracy(loc.getSpeedAccuracyMetersPerSecond());
+                    }
+                    location.altitude(loc.getAltitude())
+                            .hAccuracy(loc.getAccuracy())
+                            .bearing(loc.getBearing())
+                            .latitude(loc.getLatitude())
+                            .longitude(loc.getLongitude())
+                            .speed(loc.getSpeed())
+                            .timeNanos(loc.getElapsedRealtimeNanos())
+                            .provider(loc.getProvider());
 
+                    try {
+                        logger.saveLocation(getApplicationContext(), location.build());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        Sentry.capture(e);
+                    }
+                }
             }
         };
 
@@ -77,6 +100,7 @@ public class LocationService extends Service {
 
     private void stopMyService() {
 //        stopForeground(true);
+        fusedLocationProviderClient.removeLocationUpdates(locationCallback);
         stopSelf();
     }
 }
