@@ -162,5 +162,6 @@
     <string name="data_upload_location_time_nanos">timeNanos</string>
     <string name="data_upload_location_provider">provider</string>
     <string name="unexpected_code">Unexpected code </string>
+    <string name="no_connection">You do not seem to have an active network connection. Please toggle your wifi/data on and off and try again.</string>
 
 </resources>

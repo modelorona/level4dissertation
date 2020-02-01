@@ -26,6 +26,9 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.net.Socket;
+import java.net.SocketAddress;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
@@ -55,7 +58,8 @@ public class ExportService extends Service {
     }
 
     private void startDataUpload() {
-        final OkHttpClient client = new OkHttpClient();
+        final OkHttpClient client = new OkHttpClient().newBuilder().build();
+        final String url = BuildConfig.db_url;
 
         Handler handler = new Handler(Looper.getMainLooper());
 
@@ -65,26 +69,45 @@ public class ExportService extends Service {
 
         NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(getApplicationContext());
 
-        if (canUpload(client)) {
-            handler.post(() -> Toast.makeText(getApplicationContext(), getString(R.string.data_upload_started), Toast.LENGTH_SHORT).show());
-            run(client);
+        if (isOnline()) {
+            if (canUpload(client, url)) {
+                handler.post(() -> Toast.makeText(getApplicationContext(), getString(R.string.data_upload_started), Toast.LENGTH_SHORT).show());
+                run(client, url);
 //            show a small notification when the upload is done
-            handler.post(() -> {
-                builder.setSmallIcon(R.drawable.ic_cloud_done_black_24dp)
-                        .setContentTitle(getString(R.string.data_upload_finished))
-                        .setAutoCancel(true);
-                notificationManagerCompat.notify(4, builder.build());
-            });
+                handler.post(() -> {
+                    builder.setSmallIcon(R.drawable.ic_cloud_done_black_24dp)
+                            .setContentTitle(getString(R.string.data_upload_finished))
+                            .setAutoCancel(true);
+                    notificationManagerCompat.notify(4, builder.build());
+                });
+            } else {
+                handler.post(() -> Toast.makeText(getApplicationContext(), getString(R.string.data_upload_unavailable), Toast.LENGTH_LONG).show());
+            }
         } else {
-            handler.post(() -> Toast.makeText(getApplicationContext(), getString(R.string.data_upload_unavailable), Toast.LENGTH_LONG).show());
+            handler.post(() -> Toast.makeText(getApplicationContext(), getString(R.string.no_connection), Toast.LENGTH_LONG).show());
         }
 
         stopSelf();
     }
 
-    private boolean canUpload(OkHttpClient client) {
+    private boolean isOnline() {
+        try {
+            int timeoutMs = 1500;
+            Socket sock = new Socket();
+            SocketAddress socketAddress = new InetSocketAddress("8.8.8.8", 53);
+            sock.connect(socketAddress, timeoutMs);
+            sock.close();
+            return true;
+        } catch (Exception e) {
+            Sentry.capture(e);
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    private boolean canUpload(OkHttpClient client, String url) {
         Request request = new Request.Builder()
-                .url(BuildConfig.db_url)
+                .url(url)
                 .build();
 
         try (Response response = client.newCall(request).execute()) {
@@ -103,11 +126,11 @@ public class ExportService extends Service {
         return false;
     }
 
-    private void run(OkHttpClient client) {
+    private void run(OkHttpClient client, String url) {
         DatabaseAPI databaseAPI = DatabaseAPI.getInstance();
 
         Request.Builder requestBuild = new Request.Builder()
-                .url(BuildConfig.db_url);
+                .url(url);
 
 //        first send categories
         List<String> appCategories = getAppCategoriesJSON(databaseAPI);
@@ -201,6 +224,14 @@ public class ExportService extends Service {
         }
     }
 
+    private JsonObject getBaseRequest(String type) {
+        JsonObject request = new JsonObject();
+        request.addProperty(getString(R.string.data_upload_key), BuildConfig.app_key);
+        request.addProperty(getString(R.string.data_upload_type), type);
+        request.addProperty(getString(R.string.data_upload_uid), Utils.getInstance().getUserID(getApplication()));
+        return request;
+    }
+
     private List<String> getLocationBatchJSON(DatabaseAPI databaseAPI) {
         List<String> result = new LinkedList<>(); // list of all the requests to send out
 
@@ -213,10 +244,7 @@ public class ExportService extends Service {
             List<List<Location>> locationLists = Lists.partition(locations, Math.floorMod(locations.size(), 1000));
 
             for (List<Location> list : locationLists) {
-                JsonObject request = new JsonObject();
-                request.addProperty(getString(R.string.data_upload_key), BuildConfig.app_key);
-                request.addProperty(getString(R.string.data_upload_type), getString(R.string.data_upload_type_location));
-                request.addProperty(getString(R.string.data_upload_uid), Utils.getInstance().getUserID(getApplication()));
+                JsonObject request = getBaseRequest(getString(R.string.data_upload_type_location));
                 JsonArray batch = new JsonArray();
 
                 for (Location location : list) {
@@ -253,10 +281,7 @@ public class ExportService extends Service {
         try {
             List<Call> calls = databaseAPI.getCallData(getApplicationContext());
             for (Call call : calls) {
-                JsonObject jsonObject = new JsonObject();
-                jsonObject.addProperty(getString(R.string.data_upload_key), BuildConfig.app_key);
-                jsonObject.addProperty(getString(R.string.data_upload_type), getString(R.string.data_upload_type_call));
-                jsonObject.addProperty(getString(R.string.data_upload_uid), Utils.getInstance().getUserID(getApplicationContext()));
+                JsonObject jsonObject = getBaseRequest(getString(R.string.data_upload_type_call));
                 jsonObject.addProperty(getString(R.string.data_upload_call_start), String.valueOf(call.getStartTime()));
                 jsonObject.addProperty(getString(R.string.data_upload_call_end), String.valueOf(call.getEndTime()));
                 result.add(jsonObject.toString());
@@ -275,10 +300,7 @@ public class ExportService extends Service {
         try {
             List<LogEvent> logEvents = databaseAPI.getLogData(getApplicationContext());
             for (LogEvent logEvent : logEvents) {
-                JsonObject jsonObject = new JsonObject();
-                jsonObject.addProperty(getString(R.string.data_upload_key), BuildConfig.app_key);
-                jsonObject.addProperty(getString(R.string.data_upload_type), getString(R.string.data_upload_type_session));
-                jsonObject.addProperty(getString(R.string.data_upload_uid), Utils.getInstance().getUserID(getApplicationContext()));
+                JsonObject jsonObject = getBaseRequest(getString(R.string.data_upload_type_session));
                 jsonObject.addProperty(getString(R.string.data_upload_sd), logEvent.getData().toString());
                 jsonObject.addProperty(getString(R.string.data_upload_ss), String.valueOf(logEvent.getSessionStart()));
                 jsonObject.addProperty(getString(R.string.data_upload_se), String.valueOf(logEvent.getSessionEnd()));
@@ -294,13 +316,10 @@ public class ExportService extends Service {
     }
 
     private String getUserDataJSON(DatabaseAPI databaseAPI) {
-        JsonObject jsonObject = new JsonObject();
+        JsonObject jsonObject = getBaseRequest(getString(R.string.data_upload_type_user));
 
         try {
             UserData userData = databaseAPI.getUserData(getApplicationContext()).get(0);
-            jsonObject.addProperty(getString(R.string.data_upload_key), BuildConfig.app_key);
-            jsonObject.addProperty(getString(R.string.data_upload_type), getString(R.string.data_upload_type_user));
-            jsonObject.addProperty(getString(R.string.data_upload_uid), userData.getUserId());
             jsonObject.addProperty(getString(R.string.data_upload_sias), userData.getSias());
         } catch (Exception e) {
             e.printStackTrace();
@@ -316,9 +335,7 @@ public class ExportService extends Service {
         try {
             List<AppCategory> appCategories = databaseAPI.getAppCategories(getApplicationContext());
             for (AppCategory category : appCategories) {
-                JsonObject jsonObject = new JsonObject();
-                jsonObject.addProperty(getString(R.string.data_upload_key), BuildConfig.app_key);
-                jsonObject.addProperty(getString(R.string.data_upload_type), getString(R.string.data_upload_type_category));
+                JsonObject jsonObject = getBaseRequest(getString(R.string.data_upload_type_category));
                 jsonObject.addProperty(getString(R.string.data_upload_app_name), category.getAppName());
                 jsonObject.addProperty(getString(R.string.data_upload_category), category.getCategory());
                 jsonObject.addProperty(getString(R.string.data_upload_app_package), category.getPackageName());
