@@ -48,6 +48,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         Preference personSias = findPreference(getString(R.string.see_personal_sias_pref));
         Preference licenseInfo = findPreference(getString(R.string.license_pref));
         Preference optOut = findPreference(getString(R.string.opt_out_pref));
+        Preference id = findPreference(getString(R.string.see_personal_id_pref));
         utils = Utils.getInstance();
 
 //        toggle their values based on the current setting
@@ -77,8 +78,26 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         try {
             Objects.requireNonNull(personSias).setSummary(String.valueOf(DatabaseAPI.getInstance().getUserData(Objects.requireNonNull(getActivity()).getApplicationContext()).get(0).getSias()));
         } catch (ExecutionException | InterruptedException | IndexOutOfBoundsException e) {
-//            Sentry.capture(e);
             Objects.requireNonNull(personSias).setSummary(getString(R.string.not_yet_taken_test));
+            e.printStackTrace();
+        }
+
+        try {
+            Objects.requireNonNull(id).setSummary("Your identifier is: " + Utils.getInstance().getUserID(Objects.requireNonNull(getActivity()).getApplicationContext()) + ". Click to copy it.");
+            Objects.requireNonNull(id).setOnPreferenceClickListener(preference -> {
+                ClipboardManager clipboard = (ClipboardManager) Objects.requireNonNull(getActivity()).getSystemService(Context.CLIPBOARD_SERVICE);
+                ClipData userId = ClipData.newPlainText(getString(R.string.cliptext_id), utils.getUserID(getActivity().getApplicationContext()));
+                Objects.requireNonNull(clipboard).setPrimaryClip(userId);
+
+                CharSequence text = getString(R.string.id_copied);
+                int duration = Toast.LENGTH_LONG;
+                Toast toast = Toast.makeText(getActivity().getApplicationContext(), text, duration);
+                toast.show();
+
+                return true;
+            });
+        } catch (Exception e) {
+            Objects.requireNonNull(id).setSummary(R.string.pref_no_id);
             e.printStackTrace();
         }
 

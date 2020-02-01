@@ -60,8 +60,7 @@ public class ExportService extends Service {
     private void startDataUpload() {
         final OkHttpClient client = new OkHttpClient().newBuilder().build();
         final String url = BuildConfig.db_url;
-
-        Handler handler = new Handler(Looper.getMainLooper());
+        final Handler handler = new Handler(Looper.getMainLooper());
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), getApplicationContext().getString(R.string.on_data_export_id))
                 .setGroup(getString(R.string.data_export_group))
@@ -69,22 +68,27 @@ public class ExportService extends Service {
 
         NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(getApplicationContext());
 
-        if (isOnline()) {
-            if (canUpload(client, url)) {
-                handler.post(() -> Toast.makeText(getApplicationContext(), getString(R.string.data_upload_started), Toast.LENGTH_SHORT).show());
-                run(client, url);
+        try {
+            if (isOnline()) {
+                if (canUpload(client, url)) {
+                    handler.post(() -> Toast.makeText(getApplicationContext(), getString(R.string.data_upload_started), Toast.LENGTH_SHORT).show());
+                    run(client, url);
 //            show a small notification when the upload is done
-                handler.post(() -> {
-                    builder.setSmallIcon(R.drawable.ic_cloud_done_black_24dp)
-                            .setContentTitle(getString(R.string.data_upload_finished))
-                            .setAutoCancel(true);
-                    notificationManagerCompat.notify(4, builder.build());
-                });
+                    handler.post(() -> {
+                        builder.setSmallIcon(R.drawable.ic_cloud_done_black_24dp)
+                                .setContentTitle(getString(R.string.data_upload_finished))
+                                .setAutoCancel(true);
+                        notificationManagerCompat.notify(4, builder.build());
+                    });
+                } else {
+                    handler.post(() -> Toast.makeText(getApplicationContext(), getString(R.string.data_upload_unavailable), Toast.LENGTH_LONG).show());
+                }
             } else {
-                handler.post(() -> Toast.makeText(getApplicationContext(), getString(R.string.data_upload_unavailable), Toast.LENGTH_LONG).show());
+                handler.post(() -> Toast.makeText(getApplicationContext(), getString(R.string.no_connection), Toast.LENGTH_LONG).show());
             }
-        } else {
-            handler.post(() -> Toast.makeText(getApplicationContext(), getString(R.string.no_connection), Toast.LENGTH_LONG).show());
+        } catch (Exception e) {
+            Sentry.capture(e);
+            handler.post(() -> Toast.makeText(getApplicationContext(), getString(R.string.upload_error_occured), Toast.LENGTH_LONG).show());
         }
 
         stopSelf();

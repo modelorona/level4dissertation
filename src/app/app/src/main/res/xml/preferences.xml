@@ -39,6 +39,12 @@
         </Preference>
 
         <Preference
+            app:key="@string/see_personal_id_pref"
+            app:title="Your personal identifier"
+            app:summary="">
+        </Preference>
+
+        <Preference
             app:key="learn_more_pref"
             app:title="Learn more"
             app:summary="Learn more about the data being collected">
