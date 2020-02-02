@@ -167,5 +167,10 @@
     <string name="pref_no_id">The app has not yet generated a key for you.</string>
     <string name="null_db_url">The database URL is not set, please notify the developer if this occurs.</string>
     <string name="upload_error_occured">An error occured, and data could not be uploaded. Please see if your wifi/data is on, and try again later.</string>
+    <string name="see_your_data_pref">see_your_data_pref</string>
+    <string name="data_export_success_title">Data export successful</string>
+    <string name="data_export_success_message">Your data has been exported and can be located here:</string>
+    <string name="data_export_view_file">Open file</string>
+    <string name="csv_file_name">level4dissertation_data.csv</string>
 
 </resources>

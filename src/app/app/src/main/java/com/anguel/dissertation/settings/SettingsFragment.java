@@ -12,18 +12,31 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.widget.Toast;
 
+import com.anguel.dissertation.App;
+import com.anguel.dissertation.BuildConfig;
+import com.anguel.dissertation.persistence.entity.appcategory.AppCategory;
+import com.anguel.dissertation.persistence.entity.calls.Call;
+import com.anguel.dissertation.persistence.entity.location.Location;
+import com.anguel.dissertation.persistence.entity.logevent.LogEvent;
+import com.anguel.dissertation.persistence.entity.userdata.UserData;
 import com.anguel.dissertation.utils.Utils;
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.FileProvider;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.SwitchPreferenceCompat;
 
 import com.anguel.dissertation.R;
 import com.anguel.dissertation.persistence.DatabaseAPI;
+import com.opencsv.CSVWriter;
 
-import java.util.Arrays;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -49,6 +62,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         Preference licenseInfo = findPreference(getString(R.string.license_pref));
         Preference optOut = findPreference(getString(R.string.opt_out_pref));
         Preference id = findPreference(getString(R.string.see_personal_id_pref));
+        Preference csvExport = findPreference(getString(R.string.see_your_data_pref));
         utils = Utils.getInstance();
 
 //        toggle their values based on the current setting
@@ -121,6 +135,96 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
                 startActivity(intent);
             }
+
+            return true;
+        });
+
+        Objects.requireNonNull(csvExport).setOnPreferenceClickListener(preference -> {
+            ActivityCompat.requestPermissions(Objects.requireNonNull(getActivity()), new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 99);
+            String baseDir = android.os.Environment.getExternalStorageDirectory().getAbsolutePath();
+
+            String fileName = getString(R.string.csv_file_name);
+            String filePath = baseDir + File.separator + "Documents" + File.separator + fileName;
+
+            try (FileWriter writer = new FileWriter(filePath); CSVWriter csvWriter = new CSVWriter(writer)) {
+//                try writing each individual database one by one
+                try {
+                    UserData userData = DatabaseAPI.getInstance().getUserData(getContext()).get(0);
+                    csvWriter.writeNext(new String[]{"personal identifier", "SIAS score"});
+                    csvWriter.writeNext(new String[]{userData.getUserId(), String.valueOf(userData.getSias())});
+                    csvWriter.writeNext(new String[]{""});
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                try {
+                    List<Call> calls = DatabaseAPI.getInstance().getCallData(getContext());
+                    List<String[]> lines = new ArrayList<>(calls.size());
+
+                    calls.forEach(call -> lines.add(new String[]{String.valueOf(call.getStartTime()), String.valueOf(call.getEndTime())}));
+
+                    csvWriter.writeNext(new String[]{"call start time", "call end time"});
+                    csvWriter.writeAll(lines);
+                    csvWriter.writeNext(new String[]{""});
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                try {
+                    List<AppCategory> appCategories = DatabaseAPI.getInstance().getAppCategories(getContext());
+                    List<String[]> lines = new ArrayList<>(appCategories.size());
+
+                    appCategories.forEach(appCategory -> lines.add(new String[]{appCategory.getAppName(), appCategory.getCategory(), appCategory.getPackageName()}));
+                    csvWriter.writeNext(new String[]{"app name", "app category", "app package name"});
+                    csvWriter.writeAll(lines);
+                    csvWriter.writeNext(new String[]{""});
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                try {
+                    List<LogEvent> logEvents = DatabaseAPI.getInstance().getLogData(getContext());
+                    List<String[]> lines = new ArrayList<>(logEvents.size());
+                    logEvents.forEach(ev -> lines.add(new String[]{ev.toString()}));
+                    csvWriter.writeNext(new String[]{"session data"});
+                    csvWriter.writeAll(lines);
+                    csvWriter.writeNext(new String[]{""});
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                try {
+                    List<Location> locations = DatabaseAPI.getInstance().getLocationData(getContext());
+                    List<String[]> lines = new ArrayList<>(locations.size());
+                    locations.forEach(l -> lines.add(new String[]{l.toString()}));
+                    csvWriter.writeNext(new String[]{"location data"});
+                    csvWriter.writeAll(lines);
+                    csvWriter.writeNext(new String[]{""});
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            AlertDialog.Builder alert = new AlertDialog.Builder(Objects.requireNonNull(getContext()));
+            alert.setTitle(getString(R.string.data_export_success_title))
+                    .setMessage(getString(R.string.data_export_success_message) + " " + filePath);
+//                        .setCancelable(false);
+
+            alert.setPositiveButton(getString(R.string.data_export_view_file), ((dialog, which) -> {
+                final Uri data = FileProvider.getUriForFile(getContext(), BuildConfig.APPLICATION_ID + ".myprovider", new File(filePath));
+                getContext().grantUriPermission(getContext().getPackageName(), data, Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                Intent intent = new Intent(Intent.ACTION_VIEW)
+                        .setDataAndType(data, "text/csv")
+                        .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                startActivity(intent);
+            }));
+
+            alert.create().show();
 
             return true;
         });
