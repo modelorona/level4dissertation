@@ -18,16 +18,16 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-@Entity(tableName = "AppCategory")
+@Entity(tableName = "AppCategory", primaryKeys = {"appName", "packageName"})
+@SuppressWarnings("NullableProblems")
 public class AppCategory {
 
-    @SuppressWarnings("NullableProblems")
-    @PrimaryKey @NonNull
+    @NonNull
     String appName;
 
     @ColumnInfo
     String category;
 
-    @ColumnInfo
+    @ColumnInfo @NonNull
     String packageName;
 }

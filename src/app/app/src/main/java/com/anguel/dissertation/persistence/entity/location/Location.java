@@ -51,7 +51,16 @@ public class Location {
     float speedAccuracy;
 
     @ColumnInfo
-    long timeNanos;
+    long systemTimestamp; // represents when the timestamp was received
+
+    @ColumnInfo
+    long locationTimestamp; // the UTC timestamp, not monotonic
+
+    @ColumnInfo
+    long elapsedNanosSinceBoot; // this is the https://developer.android.com/reference/android/os/SystemClock#elapsedRealtimeNanos() method
+
+    @ColumnInfo
+    long elapsedNanosLocation; // this is the https://developer.android.com/reference/android/location/Location#getElapsedRealtimeNanos()
 
     @ColumnInfo
     String provider;

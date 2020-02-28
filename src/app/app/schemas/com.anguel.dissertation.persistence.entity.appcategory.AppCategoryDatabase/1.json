@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "3d89d590736bae9f91baf4bc608100d2",
+    "identityHash": "8e098e9f5f70d0c450c15994703cc9c8",
     "entities": [
       {
         "tableName": "AppCategory",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`appName` TEXT NOT NULL, `category` TEXT, `packageName` TEXT, PRIMARY KEY(`appName`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`appName` TEXT NOT NULL, `category` TEXT, `packageName` TEXT NOT NULL, PRIMARY KEY(`appName`, `packageName`))",
         "fields": [
           {
             "fieldPath": "appName",
@@ -24,12 +24,13 @@
             "fieldPath": "packageName",
             "columnName": "packageName",
             "affinity": "TEXT",
-            "notNull": false
+            "notNull": true
           }
         ],
         "primaryKey": {
           "columnNames": [
-            "appName"
+            "appName",
+            "packageName"
           ],
           "autoGenerate": false
         },
@@ -40,7 +41,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '3d89d590736bae9f91baf4bc608100d2')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '8e098e9f5f70d0c450c15994703cc9c8')"
     ]
   }
 }
