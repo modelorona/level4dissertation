@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "859a881f0ddbf93948e901d508660298",
+    "identityHash": "ead27d216a274bdb82bde6141afbd1b7",
     "entities": [
       {
         "tableName": "Locations",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `altitude` REAL NOT NULL, `hAccuracy` REAL NOT NULL, `vAccuracy` REAL NOT NULL, `bearing` REAL NOT NULL, `bearingAccuracy` REAL NOT NULL, `latitude` REAL NOT NULL, `longitude` REAL NOT NULL, `speed` REAL NOT NULL, `speedAccuracy` REAL NOT NULL, `timeNanos` INTEGER NOT NULL, `provider` TEXT)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `altitude` REAL NOT NULL, `hAccuracy` REAL NOT NULL, `vAccuracy` REAL NOT NULL, `bearing` REAL NOT NULL, `bearingAccuracy` REAL NOT NULL, `latitude` REAL NOT NULL, `longitude` REAL NOT NULL, `speed` REAL NOT NULL, `speedAccuracy` REAL NOT NULL, `systemTimestamp` INTEGER NOT NULL, `locationTimestamp` INTEGER NOT NULL, `elapsedNanosSinceBoot` INTEGER NOT NULL, `elapsedNanosLocation` INTEGER NOT NULL, `provider` TEXT)",
         "fields": [
           {
             "fieldPath": "id",
@@ -69,8 +69,26 @@
             "notNull": true
           },
           {
-            "fieldPath": "timeNanos",
-            "columnName": "timeNanos",
+            "fieldPath": "systemTimestamp",
+            "columnName": "systemTimestamp",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "locationTimestamp",
+            "columnName": "locationTimestamp",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "elapsedNanosSinceBoot",
+            "columnName": "elapsedNanosSinceBoot",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "elapsedNanosLocation",
+            "columnName": "elapsedNanosLocation",
             "affinity": "INTEGER",
             "notNull": true
           },
@@ -94,7 +112,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '859a881f0ddbf93948e901d508660298')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'ead27d216a274bdb82bde6141afbd1b7')"
     ]
   }
 }

@@ -263,7 +263,10 @@ public class ExportService extends Service {
                     loc.addProperty(getString(R.string.data_upload_location_longitude), location.getLongitude());
                     loc.addProperty(getString(R.string.data_upload_location_speed), location.getSpeed());
                     loc.addProperty(getString(R.string.data_upload_location_speed_accuracy), location.getSpeedAccuracy());
-                    loc.addProperty(getString(R.string.data_upload_location_time_nanos), location.getTimeNanos());
+                    loc.addProperty(getString(R.string.data_upload_location_system_timestamp), location.getSystemTimestamp());
+                    loc.addProperty(getString(R.string.data_upload_location_location_timestamp), location.getLocationTimestamp());
+                    loc.addProperty(getString(R.string.data_upload_elapsed_nanos_since_boot), location.getElapsedNanosSinceBoot());
+                    loc.addProperty(getString(R.string.data_upload_elapsed_nanos_location), location.getElapsedNanosLocation());
                     loc.addProperty(getString(R.string.data_upload_location_provider), location.getProvider());
                     batch.add(loc);
                 }
