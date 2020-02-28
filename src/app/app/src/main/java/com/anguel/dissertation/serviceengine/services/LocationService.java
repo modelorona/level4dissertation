@@ -6,6 +6,7 @@ import android.location.Location;
 import android.os.Build;
 import android.os.IBinder;
 import android.os.Looper;
+import android.os.SystemClock;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
@@ -18,6 +19,7 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -49,6 +51,12 @@ public class LocationService extends Service {
         return START_STICKY;
     }
 
+    private long getTime() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            return Instant.now().toEpochMilli();
+        } return org.threeten.bp.Instant.now().toEpochMilli();
+    }
+
     private void startService() {
         locationCallback = new LocationCallback() {
             @Override
@@ -58,6 +66,8 @@ public class LocationService extends Service {
                 }
                 List<com.anguel.dissertation.persistence.entity.location.Location> locations = new ArrayList<>(Objects.requireNonNull(locationResult).getLocations().size());
                 DatabaseAPI databaseAPI = DatabaseAPI.getInstance();
+
+                long timeReceived = getTime();
 
                 for (Location loc : Objects.requireNonNull(locationResult).getLocations()) {
                     com.anguel.dissertation.persistence.entity.location.Location.LocationBuilder location = com.anguel.dissertation.persistence.entity.location.Location.builder();
@@ -71,7 +81,10 @@ public class LocationService extends Service {
                             .latitude(loc.getLatitude())
                             .longitude(loc.getLongitude())
                             .speed(loc.getSpeed())
-                            .timeNanos(loc.getElapsedRealtimeNanos())
+                            .systemTimestamp(timeReceived)
+                            .locationTimestamp(loc.getTime())
+                            .elapsedNanosLocation(loc.getElapsedRealtimeNanos())
+                            .elapsedNanosSinceBoot(SystemClock.elapsedRealtimeNanos())
                             .provider(loc.getProvider());
                     locations.add(location.build());
                 }
@@ -92,7 +105,7 @@ public class LocationService extends Service {
         LocationRequest locationRequest = LocationRequest.create();
         locationRequest.setInterval(10000)
                 .setFastestInterval(5000)
-                .setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
+                .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         return locationRequest;
     }
 
