@@ -3,4 +3,8 @@ src/app/.idea/*
 src/app/app/release/*
 src/app/app/src/main/gen/*
 dissertation.jks
-src/data/*
+src/analysis/data/*
+src/analysis/.idea/*
+src/analysis/.ipynb_checkpoints/*
+src/analysis/preprocessing/__pycache__/*
+src/analysis/venv/*
