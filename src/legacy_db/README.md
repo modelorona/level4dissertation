@@ -1,1 +1,0 @@
-Here I store past database files when I move from one version to another. This is for legacy and historical purposes, to show what the data looks like. Ideally the database schema should not introduce breaking changes.
