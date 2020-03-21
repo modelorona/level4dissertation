@@ -20,12 +20,12 @@ def fix_category_data(db):
             app_page = requests.get(
                 play_store_link.format(pkg))  # 404 on this means it doesn't exist on google app store
             sleep(0.5)  # put in to avoid google rate limiting and preventing scrapes
-            if app_page.status_code in [404, 500]:
+            if app_page.status_code >= 400:
                 unknown_apps.append(row)
                 continue
 
             soup = BeautifulSoup(app_page.text, 'lxml')
-            genre = soup.find('a', itemprop='genre').next_element
+            genre = str(soup.find('a', itemprop='genre').next_element)
             if genre is None:  # occasionally there was a missing genre for whatever reason (rate limit protection)
                 unknown_apps.append(row)
 
