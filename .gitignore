@@ -8,3 +8,5 @@ src/analysis/.idea/*
 src/analysis/.ipynb_checkpoints/*
 src/analysis/preprocessing/__pycache__/*
 src/analysis/venv/*
+src/analysis/.env
+src/analysis/saved_reverse_geocodes*
