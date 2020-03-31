@@ -75,6 +75,8 @@ public class MainActivity extends AppCompatActivity {
                 startService(new Intent(getApplicationContext(), ExportService.class).setAction(getString(R.string.upload_data_service))));
 
         toggleDataCollection(isRecordingData());
+
+
     }
 
     private boolean isRecordingData() {

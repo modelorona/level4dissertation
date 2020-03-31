@@ -1,5 +1,8 @@
 .idea/*
+src/server/.env
 src/app/.idea/*
+src/server/node_modules/*
+src/server/.idea/*
 src/app/app/release/*
 src/app/app/src/main/gen/*
 dissertation.jks

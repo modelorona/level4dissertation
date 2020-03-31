@@ -6,7 +6,7 @@ The `server` folder contains the code for the server.
 
 ## Build instructions
 
-To run the android application, open it up in Android studio, build, and run the debug version there. If you want to sign, provide your own key. Additionally, you need to create your own `app_key` string and `db_url` string and save them as environmental variables. I had them set in the Travis built menu to be passed along with every build. They are needed for the export section; everything else will work fine without them.
+To run the android application, open it up in Android studio, build, and run the debug version there. If you want to sign, provide your own key. Additionally, you need to create your own `app_key` string and `db_url` string and save them as environmental variables. I had them set in the Travis built menu to be passed along with every build. They are needed for the export section; everything else will work fine without them. If you want to configure Sentry, you will need to go on their site, generate the api key, and then change it in the application dsn setting.
 
 To run the server, go into the folder and `npm install` to install the dependencies. The newest stable version of nodejs is recommended. There is an `.env.example` file that you need to copy into a `.env` file and fill out the values. That is where the database connection is configured.
 
