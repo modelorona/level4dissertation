@@ -1,26 +1,55 @@
 ## Data
 Keep your data (e.g. from evaluations here)
 
+### Contents of this folder
+* The `data/ethics` folder contains forms that were used and a signed ethics form.
+* The `data/processed` folder contains the processed data. The application categories were amended with the script from the `data/notebooks/preprocessing`
+script.
+* The `data/notebooks` folder contains the notebook analysis.ipynb that was used for the data analysis.
+* The `data/notebooks/preprocessing` contains a script that processed the raw categories data to fix the categories. This script should
+not need to be run again. If you want to run it on your own collected data, make sure you change the database connector configuration. Additionally, I
+feel it important to note that this operated on a copy of the raw data, hence never modifying the original raw gathered data.
+* The `data/raw` folder has the original survey responses.
 
-* If you involved human subjects in any form, you will require ethical permission.
-    * Keep records of all items related to ethics in `data/ethics`. There are templates for scripts, guidance provided.
-    * **You must have scanned PDFs of signed checklists in this folder**, or PDFs of ethics confirmations from other sources
-    * Ensure you remain GDPR compliant. In general:
-        * Never collect personally identifiable information if at all possible. 
-        * Pseudonymise identifiers for subjects. 
-        * Use coarse demographic values unless you need specific information (for example, if you need age ranges, collect ranges, not specific ages)
-        * Ensure you have explicit consent for the storage and use of data from human subjects
-        * DO NOT STORE PERSONALLY IDENTIFIABLE INFORMATION ON REMOTE SERVERS (no Dropbox, Github, etc.)
 
-* Keep a written description of the data, what is contained, and how it was captured in `data/readme.md`
-* Record all raw data as an immutable store. **Never modify captured data.** 
-    * Keep this under `data/raw`
-    * This could be logs, questionnaire responses, computation results
+### Data that is collected
+_Not all of the data was used_
+* Location
+  * altitude
+  * horizontal Accuracy
+  * vertical Accuracy
+  * bearing
+  * bearing Accuracy 
+  * latitude
+  * longitude
+  * speed
+  * speed Accuracy
+  * system Timestamp
+  * location Timestamp
+  * elapsed Nanos Since Boot
+  * elapsed Nanos Location
+  * location provider
+  
+* Call
+  * start time
+  * end time
+  
+* Apps
+  * app name
+  * app category
+  * app package
+  
+* Sessions
+  * session start
+  * session end
+  * total time visible
+  * last time used
+  * last time foreground service used
+  * app name
+  * total time in foreground
+  * last time visible
+  * total Time Foreground Service Used
+  * 
 
-* Write scripts to produced processed data from these (e.g. tidy dataframes, excel sheets, csv files, HDF5 files, sqlite databases)
-* Write scripts that process these into results, visualisations, tables that you include in your project.
-* If you use Jupyter/RStudio notebooks, place these in `data/notebooks` and name them carefully (not "Untitled1", "Untitled2").
-
-* You may need to remove the `data/` folder from version control if the data size is too large or you are bound by confidentiality.
-* If you do so **make sure you have good backups**
-
+### How data was collected
+Data was collected by the Android application. All specifics can be seen in the `src` folder.
