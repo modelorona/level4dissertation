@@ -1,1 +1,0 @@
-This is the data analysis platform. Instructions to run will be added later.

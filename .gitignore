@@ -1,5 +1,16 @@
 .idea/*
+src/server/.env
 src/app/.idea/*
+src/server/node_modules/*
+src/server/.idea/*
 src/app/app/release/*
 src/app/app/src/main/gen/*
 dissertation.jks
+data/notebooks/data/*
+data/notebooks/.idea/*
+data/notebooks/.ipynb_checkpoints/*
+data/notebooks/preprocessing/__pycache__/*
+data/notebooks/venv/*
+data/notebooks/.env
+data/notebooks/saved_reverse_geocodes*
+src/server/.env
