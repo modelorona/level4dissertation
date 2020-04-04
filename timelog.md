@@ -275,3 +275,9 @@ No work, birthday.
 
 * 31/03/2020
 4 hours on dissertation + data analysis (11am - 3pm)
+
+* 02/03/2020
+5 hours on presentation slides + recording (11am - 4pm)
+
+* 03/03/2020
+4 hours on presentation slides + recording (11am - 3pm)
