@@ -4,6 +4,7 @@ import requests
 from time import sleep
 
 
+### THIS WORKS ONLY WITH DATABASE
 # Fix missing and unknown categories for apps as well as undefined application names
 def fix_category_data(db):
     play_store_link = 'https://play.google.com/store/apps/details?id={}'
