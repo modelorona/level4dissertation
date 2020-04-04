@@ -1,4 +1,3 @@
 # Presentation
 
-Include your presentation slides here. You should include the slides in the original format you authored them in (e.g. PowerPoint, Keynote), *and*
-a `pdf` version of the slides. Any necessary videos, audio, images, figures, etc. should be present.
+The slides were created with Google Slides. I have exported them in 3 different formats for compatibility.
